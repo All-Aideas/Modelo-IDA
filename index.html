@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo IDA — ¿Cuánta gente necesitás el día que la IA no esté?</title>
+<meta name="description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA. Por César Riat.">
+<meta name="author" content="César Riat">
+
+<!-- EDITAR: si publicás en otra ruta, actualizá og:url y og:image (deben ser URLs absolutas) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Modelo IDA">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
+<meta property="og:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Calculadora interactiva, gratis y sin registro.">
+<meta property="og:url" content="https://cesarriat.com/modelo-ida/">
+<meta property="og:image" content="https://cesarriat.com/modelo-ida/assets/g1_piso_continuidad.png">
+<meta property="og:image:alt" content="Gráfico del piso de continuidad: la dotación cae con la automatización hasta chocar con un mínimo.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
+<meta name="twitter:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA).">
+<meta name="twitter:image" content="https://cesarriat.com/modelo-ida/assets/g1_piso_continuidad.png">
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// Fallback si el CDN principal falla. No se puede usar document.write junto con
+// defer (borraria el documento), asi que se inyecta el script dinamicamente.
+window.addEventListener('DOMContentLoaded',function(){
+  if(typeof Chart==='undefined'){
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+    document.head.appendChild(s);
+  }
+});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --naranja:#FF6F00; --naranja-claro:#fff3e8; --navy:#425066; --navy-oscuro:#2e3a4d;
+    --fondo:#f7f8fa; --gris-grafico:#eef1f5; --blanco:#fff; --gris:#8a94a6; --borde:#e6eaf0;
+    --verde:#2e9e5b; --amarillo:#e6a817; --rojo:#c0392b;
+    /* Paleta de modulos: tonos oscuros para que el texto blanco siempre se lea */
+    --m-hum:#2E6F9E; --m-aut:#D9480F; --m-rie:#B02A37; --m-con:#1F7A4D;
+    --m-hum-claro:#eaf2f8; --m-aut-claro:#fdf0e8; --m-rie-claro:#fbecee; --m-con-claro:#e9f5ef;
+    --m-dato:#e4e9f0; --m-dato-borde:#c3ccdb;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Montserrat',sans-serif; background:var(--fondo); color:var(--navy-oscuro); line-height:1.65;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 100px;}
+  svg.ic{width:1em; height:1em; vertical-align:-0.13em; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
+  header.hero{background:linear-gradient(135deg,var(--navy-oscuro),var(--navy)); color:#fff; padding:56px 20px 44px; text-align:center;}
+  header.hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem); font-weight:800; max-width:820px; margin:0 auto 14px; line-height:1.2;}
+  header.hero p{color:#c9d2e0; font-weight:500; max-width:640px; margin:0 auto; font-size:1rem;}
+  .hero-links{margin-top:24px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+  .hero-links a{display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px; text-decoration:none; font-weight:700; font-size:.9rem; transition:.15s;}
+  .hero-links a.medium{background:var(--naranja); color:#fff;}
+  .hero-links a.medium:hover{background:#e56400;}
+  nav.tabs{position:sticky; top:0; z-index:20; background:var(--blanco); border-bottom:1px solid var(--borde); display:flex; justify-content:center; gap:2px; padding:8px; box-shadow:0 2px 8px rgba(46,58,77,.05); flex-wrap:wrap;}
+  nav.tabs button{background:none; border:none; font-family:inherit; font-weight:700; font-size:.86rem; color:var(--gris); padding:10px 14px; border-radius:8px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:7px;}
+  nav.tabs button.active{background:var(--naranja-claro); color:var(--naranja);}
+  nav.tabs button svg{width:16px; height:16px;}
+  .panel{display:none; animation:fade .3s;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
+  section{background:var(--blanco); border-radius:14px; padding:28px 26px; margin-top:24px; box-shadow:0 1px 4px rgba(46,58,77,.07);}
+  h2{font-size:1.15rem; font-weight:800; color:var(--naranja); text-transform:uppercase; letter-spacing:.05em; margin-bottom:16px; display:flex; align-items:center; gap:10px;}
+  h2 svg{width:22px; height:22px;}
+  h3{font-size:1.05rem; font-weight:700; margin:20px 0 8px; color:var(--navy);}
+  p{margin-bottom:12px;}
+  .formula{background:var(--fondo); border-radius:10px; padding:16px; margin:14px 0; overflow-x:auto; border-left:4px solid var(--naranja);}
+  .nota{font-size:.9rem; color:var(--gris);}
+  /* --- Chips de color por modulo (mismo peso de selector: la ultima regla define el color) --- */
+  .t{display:inline-block; padding:2px 8px; border-radius:5px; font-weight:700; white-space:nowrap; color:#fff; font-size:.95em;}
+  .t-hum{background:var(--m-hum);}
+  .t-aut{background:var(--m-aut);}
+  .t-rie{background:var(--m-rie);}
+  .t-con{background:var(--m-con);}
+  .t-dato{background:var(--m-dato); color:var(--navy-oscuro); border:1px solid var(--m-dato-borde);}
+  .t-res{background:var(--navy-oscuro);}
+
+  .ejemplo{border-radius:8px; padding:13px 15px; margin:10px 0 20px; font-size:.88rem; color:var(--navy-oscuro); border-left:3px solid var(--borde); background:var(--fondo);}
+  .ejemplo .tit{display:block; font-weight:800; margin-bottom:5px; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em;}
+  .e-hum{background:var(--m-hum-claro); border-left-color:var(--m-hum);} .e-hum .tit{color:var(--m-hum);}
+  .e-aut{background:var(--m-aut-claro); border-left-color:var(--m-aut);} .e-aut .tit{color:var(--m-aut);}
+  .e-rie{background:var(--m-rie-claro); border-left-color:var(--m-rie);} .e-rie .tit{color:var(--m-rie);}
+  .e-con{background:var(--m-con-claro); border-left-color:var(--m-con);} .e-con .tit{color:var(--m-con);}
+
+  /* Nombres de variables: siempre el color de su modulo, en todo el sitio */
+  .v-hum{color:var(--m-hum); font-weight:700;}
+  .v-aut{color:var(--m-aut); font-weight:700;}
+  .v-rie{color:var(--m-rie); font-weight:700;}
+  .v-con{color:var(--m-con); font-weight:700;}
+  .v-res{color:var(--navy-oscuro); font-weight:700;}
+  .ic-mod{width:1.05em; height:1.05em; vertical-align:-.16em; fill:none; stroke:currentColor;
+    stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; margin-right:3px;}
+  .t .ic-mod{width:.92em; height:.92em; stroke-width:2.1; margin-right:2px;}
+  .mk{font-weight:800; font-size:1.05em; margin-left:2px;}
+  .mk.ok{color:var(--m-con);} .mk.no{color:var(--m-rie);}
+  h3.mod{border-left:5px solid var(--borde); padding-left:11px;}
+  h3.h-hum{border-left-color:var(--m-hum); color:var(--m-hum);}
+  h3.h-aut{border-left-color:var(--m-aut); color:var(--m-aut);}
+  h3.h-rie{border-left-color:var(--m-rie); color:var(--m-rie);}
+  h3.h-con{border-left-color:var(--m-con); color:var(--m-con);}
+  .formula.f-hum{border-left-color:var(--m-hum);} .formula.f-aut{border-left-color:var(--m-aut);}
+  .formula.f-rie{border-left-color:var(--m-rie);} .formula.f-con{border-left-color:var(--m-con);}
+
+  .leyenda-mod{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 18px;}
+  .leyenda-mod span{font-size:.78rem; padding:6px 13px; border-radius:20px;}
+
+  /* Encabezados de resultado: mismo lenguaje visual que los nodos del diagrama */
+  h3.res-h{border-left:5px solid var(--navy-oscuro); padding-left:11px; color:var(--navy-oscuro);}
+  .res-usa{display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:.78rem;
+    color:var(--gris); margin:-2px 0 10px; padding-left:16px;}
+  .res-usa .t{font-size:.72rem; padding:3px 9px;}
+  .formula-color{background:var(--fondo); border-radius:10px; padding:20px; margin:14px 0; border-left:4px solid var(--navy-oscuro); font-family:'Courier New',monospace; font-size:1.05rem; overflow-x:auto; line-height:2.4; white-space:nowrap;}
+  .formula-color.mega{background:var(--navy-oscuro); color:#fff; border-left-color:var(--naranja); font-size:.98rem;}
+
+  /* --- Diagrama de flujo con nodos y conexiones animadas --- */
+  .diag-wrap{overflow-x:auto; background:var(--fondo); border:1px solid var(--borde); border-radius:12px; padding:10px 6px; margin:16px 0 0;}
+  .diag-wrap svg{display:block; min-width:940px; width:100%; height:auto;}
+  .diag-cap{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; font-size:.74rem; color:var(--gris);}
+  .diag-cap b{color:var(--navy);}
+
+  /* aristas: fluyen siempre, y se encienden al elegir un modulo */
+  .edge{fill:none; stroke:#b9c2d0; stroke-width:1.5; stroke-dasharray:5 7;
+    animation:fluir 2.4s linear infinite; transition:stroke .2s, stroke-width .2s, opacity .2s;}
+  @keyframes fluir{to{stroke-dashoffset:-24;}}
+  .edge.off{opacity:.13; animation:none;}
+  .edge.on{stroke-width:3; opacity:1; animation:fluir .85s linear infinite;}
+
+  .nodo rect{transition:.2s;}
+  .nodo .n-tit{font-size:12px; font-weight:700; fill:var(--navy-oscuro);}
+  .nodo .n-sub{font-size:10px; fill:var(--gris);}
+  .nodo.off{opacity:.24;}
+  .nodo.mod{cursor:pointer;}
+  .nodo.mod rect{stroke-width:2;}
+  .nodo.mod:hover rect{filter:brightness(.97);}
+  .nodo.mod.on rect{stroke-width:3.5;}
+  .nodo.mod.on .n-tit{font-size:13px;}
+  .nodo.dst rect{stroke-width:2.5;}
+  .diag-lay{font-size:10px; font-weight:800; fill:var(--gris); letter-spacing:.08em; text-transform:uppercase;}
+
+  .flow-detalle{border-radius:10px; padding:16px 18px; margin-top:14px; border-left:5px solid var(--borde); background:var(--fondo);}
+  .flow-detalle h4{font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:7px;}
+  .flow-detalle p{font-size:.88rem; margin-bottom:8px;}
+  .flow-detalle .fd-form{font-family:'Courier New',monospace; font-size:1rem; background:var(--blanco);
+    border:1px solid var(--borde); border-radius:7px; padding:11px 13px; margin:9px 0; overflow-x:auto; white-space:nowrap;}
+  .flow-detalle .fd-usa{font-size:.8rem; color:var(--gris);}
+
+  /* --- Mapa del modelo --- */
+  .mapa{display:grid; grid-template-columns:1fr auto 1.15fr auto 1.15fr; gap:10px; align-items:center; margin:18px 0 6px;}
+  @media(max-width:820px){.mapa{grid-template-columns:1fr; gap:6px;} .mapa .flecha{transform:rotate(90deg); margin:2px auto;}}
+  .mapa-col{background:var(--fondo); border-radius:10px; padding:13px; border:1px solid var(--borde);}
+  .mapa-col h4{font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--gris); margin-bottom:9px; font-weight:800;}
+  .mapa .flecha{color:var(--gris); font-size:1.5rem; font-weight:700; text-align:center;}
+  .mapa-item{font-size:.78rem; margin-bottom:7px; line-height:1.45;}
+  .mapa-item:last-child{margin-bottom:0;}
+  .mapa-item b{font-family:'Courier New',monospace;}
+  .mapa-item .nota{font-size:.71rem; display:block; line-height:1.35;}
+  .mapa-item .t{font-size:.7rem; padding:1px 7px;}
+  .paso{display:flex; gap:12px; align-items:flex-start; margin-bottom:14px;}
+  .paso-n{flex:0 0 26px; height:26px; border-radius:50%; background:var(--navy-oscuro); color:#fff; font-weight:800; font-size:.82rem; display:flex; align-items:center; justify-content:center; margin-top:2px;}
+  .paso-tx{font-size:.9rem; flex:1;}
+  .cuenta{font-family:'Courier New',monospace; background:var(--gris-grafico); padding:2px 7px; border-radius:4px; font-size:.88em; display:inline-block; color:var(--navy-oscuro);}
+
+  /* --- Conclusiones --- */
+  .tabla-scroll{overflow-x:auto; margin:14px 0;}
+  .tabla-scroll table{margin:0; min-width:460px;}
+  tr.fila-ok td{background:var(--m-con-claro);}
+  tr.fila-ok td:first-child{box-shadow:inset 3px 0 0 var(--m-con);}
+  tr.fila-mal td{background:var(--m-rie-claro);}
+  tr.fila-mal td:first-child{box-shadow:inset 3px 0 0 var(--m-rie);}
+  .remate{background:var(--navy-oscuro); color:#fff; border-radius:12px; padding:20px 22px; margin:20px 0 6px; font-size:1rem; line-height:1.6;}
+  .remate b{color:var(--naranja);}
+  .preg-final{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;}
+  @media(max-width:680px){.preg-final{grid-template-columns:1fr;}}
+  .preg-final div{background:var(--fondo); border-radius:10px; padding:16px 18px; border-left:4px solid var(--naranja);}
+  .preg-final h4{font-size:1rem; color:var(--navy); margin-bottom:5px;}
+  table{width:100%; border-collapse:collapse; font-size:.9rem; margin:12px 0;}
+  th,td{padding:9px 10px; border-bottom:1px solid var(--borde); text-align:left;}
+  th{color:var(--navy); font-weight:700; background:var(--fondo);}
+  .grafico-svg{width:100%; background:var(--blanco); border:1px solid var(--borde); border-radius:10px; margin:14px 0; padding:6px; overflow-x:auto;}
+  .grafico-svg svg{display:block; width:100%; min-width:560px; height:auto;}
+  img.grafico{width:100%; border-radius:10px; margin:14px 0; border:1px solid var(--borde);}
+
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+  @media(max-width:760px){.calc-grid{grid-template-columns:1fr;}}
+  .campo{margin-bottom:16px;}
+  .campo label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:5px;}
+  .campo .hint{font-weight:400; color:var(--gris); font-size:.76rem;}
+  .campo input[type=number]{width:100%; padding:10px 12px; border:1.5px solid var(--borde); border-radius:8px; font-family:inherit; font-size:1rem; font-weight:600; color:var(--navy-oscuro);}
+  .campo input:focus{outline:none; border-color:var(--naranja);}
+  .slider-row{display:flex; align-items:center; gap:10px;}
+  .slider-row input[type=range]{flex:1; accent-color:var(--naranja);}
+  .slider-row .val{font-weight:800; color:var(--naranja); min-width:48px; text-align:right; font-size:.95rem;}
+  .arq-group label.check{display:flex; align-items:center; gap:8px; font-weight:600; font-size:.85rem; margin-bottom:8px; cursor:pointer; padding:8px 10px; border-radius:8px; background:var(--fondo);}
+  .arq-group input[type=checkbox],.arq-group input[type=radio]{accent-color:var(--naranja); width:17px; height:17px; flex:0 0 auto;}
+
+  /* --- Asistente de costo real de la IA --- */
+  .asistente{margin:-8px 0 16px; border:1px solid var(--borde); border-radius:9px; background:var(--fondo);}
+  .asistente summary{cursor:pointer; padding:9px 12px; font-size:.79rem; font-weight:700; color:var(--m-aut); list-style:none;}
+  .asistente summary::-webkit-details-marker{display:none;}
+  .asistente summary::before{content:'▸ ';}
+  .asistente[open] summary::before{content:'▾ ';}
+  .asist-body{padding:0 12px 12px;}
+  .asist-body .campo{margin-bottom:9px;}
+  .asist-body .campo label{font-size:.75rem;}
+  .asist-body input[type=number]{padding:7px 9px; font-size:.9rem;}
+  .ct-btn{background:var(--blanco); border:1.5px solid var(--borde); font-family:inherit; font-weight:700; font-size:.76rem; color:var(--navy); padding:7px 12px; border-radius:7px; cursor:pointer;}
+  .ct-btn.on{background:var(--m-aut); color:#fff; border-color:var(--m-aut);}
+  .asist-tot{font-size:.8rem; font-weight:700; color:var(--navy); padding-top:8px; border-top:1px dashed var(--borde); margin-top:4px;}
+  .asist-res{background:var(--navy-oscuro); color:#fff; border-radius:8px; padding:11px 13px; margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:.82rem;}
+  .asist-res b{color:var(--naranja); font-size:1.1rem;}
+  .btn-usar{background:var(--naranja); color:#fff; border:none; font-family:inherit; font-weight:800; font-size:.76rem; padding:8px 14px; border-radius:7px; cursor:pointer; white-space:nowrap;}
+  .btn-usar:hover{background:#e56400;}
+
+  /* --- Botones de accion de la calculadora --- */
+  .acciones{display:flex; gap:10px; margin-top:26px; padding-top:20px; border-top:1px solid var(--borde);}
+  @media(max-width:620px){.acciones{flex-wrap:wrap;} .acciones .btn-accion{flex:1 1 100%;}}
+  .btn-accion{flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--blanco); border:1.5px solid var(--borde); font-family:inherit; font-weight:700; font-size:.85rem; color:var(--navy); padding:13px 18px; border-radius:9px; cursor:pointer; transition:.15s;}
+  .btn-accion:hover{border-color:var(--naranja); color:var(--naranja);}
+  .btn-accion.primario{background:var(--naranja); color:#fff; border-color:var(--naranja);}
+  .btn-accion.primario:hover{background:#e56400; border-color:#e56400; color:#fff;}
+  @keyframes destello{0%,100%{box-shadow:0 0 0 0 rgba(255,111,0,0);}30%{box-shadow:0 0 0 6px rgba(255,111,0,.35);}}
+  .resaltar{animation:destello 1.1s ease-out;}
+
+  .resultado-box{background:linear-gradient(135deg,var(--navy-oscuro),var(--navy)); color:#fff; border-radius:14px; padding:24px; position:sticky; top:70px;}
+  .res-item{margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid rgba(255,255,255,.12);}
+  .res-item:last-child{border:none; margin:0; padding:0;}
+  .res-label{font-size:.78rem; color:#9fb0c6; text-transform:uppercase; letter-spacing:.05em; font-weight:700;}
+  .res-num{font-size:2.4rem; font-weight:800; line-height:1.1; margin:4px 0;}
+  .res-num.naranja{color:var(--naranja);}
+  .res-sub{font-size:.85rem; color:#c9d2e0;}
+  .ida-badge{display:inline-block; padding:4px 14px; border-radius:20px; font-weight:800; font-size:.9rem; margin-top:6px;}
+  .ida-verde{background:var(--verde);} .ida-amarillo{background:var(--amarillo);} .ida-rojo{background:var(--rojo);}
+  .ida-mini{font-size:.82rem; color:#c9d2e0; margin-top:10px; line-height:1.45;}
+  .alerta{font-size:.82rem; margin-top:10px; padding:10px 12px; border-radius:8px; font-weight:600;}
+  .alerta.ok{background:rgba(46,158,91,.18); color:#8fe6b0;}
+  .alerta.warn{background:rgba(192,57,43,.2); color:#f3a89f;}
+
+  .ida-escala{display:flex; align-items:stretch; border-radius:10px; overflow:hidden; margin:16px 0 8px; height:38px; font-size:.78rem; font-weight:700; color:#fff;}
+  .ida-escala div{display:flex; align-items:center; justify-content:center; text-align:center;}
+  .ida-escala .z1{background:var(--verde); flex:30;}
+  .ida-escala .z2{background:var(--amarillo); flex:30;}
+  .ida-escala .z3{background:var(--rojo); flex:40;}
+  .escala-labels{display:flex; justify-content:space-between; font-size:.75rem; color:var(--gris); font-weight:600;}
+
+  .grafico-box{background:var(--gris-grafico); border-radius:12px; padding:20px; margin-top:16px;}
+  .canvas-holder{position:relative; height:360px;}
+  @media(max-width:760px){.canvas-holder{height:300px;}}
+  .modo-btn{background:var(--fondo); border:1.5px solid var(--borde); font-family:inherit; font-weight:700; font-size:.85rem; color:var(--navy); padding:9px 16px; border-radius:8px; cursor:pointer; transition:.15s;}
+  .modo-btn.active{background:var(--naranja); color:#fff; border-color:var(--naranja);}
+  #controles-jugar .campo, #controles-mc .campo{margin-bottom:12px;}
+
+  /* --- Informe imprimible / PDF --- */
+  #informe{display:none;}
+  @media print{
+    header.hero, nav.tabs, .wrap, footer, .acciones{display:none !important;}
+    body{background:#fff; color:#2e3a4d; font-size:11pt;}
+    #informe{display:block !important; position:relative; padding:0;}
+    @page{margin:18mm 16mm;}
+    .inf-marca{position:fixed; top:46%; left:50%; transform:translate(-50%,-50%) rotate(-28deg);
+      font-size:52pt; font-weight:700; letter-spacing:.06em; color:rgba(66,80,102,.038);
+      white-space:nowrap; z-index:0; pointer-events:none;}
+    .inf-kpis{display:flex; gap:7px; margin-bottom:12px; position:relative; z-index:1;}
+    .inf-kpi{flex:1; border:1px solid #e6eaf0; border-top:3px solid #FF6F00; border-radius:5px; padding:8px 9px; text-align:center;}
+    .inf-kpi .k-lab{font-size:7pt; text-transform:uppercase; letter-spacing:.04em; color:#8a94a6; font-weight:700; display:block;}
+    .inf-kpi .k-val{font-size:16pt; font-weight:800; color:#2e3a4d; line-height:1.15;}
+    .inf-kpi .k-sub{font-size:7.5pt; color:#8a94a6; display:block;}
+    .inf-kpi.ok{border-top-color:#1F7A4D;} .inf-kpi.mal{border-top-color:#B02A37;}
+    .inf-veredicto{background:#2e3a4d; color:#fff; border-radius:6px; padding:10px 12px; font-size:9.5pt; line-height:1.45; margin-bottom:14px; position:relative; z-index:1;}
+    .inf-veredicto b{color:#FF9A44;}
+    .inf-indice{border:1px solid #e6eaf0; border-radius:5px; padding:8px 12px; margin-bottom:14px; font-size:8.5pt; color:#425066; position:relative; z-index:1;}
+    .inf-indice b{color:#2e3a4d; display:block; margin-bottom:3px; font-size:8pt; text-transform:uppercase; letter-spacing:.04em;}
+    .inf-indice span{margin-right:14px; white-space:nowrap;}
+    .inf-graf{display:flex; gap:12px; margin-bottom:10px; position:relative; z-index:1;}
+    .inf-graf > div{flex:1; border:1px solid #e6eaf0; border-radius:5px; padding:9px;}
+    .inf-graf h3{font-size:8.5pt; color:#425066; margin:0 0 5px; font-weight:700;}
+    .inf-graf svg{width:100%; height:auto; display:block;}
+    .inf-cab{border-bottom:2.5px solid #FF6F00; padding-bottom:9px; margin-bottom:14px; position:relative; z-index:1;}
+    .inf-cab h1{font-size:17pt; font-weight:800; color:#2e3a4d; margin:0 0 3px;}
+    .inf-cab .sub{font-size:9.5pt; color:#8a94a6; font-weight:600;}
+    #informe h2{font-size:11pt; color:#FF6F00; text-transform:uppercase; letter-spacing:.05em; margin:15px 0 7px; position:relative; z-index:1;}
+    #informe table{width:100%; border-collapse:collapse; font-size:9.5pt; margin-bottom:9px; position:relative; z-index:1;}
+    #informe th,#informe td{padding:5px 8px; border-bottom:1px solid #e6eaf0; text-align:left;}
+    #informe th{background:#f7f8fa; font-weight:700; color:#425066;}
+    #informe td.num{text-align:right; font-weight:700; white-space:nowrap;}
+    .inf-destacado td{background:#fff3e8;}
+    #informe p{font-size:9.5pt; line-height:1.5; margin-bottom:7px; position:relative; z-index:1;}
+    .inf-pie{margin-top:20px; padding-top:9px; border-top:1px solid #e6eaf0; font-size:8pt; color:#8a94a6;
+      display:flex; justify-content:space-between; gap:10px; position:relative; z-index:1;}
+    .inf-pie b{color:#FF6F00;}
+    .inf-nota{background:#f7f8fa; border-left:3px solid #FF6F00; padding:8px 10px; font-size:9pt;}
+  }
+
+  footer{text-align:center; color:var(--gris); font-size:.82rem; margin-top:40px;}
+  footer a{color:var(--naranja); text-decoration:none; font-weight:700;}
+  .cta{display:inline-flex; align-items:center; gap:8px; background:var(--naranja); color:#fff; font-weight:800; padding:12px 26px; border-radius:10px; text-decoration:none; margin-top:8px;}
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><rect x="8" y="5.5" width="8" height="3.5" rx="1"/><circle cx="9" cy="13" r=".6"/><circle cx="12" cy="13" r=".6"/><circle cx="15" cy="13" r=".6"/><circle cx="9" cy="16.5" r=".6"/><circle cx="12" cy="16.5" r=".6"/><circle cx="15" cy="16.5" r=".6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.3 4.5 4.5v13c3.5-.2 6 .5 7.5 2 1.5-1.5 4-2.2 7.5-2v-13C16 4.3 13.5 5 12 6.5z"/><line x1="12" y1="6.5" x2="12" y2="19.5"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="10" cy="8" r="2.5" fill="var(--gris-grafico)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.5" fill="var(--gris-grafico)"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M7.5 15l3.5-4 3 2.5L20 7"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="4" y1="7" x2="20" y2="7"/><path d="M6.5 7L4 13h5z"/><path d="M17.5 7L15 13h5z"/></symbol>
+  <symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.1" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 3v6l-4.5 8.5A2 2 0 007.3 21h9.4a2 2 0 001.8-3.5L14 9V3"/><line x1="9" y1="3" x2="15" y2="3"/><line x1="8" y1="14" x2="16" y2="14"/></symbol>
+  <symbol id="i-medium" viewBox="0 0 24 24" stroke="none" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42S20.96 8.46 20.96 12zM24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="18" y2="12"/><polyline points="12 6 18 12 12 18"/></symbol>
+  <symbol id="i-mod-hum" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.5a7.2 7.2 0 0 1 14.4 0"/></symbol>
+  <symbol id="i-mod-aut" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M12 2.6v2.9M12 18.5v2.9M21.4 12h-2.9M5.5 12H2.6M18.6 5.4l-2 2M7.4 16.6l-2 2M18.6 18.6l-2-2M7.4 7.4l-2-2"/></symbol>
+  <symbol id="i-mod-rie" viewBox="0 0 24 24"><path d="M12 3.4 21.2 19.6a1.3 1.3 0 0 1-1.2 1.9H4a1.3 1.3 0 0 1-1.2-1.9z"/><line x1="12" y1="9.6" x2="12" y2="14.4"/><circle cx="12" cy="17.6" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-mod-con" viewBox="0 0 24 24"><path d="M12 2.8 20 6v6.2c0 4.6-3.2 7.8-8 9.2-4.8-1.4-8-4.6-8-9.2V6z"/><polyline points="8.6 12 11 14.4 15.6 9.8"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><polyline points="3 4 3 9.5 8.5 9.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/><line x1="8.5" y1="13" x2="15.5" y2="13"/><line x1="8.5" y1="16.5" x2="13" y2="16.5"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9.5 18h5"/><path d="M10.5 21h3"/><path d="M12 3a6 6 0 00-3.6 10.8c.5.4.9 1 .9 1.7v.5h5.4v-.5c0-.7.4-1.3.9-1.7A6 6 0 0012 3z"/></symbol>
+</svg>
+
+<header class="hero">
+  <h1>¿Cuánta gente necesitás para operar el día que la IA no esté?</h1>
+  <p>Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Cargá los números de tu empresa y obtené el resultado al instante.</p>
+  <div class="hero-links">
+    <!-- EDITAR: reemplazá el # por la URL de tu artículo cuando lo publiques -->
+    <a class="medium" href="#" id="link-medium"><svg class="ic"><use href="#i-medium"/></svg> Leer el artículo</a>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="active" data-tab="calc"><svg><use href="#i-calc"/></svg> Calculadora</button>
+  <button data-tab="explica"><svg><use href="#i-book"/></svg> Cómo funciona</button>
+  <button data-tab="formula"><svg><use href="#i-flask"/></svg> Fórmulas</button>
+  <button data-tab="jugar"><svg><use href="#i-sliders"/></svg> Explorar gráficos</button>
+  <button data-tab="extremos"><svg><use href="#i-chart"/></svg> Casos extremos</button>
+  <button data-tab="compara"><svg><use href="#i-scale"/></svg> Local vs Nube</button>
+  <button data-tab="montecarlo"><svg><use href="#i-dice"/></svg> Montecarlo</button>
+  <button data-tab="conclusiones"><svg><use href="#i-bulb"/></svg> Conclusiones</button>
+</nav>
+
+<div class="wrap">
+
+<!-- ========== CALCULADORA ========== -->
+<div class="panel active" id="calc">
+<section>
+  <h2><svg><use href="#i-calc"/></svg> Calculá tu empresa</h2>
+  <p class="nota">Mové los valores y mirá cómo cambian tus resultados. Todo se calcula en tu navegador; nada se envía a ningún lado.</p>
+  <div class="calc-grid">
+    <div>
+      <h3>Tu operación</h3>
+      <div class="campo">
+        <label>Personas actuales en el área <span class="hint">las que hoy hacen el trabajo</span></label>
+        <input type="number" id="P" value="10" min="1">
+      </div>
+      <div class="campo">
+        <label>Nómina mensual total en USD <span class="hint">sueldos con cargas incluidas</span></label>
+        <input type="number" id="N" value="16000" min="0" step="500">
+      </div>
+      <div class="campo">
+        <label>Horas trabajadas por persona al mes</label>
+        <input type="number" id="hp" value="160" min="1">
+      </div>
+      <h3>Automatización</h3>
+      <div class="campo">
+        <label>% de las horas de trabajo automatizable <span class="hint">a — qué fracción de las horas del área puede hacer la IA</span></label>
+        <div class="slider-row"><input type="range" id="a" min="0" max="100" value="60" aria-label="Porcentaje de horas automatizable"><span class="val" id="a_v">60%</span></div>
+      </div>
+      <div class="campo">
+        <label>% de esas horas con firma humana obligatoria <span class="hint">r — médico, escribano, auditor</span></label>
+        <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas con firma humana obligatoria"><span class="val" id="r_v">20%</span></div>
+      </div>
+      <div class="campo">
+        <label>Eficiencia real de la IA <span class="hint">η — rinde esto de una persona; nunca 100%</span></label>
+        <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Eficiencia real de la IA"><span class="val" id="eta_v">80%</span></div>
+      </div>
+    </div>
+    <div>
+      <h3>Costos e inversión</h3>
+      <div class="campo">
+        <label>Costo de la IA por mes (USD)</label>
+        <input type="number" id="CtMes" value="1229" min="0" step="50">
+      </div>
+      <details class="asistente">
+        <summary>¿Qué número pongo acá? Abrí el asistente de costo real</summary>
+        <div class="asist-body">
+          <p class="hint" style="margin-bottom:10px;">La idea no es acertar el número exacto: es <b>no olvidarte de ningún costo</b>. Varios pueden dar cero —si ya los tenés cubiertos— pero conviene mirarlos uno por uno antes de descartarlos.</p>
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <button type="button" class="ct-btn on" id="ct-modo-api">Pago por uso (API)</button>
+            <button type="button" class="ct-btn" id="ct-modo-local">Servidor propio</button>
+          </div>
+
+          <div id="ct-panel-api">
+            <p class="hint" style="margin-bottom:10px;">Cargá lo que <b>sí sabés o podés cotizar</b>: el precio de tu modelo y cuánto pensás gastar al mes. Las horas automatizadas ya las tiene el modelo, así que el costo por hora sale solo.</p>
+            <div class="campo">
+              <label>1 · Precio por millón de tokens (USD) <span class="hint">depende del modelo que elijas: DeepSeek V4-Flash ≈ $0,21 · Gemini 3.6 Flash ≈ $4,50 · Gemini 3.1 Pro ≈ $7</span></label>
+              <input type="number" id="ctp_precio" value="0.21" min="0" step="0.01">
+            </div>
+            <div class="campo">
+              <label>2 · Millones de tokens que vas a consumir por MES <span class="hint">del tablero de tu proveedor, o proyectado desde un mes de prueba. Es tu OPEX de IA, el mismo dato que le pedirías a finanzas.</span></label>
+              <input type="number" id="ctp_mes" value="614" min="0" step="10">
+            </div>
+            <div class="asist-tot">Gasto mensual en IA: <b id="ctp_opex">$129</b> &nbsp;·&nbsp; tus horas automatizadas: <b id="ctp_horas">614</b> h/mes</div>
+            <p class="hint" id="ctp_diag" style="background:var(--m-aut-claro); border-left:3px solid var(--m-aut); padding:9px 11px; border-radius:6px;"></p>
+            <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin-top:8px;">
+            <b>Por qué se pregunta por mes y no por hora.</b> Un modelo caro suele necesitar menos tokens para la misma tarea, y uno barato más. Preguntarte "cuántos tokens por hora" te obligaría a adivinar esa compensación; preguntarte el <b>gasto mensual</b> la incluye sola. Además, "una hora de trabajo" no es una hora de la persona completa —esa tiene reuniones, llamados y mil cosas que la IA no hace—: son las horas que ya contaste como automatizables arriba.</p>
+          </div>
+
+          <div id="ct-panel-local" style="display:none;">
+            <div class="campo">
+              <label>Servidor: alquiler o cuota mensual (USD) <span class="hint">si lo comprás, no va acá: va en "Inversión inicial"</span></label>
+              <input type="number" id="ctl_srv" value="5170" min="0" step="100">
+            </div>
+            <div class="campo">
+              <label>Electricidad y conectividad (USD/mes) <span class="hint">0 si ya viene incluida en el alquiler</span></label>
+              <input type="number" id="ctl_luz" value="250" min="0" step="50">
+            </div>
+            <div class="campo">
+              <label>SysAdmin / soporte técnico (USD/mes) <span class="hint">contratado, por hora, tercerizado — o <b>0 si ya tenés a alguien que lo absorbe</b></span></label>
+              <input type="number" id="ctl_sys" value="3000" min="0" step="250">
+            </div>
+            <div class="campo">
+              <label>Otros: monitoreo, backup, licencias (USD/mes) <span class="hint">0 si no aplica</span></label>
+              <input type="number" id="ctl_otros" value="0" min="0" step="50">
+            </div>
+            <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:8px 10px; border-radius:6px;">Poner <b>0</b> en el sysadmin es una respuesta válida si un líder técnico ya absorbe la tarea. Lo que no es válido es <b>no haberlo pensado</b>: es el costo oculto que más proyectos de IA local hunde.</p>
+            <div class="asist-tot">Costo fijo total: <span id="ctl_total">$8.420</span>/mes &nbsp;·&nbsp; tus horas de IA: <span id="ctl_horas">614</span> h/mes</div>
+          </div>
+
+          <div class="asist-res">
+            <span>Costo mensual de IA: <b id="ct-res">$129</b></span>
+            <button type="button" class="btn-usar" id="ct-usar">Usar este valor ↑</button>
+          </div>
+          <p class="hint" id="ct-aviso" style="margin-top:8px;"></p>
+        </div>
+      </details>
+      <div class="campo">
+        <label>Inversión inicial (USD) <span class="hint">todo lo que pagás UNA sola vez: proveedor o consultora, horas de tus programadores, integración, migración de datos, licencias iniciales, y las horas de tu propia gente definiendo reglas y revisando salidas. Hardware solo si lo comprás — si lo alquilás va en el costo por hora.</span></label>
+        <input type="number" id="I" value="50000" min="0" step="1000">
+        <p class="hint" style="margin-top:5px;">Las horas internas <b>no son gratis por ser internas</b>: suelen ser el 20–30% del total. Contarlas en cero hace que el recupero sea ficción.</p>
+      </div>
+      <div class="campo">
+        <label>Mantenimiento mensual (USD)</label>
+        <input type="number" id="M" value="500" min="0" step="100">
+      </div>
+      <h3>Arquitectura</h3>
+      <p class="hint" style="margin:-4px 0 8px;">Estas decisiones definen tu <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA el hecho de que tu arquitectura sea frágil. Arranca en 1,00 (sin riesgo) y sube con cada casillero.</p>
+      <div class="arq-group" id="arq">
+        <p class="hint" style="margin-bottom:6px;">Dónde corre la IA (elegí una):</p>
+        <label class="check"><input type="radio" name="infra" data-rho="0.30" checked> Una sola nube <span class="hint">(+30%)</span></label>
+        <label class="check"><input type="radio" name="infra" data-rho="0.10"> Multi-cloud, 2+ proveedores <span class="hint">(+10%)</span></label>
+        <label class="check"><input type="radio" name="infra" data-rho="0.02"> IA local (tus servidores) <span class="hint">(+2%)</span></label>
+        <p class="hint" id="aviso-local" style="display:none; background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin:-2px 0 8px;">Bajar el riesgo es solo la mitad de la historia: local también <b>sube tu costo por hora</b>. Sumá servidor + electricidad + sysadmin y dividí por tus horas de IA — suele dar bastante más que una API. Cargá ese total arriba en "Costo de la IA por mes" — o usá el asistente, que ya lo suma por vos.</p>
+        <p class="hint" style="margin:10px 0 6px;">Agravantes (marcá los que apliquen):</p>
+        <label class="check"><input type="checkbox" data-rho="0.20" checked> Sin plan de contingencia <span class="hint">(+20%)</span></label>
+        <label class="check"><input type="checkbox" data-rho="0.15"> Datos sensibles en nube externa <span class="hint">(+15%)</span></label>
+
+        <details class="asistente" style="margin-top:10px;">
+          <summary>¿Qué cuenta como "plan de contingencia"? Ver ejemplos</summary>
+          <div class="asist-body">
+            <p class="hint" style="margin-bottom:9px;">No es un documento en un cajón. Un plan de contingencia real tiene <b>cuatro cosas</b>, y si te falta alguna, marcá la casilla:</p>
+            <p class="hint"><b>1 · El procedimiento manual escrito.</b> Paso a paso de cómo se hacía el trabajo antes de la IA: qué sistema se abre, qué se controla, a quién se le avisa. Si el único que sabe es "el que estuvo desde el principio", no hay plan.</p>
+            <p class="hint"><b>2 · Gente entrenada de verdad, no en la lista.</b> Acá está lo importante: no alcanza con <i>tener</i> las personas. Si hace ocho meses que la IA hace todo y ellos solo revisan salidas, <b>perdieron la práctica</b>. El día que la IA no esté no van a poder arrancar, y encima van a tener que rehacer la curva de aprendizaje bajo presión, con el negocio parado.</p>
+            <p class="hint"><b>3 · Simulacros periódicos.</b> La forma de resolver lo anterior: una vez por trimestre, apagás la IA a propósito unas horas y operás a mano. Igual que un simulacro de incendio. Es la única manera de saber si tu piso de continuidad existe o es un número en una planilla. Cuesta horas, y esas horas son parte del seguro.</p>
+            <p class="hint"><b>4 · Un segundo camino técnico probado.</b> Otro proveedor con las credenciales ya cargadas y testeadas, o un modelo más chico corriendo local que aguante lo crítico. Probado: si nunca lo encendiste, no cuenta.</p>
+            <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin-top:9px;">
+            El error más común es tener el punto 1 y creer que alcanza. <b>Un procedimiento que nadie ejecutó en un año no es un plan: es un papel.</b> Si estás en esa situación, dejá la casilla marcada — tu riesgo es real.</p>
+          </div>
+        </details>
+      </div>
+      <h3>Continuidad</h3>
+      <div class="campo">
+        <label>Horas/mes mínimas para operar SIN IA <span class="hint">horas de trabajo, no cantidad de personas ni de puestos</span></label>
+        <input type="number" id="Hmin" value="640" min="0" step="40">
+      </div>
+      <details class="asistente">
+        <summary>¿Tenés que cubrir puestos al mismo tiempo? Calculá las horas acá</summary>
+        <div class="asist-body">
+          <p class="hint" style="margin-bottom:10px;">Este es el error más caro del modelo. Si por contrato o por normativa <b>tenés que tener 2 personas siempre presentes</b>, eso <b>no son 2 personas</b>: son 2 puestos que hay que cubrir durante todas las horas que abre la operación, y eso se paga con más gente.</p>
+          <div class="campo">
+            <label>Puestos que deben estar cubiertos al mismo tiempo <span class="hint">las 2 personas del contrato, las cajas que no pueden cerrar, las ventanillas mínimas</span></label>
+            <input type="number" id="hm_puestos" value="2" min="0" step="1">
+          </div>
+          <div class="campo">
+            <label>Horas que la operación está abierta al mes <span class="hint">oficina 8 h × 22 días = 176 · retail 12 h × 30 = 360 · guardia 24/7 = 720</span></label>
+            <input type="number" id="hm_oper" value="176" min="1" step="8">
+          </div>
+          <div class="asist-tot">Horas mínimas: <span id="hm_total">352</span> h/mes &nbsp;·&nbsp; equivale a <span id="hm_personas">3</span> personas con tu jornada actual</div>
+          <div class="asist-res">
+            <span>H_min calculado: <b id="hm_res">352 h</b></span>
+            <button type="button" class="btn-usar" id="hm-usar">Usar este valor ↑</button>
+          </div>
+          <p class="hint" id="hm_aviso" style="margin-top:8px;"></p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="acciones">
+    <button type="button" class="btn-accion primario" id="btn-calcular"><svg class="ic"><use href="#i-calc"/></svg> Calcular</button>
+    <button type="button" class="btn-accion" id="btn-reiniciar"><svg class="ic"><use href="#i-reset"/></svg> Reiniciar valores</button>
+    <button type="button" class="btn-accion" id="btn-informe"><svg class="ic"><use href="#i-doc"/></svg> Descargar informe</button>
+  </div>
+  <p class="nota" style="margin-top:10px; margin-bottom:0;">Los resultados se actualizan solos mientras movés los valores. El botón <b>Calcular</b> te lleva al resultado, útil desde el celular.</p>
+</section>
+<section style="padding:0; background:none; box-shadow:none;">
+  <div class="resultado-box">
+    <div class="res-item">
+      <div class="res-label">Personas que necesitás conservar</div>
+      <div class="res-num naranja" id="out_P">7</div>
+      <div class="res-sub" id="out_P_sub">La cuenta económica manda. Tu piso de continuidad es 4.</div>
+    </div>
+    <div class="res-item">
+      <div class="res-label">Índice de Dependencia de IA (IDA)</div>
+      <div class="res-num" id="out_IDA">58</div>
+      <span class="ida-badge ida-amarillo" id="out_IDA_badge">Vigilancia</span>
+      <div class="ida-mini" id="out_IDA_mini"></div>
+    </div>
+    <div class="res-item">
+      <div class="res-label">Ahorro mensual ajustado por riesgo</div>
+      <div class="res-num" id="out_S" style="font-size:1.8rem;">$2.457</div>
+      <div class="res-sub">Automatización efectiva: <b id="out_aef">38%</b> · riesgo ×<b id="out_lambda">1,50</b> · <b id="out_lib">3 personas liberadas</b></div>
+      <div class="alerta warn" id="out_S_freno" style="display:none;"></div>
+    </div>
+    <div class="res-item">
+      <div class="res-label">Recupero de la inversión</div>
+      <div class="res-num" id="out_pb" style="font-size:1.8rem;">20 meses</div>
+      <div class="alerta warn" id="out_alerta">Más de 18 meses: la inversión no se recupera en un plazo razonable.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ========== CÓMO FUNCIONA ========== -->
+<div class="panel" id="explica">
+<section>
+  <h2><svg><use href="#i-book"/></svg> El problema, desde cero</h2>
+  <p>Hoy un call center se puede automatizar al 100% con IA. La pregunta ya no es "¿se puede?". La pregunta es: <b>¿qué pasa si de un día para otro no podés usar IA?</b></p>
+  <p>Puede pasar de muchas formas: se cae el proveedor de nube, el modelo se discontinúa, el precio se dispara, una regulación te prohíbe procesar datos afuera, o te cortan el servicio. El 20 de abril de 2026, ChatGPT, Claude y Gemini se cayeron casi al mismo tiempo: quienes usaban uno como respaldo del otro se quedaron sin plan B.</p>
+  <p>El punto ciego: cuando una empresa automatiza, calcula cuánta gente puede <b>reducir</b>. Nadie calcula cuánta gente tiene que <b>conservar</b>. Este segundo número es el que te salva.</p>
+  <h3>Qué es el IDA</h3>
+  <p>El <b>Índice de Dependencia de IA</b> es un número de <b>0 a 100</b> que resume cuán expuesta está tu operación si la IA deja de estar disponible. Combina dos cosas: cuánto automatizaste y cuán frágil es la arquitectura que lo sostiene.</p>
+  <div class="ida-escala">
+    <div class="z1">0–30 · Resiliente</div>
+    <div class="z2">30–60 · Vigilancia</div>
+    <div class="z3">60–100 · Crítico</div>
+  </div>
+  <div class="escala-labels"><span>0 = no dependés de la IA</span><span>100 = tu operación es rehén de ella</span></div>
+  <p style="margin-top:14px;"><b>IDA cerca de 0:</b> casi no automatizaste, o lo hiciste con arquitectura robusta (IA local, multi-cloud, contingencia). Si la IA se cae, es una molestia menor.<br>
+  <b>IDA cerca de 100:</b> automatizaste mucho sobre una arquitectura frágil (una sola nube, sin plan B). Si la IA se cae, tu operación se cae con ella.</p>
+  <h3>Cuatro preguntas</h3>
+  <table>
+    <tr><th>Pregunta</th><th>Módulo</th></tr>
+    <tr><td>¿Cuánto cuesta la hora humana?</td><td>Humano</td></tr>
+    <tr><td>¿Cuánto puedo automatizar <i>de verdad</i>?</td><td>Automatización</td></tr>
+    <tr><td>¿Cuánto me cuesta el riesgo de mi arquitectura?</td><td>Riesgo</td></tr>
+    <tr><td>¿Cuál es mi piso para sobrevivir sin IA?</td><td>Continuidad</td></tr>
+  </table>
+  <p class="nota">Seguí en <b>Fórmulas</b> para ver la cuenta completa paso a paso, o pasá a <b>Casos extremos</b> para entenderla con ejemplos.</p>
+</section>
+</div>
+
+<!-- ========== FÓRMULAS ========== -->
+<div class="panel" id="formula">
+<section>
+  <h2><svg><use href="#i-flask"/></svg> Cómo se arma la cuenta</h2>
+  <p>Los datos que cargás en la calculadora pasan por <b>cuatro módulos</b>, y de ahí salen las <b>tres respuestas</b> del modelo. <b>Hacé clic en cada módulo</b> para ver qué datos usa, qué produce y a qué resultado alimenta.</p>
+
+  <div class="diag-wrap">
+    <svg id="diagrama" viewBox="0 0 1075 560" role="img" aria-label="Diagrama de flujo del modelo: los datos alimentan cuatro modulos y estos producen las tres respuestas"></svg>
+  </div>
+  <div class="diag-cap">
+    <span><b>Hacé clic en un módulo</b> para ver hacia dónde va</span>
+    <span>·</span>
+    <span><b>o en una respuesta</b> para ver de qué se alimenta</span>
+  </div>
+
+  <div class="flow-detalle" id="flow-detalle"></div>
+
+  <p class="nota" style="margin-top:14px;">Los ejemplos numéricos que siguen usan los valores que trae la calculadora por defecto: 10 personas, 160 h cada una, nómina $16.000, 60% automatizable, 20% con firma humana, 80% de eficiencia, una sola nube sin plan de contingencia, 640 h mínimas, inversión $50.000 y mantenimiento $500 por mes.</p>
+</section>
+
+<section>
+  <h2><svg><use href="#i-flask"/></svg> Paso a paso: los cuatro módulos</h2>
+
+  <h3 class="mod h-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Módulo Humano → produce C_h</h3>
+  <div class="formula f-hum">$$C_h = \frac{N}{H} \qquad H = P \cdot h_{persona}$$</div>
+  <p class="nota"><b>N</b> = nómina mensual total en USD del área (sueldos con cargas). <b>H</b> = horas humanas totales del área al mes, que sale de multiplicar personas por horas de cada una. <b class="v-hum">C_h</b> es lo que te cuesta una hora de trabajo humano: la vara contra la que se compara la IA.</p>
+  <div class="ejemplo e-hum"><span class="tit">Cuánto da y qué pasa si lo movés</span>
+  <span class="cuenta">H = 10 × 160 = 1.600 h</span> → <span class="cuenta">C_h = 16.000 ÷ 1.600 = $10/h</span><br><br>
+  Si <b>N</b> sube y H queda igual (aumento de sueldos), C_h sube: cada hora sale más cara y la IA se justifica más fácil. Si <b>H</b> sube sin que N suba proporcional, C_h baja: con hora humana a $5 en vez de $10, la misma IA a $2 deja de ser tan buen negocio.</div>
+
+  <h3 class="mod h-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Módulo Automatización → produce a_ef</h3>
+  <div class="formula f-aut">$$a_{ef} = a \cdot (1-r) \cdot \eta$$</div>
+  <p class="nota"><b>a</b> = % de las horas del área que técnicamente puede hacer la IA. <b>r</b> = % de esas horas que exige firma humana obligatoria (médico, escribano, auditor): la IA no las reemplaza aunque técnicamente pudiera hacer la tarea. <b>η</b> (eta) = eficiencia real de la IA frente a una persona; nunca 100%, siempre hay reprocesos y supervisión. <b class="v-aut">a_ef</b> es la automatización <i>efectiva</i>: el % de horas que realmente sacás de la carga humana.</p>
+  <div class="ejemplo e-aut"><span class="tit">Un ejemplo concreto: los emails de un retail</span>
+  Técnicamente <b>se pueden contestar el 100%</b> con IA: leer, entender, redactar y responder. Ese es tu <b class="v-aut">a</b> = 100%.<br><br>
+  Pero por regla de negocio hay correos que <b>tienen que pasar por una persona sí o sí</b>: los que mencionan temas legales, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales. Si eso es 1 de cada 5, tu <b class="v-aut">r</b> = 20%.<br><br>
+  Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu <b class="v-aut">η</b> = 80%.<br><br>
+  Resultado: <span class="cuenta">1,00 × (1 − 0,20) × 0,80 = 64%</span>. Arrancaste creyendo que automatizabas todo y en la práctica sacás <b>dos tercios</b> de la carga. Ese 64% es el número con el que hay que hacer las cuentas, no el 100%.</div>
+  <p class="nota"></p>
+  <div class="ejemplo e-aut"><span class="tit">Cuánto da y qué pasa si lo movés</span>
+  <span class="cuenta">a_ef = 0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
+  Arrancaste con 60% de promesa y terminaste en 38,4% real. Subir <b>a</b> o <b>η</b> sube a_ef en línea recta; subir <b>r</b> lo baja. Si una regulación nueva lleva r a 50%, a_ef cae a 24% sin que cambie nada de la tecnología.</div>
+
+  <h3 class="mod h-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Módulo Riesgo → produce λ</h3>
+  <div class="formula f-rie">$$\lambda = 1 + \sum_i \rho_i \qquad C_{mes}^{real} = \lambda \cdot C_{mes}$$</div>
+  <table>
+    <tr><th>Decisión de arquitectura</th><th>ρ</th></tr>
+    <tr><td>Una sola nube</td><td>+0,30</td></tr>
+    <tr><td>Multi-cloud (2+ proveedores)</td><td>+0,10</td></tr>
+    <tr><td>IA local (en tus servidores)</td><td>+0,02</td></tr>
+    <tr><td>Sin plan de contingencia</td><td>+0,20</td></tr>
+    <tr><td>Datos sensibles en nube externa</td><td>+0,15</td></tr>
+  </table>
+  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es el costo esperado del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
+  <div class="ejemplo e-rie"><span class="tit">Cuánto da y qué pasa si lo movés</span>
+  Una sola nube (+0,30) y sin plan de contingencia (+0,20) suman 0,50 de prima: <span class="cuenta">1 + 0,50 = 1,50</span><br><br>
+  <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.844</span> en la evaluación del proyecto.<br><br>
+  ¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que esa nube única se cae y no tenés plan B, perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara <i>cuando todavía estás a tiempo de cambiarla</i>.<br><br>
+  Es la misma lógica del seguro del auto: manejar sin seguro no te sale más barato, te sale igual hasta que chocás.<br><br>
+  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo real cae de $1.844 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
+
+  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Módulo Continuidad → produce P_min</h3>
+  <div class="formula f-con">$$P_{min} = \Big\lceil \frac{H_{min}}{h_{persona}} \Big\rceil$$</div>
+  <p class="nota"><b class="v-con">H_min</b> = horas de trabajo que necesitás al mes para sostener <i>solo lo crítico</i> si la IA no está: no toda tu operación, la parte que no puede parar. <b>h_persona</b> = horas que trabaja una persona al mes. El símbolo ⌈ ⌉ es "redondeo hacia arriba": si da 3,2 personas, son 4, porque no existe media persona.</p>
+  <div class="ejemplo e-con"><span class="tit">Cuánto da y qué pasa si lo movés</span>
+  <span class="cuenta">P_min = ⌈640 ÷ 160⌉ = ⌈4⌉ = 4 personas</span><br><br>
+  Esas 4 personas son tu piso: con menos que eso, el día que la IA no está no podés sostener la operación crítica. Si H_min sube (más operación que no puede parar), el piso sube. Si h_persona sube (doble turno, 320 h), el piso baja a 2: mismas horas cubiertas con menos gente.</div>
+
+  <div class="ejemplo e-con"><span class="tit">Ojo: esto NO es lo mismo que la firma del médico o del escribano</span>
+  Son dos preguntas distintas, y es donde más se confunde la gente:<br><br>
+  <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto no puede por norma?</i> Es la firma del médico, del escribano, del auditor. Eso pasa <b>aunque la IA funcione perfecto</b>: hay tareas que legalmente no se delegan.<br><br>
+  <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
+  <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo: <i>"si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que revisar pedidos 4 horas por día"</i> → 88 horas más. Total ≈ 290 horas al mes: ese es tu <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona te da el piso.<br><br>
+  Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</div>
+</section>
+
+<section>
+  <h2><svg><use href="#i-flask"/></svg> Cómo se unen: los tres resultados</h2>
+  <p>Acá no aparece ninguna variable nueva. Los tres resultados son los cuatro números de arriba, combinados. Cada término va pintado con el color del módulo del que viene:</p>
+  <div class="leyenda-mod">
+    <span class="t t-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Humano · C_h</span>
+    <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización · a_ef</span>
+    <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo · λ</span>
+    <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad · P_min</span>
+    <span class="t t-dato">dato que cargás</span>
+  </div>
+
+  <h3 class="res-h">Resultado 1 — Cuánta gente conservar (P')</h3>
+  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad</span></p>
+  <div class="formula-color">P' &nbsp;=&nbsp; max<b>(</b> &nbsp;⌈ <span class="t t-dato">P</span> · (1 − <span class="t t-aut">a_ef</span>) ⌉ &nbsp;,&nbsp; <span class="t t-con">P_min</span> &nbsp;<b>)</b></div>
+  <p>Esta fórmula hace <b>dos cuentas distintas y se queda con la más grande</b>. Paso a paso:</p>
+
+  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>La cuenta económica:</b> si automatizás el 38,4% de las horas, te "sobra" ese 38,4% de la gente. Queda el resto: <span class="cuenta">10 × (1 − 0,384) = 6,16 → ⌈6,16⌉ = 7 personas</span>. Redondeás para arriba porque no podés tener 6,16 empleados.</div></div>
+  <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>La cuenta de supervivencia:</b> es el <span class="t t-con">P_min</span> que ya calculaste en el módulo Continuidad: <span class="cuenta">4 personas</span>. No sale de automatizar nada — sale de preguntarte cuánta gente necesitás el día que la IA no está.</div></div>
+  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>El <span class="cuenta">max( )</span> elige la más grande:</b> <span class="cuenta">max(7 , 4) = 7 personas</span>. Ese es tu P': la respuesta final del modelo.</div></div>
+
+  <p><b>¿Por qué la más grande y no la más chica?</b> Porque las dos son condiciones que tenés que cumplir <i>al mismo tiempo</i>: necesitás al menos 7 para hacer el trabajo del día a día, y al menos 4 para sobrevivir sin IA. El número que las cumple a las dos es el mayor. Quedarte con el menor te dejaría incumpliendo una.</p>
+  <p>En este ejemplo manda la economía y el piso ni se activa. <b>Pero mirá qué pasa si automatizás más:</b> con a_ef del 90%, la cuenta económica da <span class="cuenta">⌈10 × 0,10⌉ = 1 persona</span>, y entonces <span class="cuenta">max(1 , 4) = 4</span>. <b>Ahí el piso toma el control</b> y te frena: por más que automatices el 100%, nunca vas a bajar de 4. Esas 3 personas de diferencia entre lo que dice el Excel y lo que dice el piso son tu prima de seguro operativo.</p>
+
+  <h3 class="res-h">Resultado 2 — Si conviene o no (S y T)</h3>
+  <p class="res-usa">Se alimenta de: <span class="t t-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Humano</span> <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span class="t t-res">y del Resultado 1</span></p>
+  <div class="formula-color">S &nbsp;=&nbsp; <b>(</b> <span class="t t-dato">P</span> − <span class="t t-res">P'</span> <b>)</b> · <span class="t t-hum">sueldo</span> &nbsp;−&nbsp; <span class="t t-rie">λ</span> · <span class="t t-dato">C_mes</span> &nbsp;−&nbsp; <span class="t t-dato">M</span></div>
+  <div class="formula-color">T<sub>payback</sub> &nbsp;=&nbsp; <span class="t t-dato">I</span> &nbsp;÷&nbsp; S</div>
+  <p><b>S es el ahorro mensual en dólares.</b> Fijate que arranca con <span class="t t-res">P'</span>, el resultado anterior: <b>solo ahorrás el sueldo de la gente que efectivamente podés liberar</b>. Paso a paso:</p>
+  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>Cuánta gente liberás de verdad:</b> <span class="cuenta">P − P' = 10 − 7 = 3 personas</span>. Ojo que no son 3,84 (el 38,4% de 10): no podés despedir fracciones de persona, y si el piso se activa liberás todavía menos.</div></div>
+  <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>Cuánto ahorrás en sueldos:</b> cada persona cuesta <span class="cuenta">N ÷ P = 16.000 ÷ 10 = $1.600/mes</span>, así que <span class="cuenta">3 × $1.600 = $4.800/mes</span>.</div></div>
+  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>Cuánto te cuesta la IA:</b> tu gasto mensual, ajustado por riesgo: <span class="cuenta">1,5 × $1.229 = $1.844/mes</span>. Acá entra el multiplicador de riesgo: tu proveedor te factura $1.229, pero con una arquitectura frágil el costo real que el modelo te cobra es $1.844.</div></div>
+  <div class="paso"><div class="paso-n">4</div><div class="paso-tx"><b>Restás todo:</b> <span class="cuenta">$4.800 − $1.843 − $500 = S = $2.457/mes</span>.</div></div>
+  <div class="paso"><div class="paso-n">5</div><div class="paso-tx"><b>Para qué sirve S:</b> para dos decisiones. Primera, el semáforo — si S sale <b>cero o negativo</b>, automatizar cuesta más de lo que ahorra y el proyecto no va, por lindo que suene. Segunda, el recupero: <span class="cuenta">T = $50.000 ÷ $2.457 = 20 meses</span>. Regla del modelo: <b>arriba de 18 meses, no avances</b> — en IA, 18 meses es una eternidad tecnológica.</div></div>
+
+  <div class="ejemplo e-rie" style="margin-top:18px;"><span class="tit">La trampa que esta fórmula evita</span>
+  La cuenta intuitiva —y la que hace casi todo el mundo— es <span class="cuenta">horas automatizadas × costo de la hora humana</span>: 614,4 h × $10 = $6.144 de ahorro. <b>Es falso.</b> Vos no pagás horas, pagás sueldos. Automatizar 3,84 personas-equivalente cuando solo podés echar 3 no ahorra 3,84 sueldos: ahorra 3.<br><br>
+  Y cuando el piso de continuidad se activa la brecha se vuelve enorme. Con automatización al 100% y piso de 4, la cuenta ingenua promete <b>$10.700/mes</b>; el ahorro real es <b>$4.300/mes</b>. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace su trabajo. <b>Esa es tu prima de seguro operativo, y ahora el modelo te la cobra.</b></div>
+
+  <div class="ejemplo e-aut" style="margin-top:14px;"><span class="tit">El corolario incómodo: existe un óptimo</span>
+  Una vez que chocaste el piso, cada punto extra de automatización <b>suma factura de IA pero no libera a nadie más</b>. Desde ahí, automatizar más te <b>baja</b> el ahorro y te <b>sube</b> el IDA: quedás más pobre y más dependiente al mismo tiempo. En el ejemplo, el óptimo está en el 60% de automatización efectiva ($6.220/mes); al 100% caés a $4.300. Mirá la curva en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</div>
+
+  <p class="nota" style="margin-top:14px;"><b>Una aclaración honesta sobre λ:</b> S es el <i>ahorro ajustado por riesgo</i>, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor todos los meses: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al momento de decidir. Tu contador va a ver un ahorro mayor —el mismo número con λ=1—; tu director de riesgo va a querer ver este.</p>
+
+  <h3 class="res-h">Resultado 3 — Cuán expuesto quedás (IDA)</h3>
+  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span style="color:var(--gris)">— nunca dinero</span></p>
+  <div class="formula-color">IDA &nbsp;=&nbsp; min<b>(</b> <span class="t t-aut">a_ef</span> · <span class="t t-rie">λ</span> · 100 &nbsp;,&nbsp; 100 <b>)</b></div>
+  <p><span class="cuenta">IDA = 0,384 × 1,50 × 100 = 58</span> → zona amarilla, vigilancia.</p>
+  <p class="nota">El <span class="cuenta">min( , 100)</span> no es decorativo: con automatización alta y arquitectura muy frágil el producto se pasa de 100 (el techo teórico es 177, con a_ef=1 y todos los agravantes marcados). Cualquier valor por encima de 100 ya es "máxima dependencia posible", así que el índice se topea ahí para que la escala 0–100 signifique siempre lo mismo.</p>
+  <p><b>Por qué el IDA no incluye la plata.</b> Es la pregunta más común y es deliberado: <b>ahorrar y estar expuesto son cosas distintas</b>. Podés tener un proyecto que ahorra bien y recupera rápido —excelente negocio— y al mismo tiempo estar en zona amarilla de dependencia. Si metieras el dinero adentro del IDA, un ahorro grande te "taparía" el riesgo y el índice te diría que estás bien justo cuando más frágil estás. Por eso el IDA mide solo dos cosas: <b>cuánto delegaste</b> (a_ef) por <b>cuán frágil es lo que lo sostiene</b> (λ). El dinero ya tiene su propia fórmula, que es S.</p>
+  <p class="nota">Comprobalo: dos empresas con la misma automatización del 38,4% pero distinta arquitectura → con una sola nube (λ=1,50) da IDA 58; con IA local (λ=1,02) da IDA 39. Mismo trabajo automatizado, mitad de exposición.</p>
+</section>
+
+<section>
+  <h2><svg><use href="#i-scale"/></svg> La plata: inversión vs costo operativo</h2>
+  <p>Todo proyecto de automatización tiene <b>dos bolsillos distintos</b>, y confundirlos es el error más caro que se puede cometer con este modelo. Uno se paga una sola vez; el otro, todos los meses de tu vida.</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Inversión (I) — una sola vez</th><th>Costo operativo — todos los meses</th></tr>
+    <tr>
+      <td>Honorarios de proveedor o consultora<br>
+      <b>Horas de tus propios programadores</b><br>
+      Integración con tus sistemas actuales<br>
+      Migración y limpieza de datos<br>
+      Licencias iniciales<br>
+      <b>Horas de tu propia gente</b> definiendo reglas y revisando salidas<br>
+      Hardware, <i>solo si lo comprás</i></td>
+      <td>Tokens / API, o alquiler del servidor (<b>C_mes</b>)<br>
+      Electricidad y conectividad<br>
+      <b>Sysadmin o servicio gestionado</b><br>
+      Mantenimiento y ajustes del software (<b>M</b>)<br>
+      Reentrenamiento cuando cambia el modelo<br>
+      Monitoreo y auditoría de salidas</td>
+    </tr>
+  </table>
+  </div>
+
+  <p class="nota">Las dos líneas en negrita de la izquierda son las que todo presupuesto olvida: <b>las horas internas no son gratis por ser internas</b>. Entre definir reglas, revisar salidas y capacitar, tu propio equipo suele representar entre el 20% y el 30% de la inversión real. Si las contás en cero, el payback que te da el modelo es ficción.</p>
+  <p class="nota"><b>Y una aclaración que evita doble conteo:</b> si el servidor lo <i>alquilás</i>, es costo operativo y va dentro de C_mes. Si lo <i>comprás</i>, es inversión y va en I. Nunca en los dos lados.</p>
+
+  <h3>Dónde vive la inversión dentro del modelo: en un solo lugar</h3>
+  <p>Esto sorprende a casi todos. La inversión <b>no aparece en ninguna fórmula de los cuatro módulos</b>. Solo aparece al final, en una división: <span class="cuenta">T = I ÷ S</span>. Mirá qué pasa si la cambio y dejo absolutamente todo lo demás igual:</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Inversión</th><th>Ahorro mensual</th><th>IDA</th><th>Recupero</th></tr>
+    <tr class="fila-ok"><td>$25.000</td><td>$2.457</td><td>58</td><td>10 meses <span class="mk ok">✓</span></td></tr>
+    <tr><td>$50.000</td><td>$2.457</td><td>58</td><td>20 meses <span class="mk no">✕</span></td></tr>
+    <tr><td>$100.000</td><td>$2.457</td><td>58</td><td>41 meses <span class="mk no">✕</span></td></tr>
+    <tr class="fila-mal"><td>$200.000</td><td>$2.457</td><td>58</td><td>81 meses <span class="mk no">✕</span></td></tr>
+  </table>
+  </div>
+
+  <p>El ahorro no se mueve. El IDA no se mueve. <b>Lo único que se mueve es el recupero.</b> Y está bien que sea así: los $50.000 son un gasto de una sola vez, no cambian cuánta plata te entra por mes ni cuán dependiente quedás de tu proveedor. Cambian solamente <i>cuánto tardás en devolver lo que pusiste</i>.</p>
+
+  <div class="ejemplo e-hum"><span class="tit">La asimetría que conviene tener en la cabeza</span>
+  Un error en la <b>inversión</b> lo pagás una vez: si te equivocaste $20.000, tu payback se corre unos meses y listo.<br><br>
+  Un error en el <b>costo operativo</b> te acompaña <b>todos los meses para siempre</b>: si subestimaste C_mes, cada mes ahorrás menos de lo que creías, y eso no se termina nunca. Por eso, si tenés poco tiempo para revisar supuestos, <b>revisá C_mes antes que I</b>.</div>
+
+  <h3>El punto ciego: la fórmula asume que la IA se paga por hora</h3>
+  <p>El modelo te pide el <b>gasto mensual</b> de IA porque es el número que realmente conocés: sale de tu factura o de una proyección. Con eso calcula solo el costo por hora automatizada, que es lo que necesitan los gráficos.</p><p>Pero ojo con lo que ese número esconde: con <b>API</b> el gasto <b>sube y baja con el uso</b> —si automatizás menos, pagás menos—; con <b>servidor propio</b> el gasto es <b>fijo</b> y no baja aunque no lo uses.</p>
+  <p class="nota">Dicho en criollo: con API el costo es una <b>diagonal</b> que sube con el uso; con local es una <b>recta horizontal</b> que no baja nunca. Por eso, si corrés local y después automatizás menos de lo previsto, tu costo por hora se dispara sin que hayas cambiado nada del contrato.</p>
+
+  <h3>Cuánto cuesta de verdad correr local</h3>
+  <p>Y acá está la parte que casi nadie presupuesta. Correr IA en tus servidores <b>no es solo el fierro</b>:</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Concepto</th><th>Costo mensual</th></tr>
+    <tr><td>Alquiler 2× H200, 24/7</td><td>$5.170</td></tr>
+    <tr><td>Electricidad (~2,1 kW constantes)</td><td>$250</td></tr>
+    <tr class="fila-mal"><td><b>SysAdmin / MLOps que lo mantenga</b></td><td><b>$3.000</b></td></tr>
+    <tr><td><b>Total real</b></td><td><b>$8.420</b></td></tr>
+  </table>
+  </div>
+
+  <div class="ejemplo e-rie"><span class="tit">La ironía que hay que decir en voz alta</span>
+  Ese sysadmin cuesta <b>1,88 veces el sueldo de la persona que estabas reemplazando</b> ($3.000 contra $1.600). Automatizaste para no pagar un puesto administrativo y terminaste contratando un puesto técnico que sale casi el doble. No es un argumento contra la IA local — es un argumento contra <b>olvidarse de contarla</b>.<br><br>
+  Y mueve el punto de equilibrio de manera dramática:<br>
+  • Contando <b>solo el servidor</b>: local conviene arriba de <b>154 personas-equivalente</b>.<br>
+  • Contando <b>servidor + luz + sysadmin</b>: recién arriba de <b>251 personas-equivalente</b>.<br><br>
+  Si no tenés esa escala, la alternativa honesta no es "no automatizar": es <b>API</b>, o un <b>servicio gestionado tercerizado</b> donde el sysadmin es problema del proveedor y entra como una cuota mensual previsible.</div>
+
+  <p class="nota">Para el proyecto de 10 personas del ejemplo, la diferencia es terminante: con API DeepSeek el ahorro es <b>$4.168/mes</b> y recupera en 12 meses; con servidor propio contando todo, el ahorro es <b>−$4.288/mes</b> y no recupera nunca. Misma tarea, misma automatización, misma gente.</p>
+</section>
+
+<section>
+  <h2><svg><use href="#i-flask"/></svg> Las fórmulas en una sola línea</h2>
+  <p>Si reemplazás cada módulo por su definición, cada resultado queda expresado directamente en función de los datos que cargás, sin pasos intermedios. Son las mismas cuentas de arriba, escritas de corrido:</p>
+
+  <p class="nota" style="margin-bottom:4px;"><b>Personas a conservar</b></p>
+  <div class="formula-color mega">P' = max<b>(</b> ⌈ <span class="t t-dato">P</span> · (1 − <span class="t t-aut">a·(1−r)·η</span>) ⌉ , ⌈ <span class="t t-con">H_min ÷ h_p</span> ⌉ <b>)</b></div>
+
+  <p class="nota" style="margin-bottom:4px;"><b>Ahorro mensual</b> — el <span class="t t-res">P'</span> de arriba entra entero adentro, por eso es la más larga:</p>
+  <div class="formula-color mega">S = <b>[</b> <span class="t t-dato">P</span> − max( ⌈<span class="t t-dato">P</span>·(1−<span class="t t-aut">a(1−r)η</span>)⌉ , ⌈<span class="t t-con">H_min ÷ h_p</span>⌉ ) <b>]</b> · <span class="t t-hum">N/P</span> &nbsp;−&nbsp; <span class="t t-rie">(1+Σρ)</span> · <span class="t t-dato">C_mes</span> &nbsp;−&nbsp; <span class="t t-dato">M</span></div>
+  <p class="nota">Se lee en dos mitades: <i>los sueldos que dejás de pagar</i>, menos <i>lo que te cuesta la IA ajustada por riesgo</i>, menos mantenimiento. Con los números del ejemplo: [10 − max(7, 4)] × 1.600 − 1.600 × 0,384 × 1,5 × 2 − 500 = 4.800 − 1.843 − 500 = <b>$2.457</b>.</p>
+
+  <p class="nota" style="margin-bottom:4px;"><b>Índice de Dependencia</b></p>
+  <div class="formula-color mega">IDA = min<b>(</b> <span class="t t-aut">a·(1−r)·η</span> · <span class="t t-rie">(1+Σρ)</span> · 100 , 100 <b>)</b></div>
+
+  <p style="margin-top:18px;"><b>¿Y una sola mega fórmula que junte los tres resultados?</b> No, y no por falta de ganas: vienen en unidades distintas —<b>personas</b>, <b>dólares por mes</b> y un <b>índice de 0 a 100</b>—. Sumarlos daría un número sin significado. Pero sí hay un <b>orden obligatorio</b>: <span class="t t-res">P'</span> se calcula primero porque <b>S depende de él</b>. Esa dependencia es lo que hace honesto al modelo — es la que le cobra a la empresa el costo de su propio piso de continuidad.</p>
+  <p class="nota">Las tres respuestas, juntas, son la decisión completa: <b class="v-res">P'</b> te dice con cuánta gente te quedás, <b>S y T</b> si el proyecto se paga, y el <b>IDA</b> cuán expuesto quedás después de hacerlo. Un proyecto puede aprobar las dos primeras y reprobar la tercera: ahí es donde el modelo gana su sueldo.</p>
+</section>
+</div>
+
+<!-- ========== JUGAR ========== -->
+<div class="panel" id="jugar">
+<section>
+  <h2><svg><use href="#i-sliders"/></svg> Explorá el modelo moviendo valores</h2>
+  <p class="nota">Elegí qué querés ver y mové los controles. La curva se recalcula en vivo para que entiendas cómo cada variable cambia el resultado.</p>
+  <div class="campo" style="margin-top:16px;">
+    <label>¿Qué querés explorar?</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;" id="modo-btns">
+      <button class="modo-btn active" data-modo="piso">Piso de continuidad</button>
+      <button class="modo-btn" data-modo="ahorro">Ahorro vs Riesgo (λ)</button>
+      <button class="modo-btn" data-modo="inversion">Umbral de inversión</button>
+    </div>
+  </div>
+  <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasJugar"></canvas></div></div>
+  <div id="controles-jugar" style="margin-top:20px;"></div>
+  <p class="nota" id="jugar-explica" style="margin-top:16px; padding:14px; background:var(--naranja-claro); border-radius:8px; color:var(--navy); font-weight:600;"></p>
+</section>
+</div>
+
+<!-- ========== CASOS EXTREMOS ========== -->
+<div class="panel" id="extremos">
+<section>
+  <h2><svg><use href="#i-chart"/></svg> Aprendé los parámetros con casos extremos</h2>
+  <h3>Extremo A — Automatizo el call center al 100% → el piso P_min</h3>
+  <p>La cuenta ingenua dice cero personas. El modelo dice no: la dotación cae hasta chocar con un piso —el mínimo para operar sin IA— y ahí se planta. La diferencia es tu <b>prima de seguro operativo</b>.</p>
+  <div class="grafico-svg" id="graf-A"></div>
+  <h3>Extremo B — Una sola nube sin plan B → el riesgo λ</h3>
+  <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo real de la IA alcanza al humano, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
+  <img class="grafico" src="assets/g4_riesgo_animado.gif" alt="Riesgo animado">
+  <h3>Extremo C — DeepSeek local para los mails → la inversión I</h3>
+  <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$13/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Y el fierro no es el costo completo</span>
+  Esos $5.170 son solo el alquiler. Correr IA propia necesita además <b>electricidad</b> (~$250/mes con 2,1 kW constantes) y sobre todo <b>alguien que la mantenga</b>: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real: <b>$8.420/mes</b>, y la brecha contra la API salta de 410× a <b>668×</b>.<br><br>
+  La ironía vale la pena decirla: ese sysadmin cuesta <b>casi el doble</b> que la persona administrativa que estabas reemplazando. Automatizaste para no pagar un puesto y contrataste uno más caro.<br><br>
+  <b>Puede ser cero</b>, ojo: si ya tenés a alguien que lo absorbe, o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado. En la <b>Calculadora</b> hay un asistente que te va pidiendo cada componente por separado para que ninguno quede afuera por olvido.</div>
+
+  <div class="grafico-svg" id="graf-C"></div>
+
+  <h3>Extremo D — El mismo servidor, pero a escala → el volumen H</h3>
+  <p>El break-even del servidor propio está cerca de <b>24.600 millones de tokens/mes</b>: unas <b>154 personas-equivalente</b> operando full time sobre IA. Por debajo, la API gana. Por encima, el local gana y encima te baja λ al mínimo — decisivo para un banco o una empresa de salud donde la soberanía del dato vuelve irrelevante el cálculo de tokens.</p>
+  <p>Pero si contás el costo completo —fierro, luz y sysadmin— el punto de equilibrio se corre bastante más lejos:</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Qué contás</th><th>Costo fijo/mes</th><th>Break-even</th><th>Equivale a</th></tr>
+    <tr><td>Solo el servidor</td><td>$5.170</td><td>24.600 millones de tokens</td><td>154 personas</td></tr>
+    <tr class="fila-mal"><td><b>Servidor + luz + sysadmin</b></td><td><b>$8.420</b></td><td><b>40.100 millones de tokens</b></td><td><b>251 personas</b></td></tr>
+  </table>
+  </div>
+
+  <p class="nota">Dicho de otro modo: el servidor propio no se justifica por moda ni por miedo. Se justifica cuando tu volumen supera ese piso <b>o</b> cuando la criticidad del dato hace que λ importe más que el costo. Si no llegás a esa escala pero necesitás soberanía del dato, la salida intermedia es un <b>servicio gestionado tercerizado</b>: el sysadmin es problema del proveedor y entra como cuota mensual previsible.</p>
+</section>
+</div>
+
+<!-- ========== COMPARADOR ========== -->
+<div class="panel" id="compara">
+<section>
+  <h2><svg><use href="#i-scale"/></svg> Local vs Nube: ¿te conviene el servidor propio?</h2>
+  <p class="nota">Precios reales verificados en agosto 2026. Decí cuántas horas de trabajo al mes vas a automatizar y mirá qué opción conviene. Se asume ~1 millón de tokens por hora de trabajo equivalente.</p>
+  <div class="campo" style="max-width:460px; margin:18px 0;">
+    <label>Horas de trabajo/mes que vas a automatizar <span class="hint">15h/semana ≈ 60h/mes</span></label>
+    <div class="slider-row"><input type="range" id="hcomp" min="10" max="50000" value="60" step="10" aria-label="Horas de trabajo por mes que vas a automatizar"><span class="val" id="hcomp_v" style="min-width:90px;">60 h</span></div>
+    <p class="nota" id="hcomp_ctx" style="margin-top:4px;"></p>
+  </div>
+  <table id="tabla_comp"></table>
+  <p class="nota" id="comp_conclusion" style="margin-top:16px; font-weight:600; color:var(--navy); padding:12px; background:var(--naranja-claro); border-radius:8px;"></p>
+  <h3 style="margin-top:26px;">Precios de referencia (agosto 2026)</h3>
+  <table>
+    <tr><th>Modelo</th><th>Input /1M</th><th>Output /1M</th><th>≈ Costo/hora*</th></tr>
+    <tr><td>DeepSeek V4-Flash (API)</td><td>$0,14</td><td>$0,28</td><td>$0,21</td></tr>
+    <tr><td>DeepSeek V4-Pro (API)</td><td>$0,435</td><td>$0,87</td><td>$0,65</td></tr>
+    <tr><td>Gemini 3.6 Flash (API)</td><td>$1,50</td><td>$7,50</td><td>$4,50</td></tr>
+    <tr><td>Gemini 3.1 Pro (API)</td><td>$2,00</td><td>$12,00</td><td>$7,00</td></tr>
+    <tr><td>DeepSeek V4-Flash local (2× H200)</td><td colspan="2">~$5.170/mes fijo solo el alquiler 24/7 · <b>~$8.420 con luz y sysadmin</b></td><td>—</td></tr>
+  </table>
+  <p class="nota">*Costo/hora asumiendo 0,5M input + 0,5M output. Los modelos abiertos (DeepSeek, MIT) se pueden autohospedar; los de Google no. Verificá los precios vigentes antes de comprometer presupuesto — cambian seguido.</p>
+  <p class="nota"><b>Por qué el local aparece con dos precios:</b> el alquiler del servidor no es el costo completo. Sumale electricidad (~$250/mes) y sobre todo <b>un sysadmin o servicio gestionado</b> (~$3.000/mes), que es el costo que más proyectos de IA local hunde. Puede ser cero si ya tenés a alguien que lo absorbe — pero conviene evaluarlo, no asumirlo. El detalle está en <b>Fórmulas → La plata</b>, y en la <b>Calculadora</b> hay un asistente que te lo va pidiendo componente por componente.</p>
+</section>
+</div>
+
+<!-- ========== MONTECARLO ========== -->
+<div class="panel" id="montecarlo">
+<section>
+  <h2><svg><use href="#i-dice"/></svg> Simulación de Montecarlo</h2>
+  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre tu proyecto <b>10.000 veces</b> con combinaciones al azar. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
+  <div id="controles-mc" style="margin-top:18px;"></div>
+  <button class="cta" id="run-mc" style="margin:8px 0 4px;"><svg class="ic"><use href="#i-dice"/></svg> Correr 10.000 simulaciones</button>
+  <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasMC"></canvas></div></div>
+  <p class="nota" id="mc-resumen" style="margin-top:16px; padding:14px; background:var(--naranja-claro); border-radius:8px; color:var(--navy); font-weight:600;"></p>
+</section>
+</div>
+
+<!-- ========== CONCLUSIONES ========== -->
+<div class="panel" id="conclusiones">
+<section>
+  <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
+  <p>Si te llevás dos cosas de todo este modelo, que sean las dos primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA.</p>
+  <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
+</section>
+
+<section>
+  <h3 class="mod h-aut" style="font-size:1.15rem;">1 · El máximo de automatización no es el óptimo</h3>
+  <p>La intuición dice que cuanto más automatices, más ahorrás. Es falso, y el modelo muestra exactamente dónde deja de ser cierto.</p>
+  <p>Acordate del piso de continuidad: hay una cantidad de gente que <b>no podés soltar</b>, por más que la IA haga su trabajo. Una vez que llegás a ese piso, cada punto adicional de automatización <b>suma factura de IA pero ya no libera a nadie más</b>. Seguís pagando los mismos sueldos y encima pagás más IA.</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Automatización efectiva</th><th>Lo que promete la cuenta ingenua</th><th>Ahorro real</th><th>Recupero</th><th>IDA</th></tr>
+    <tr class="fila-ok"><td><b>60%</b> — el óptimo</td><td>$6.220</td><td><b>$6.220</b></td><td><b>8 meses</b></td><td>90</td></tr>
+    <tr><td>80%</td><td>$8.460</td><td>$5.260</td><td>10 meses</td><td>100</td></tr>
+    <tr class="fila-mal"><td>100%</td><td>$10.700</td><td>$4.300</td><td>12 meses</td><td>100</td></tr>
+  </table>
+  </div>
+
+  <p>Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua te promete <b>$10.700 por mes</b> y la realidad te da <b>$4.300</b>. Los $6.400 que faltan son los cuatro sueldos del piso de continuidad, que seguís pagando mientras la IA hace ese trabajo.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">La frase para llevarse</span>
+  Pasado el piso, <b>automatizar de más te deja más pobre y más dependiente al mismo tiempo</b>: el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.</div>
+
+  <p class="nota">Podés ver esta curva en vivo en <b>Explorar gráficos → Ahorro vs Riesgo (λ)</b>: la línea gris es la promesa ingenua, la naranja es lo que pasa de verdad, y se separan justo en el punto donde el piso empieza a morder. El punto verde marca tu óptimo.</p>
+</section>
+
+<section>
+  <h3 class="mod h-rie" style="font-size:1.15rem;">2 · Lo que salva un proyecto es la arquitectura, no despedir más gente</h3>
+  <p>Acá está la consecuencia práctica, y es la que puede cambiar una decisión de directorio.</p>
+  <p>Cuando el número no cierra, el reflejo de cualquier gerente es <b>recortar más gente</b>. La conclusión anterior ya nos dijo que eso no funciona: no podés bajar del piso, y automatizar más te empeora las dos cosas. Entonces, ¿qué queda?</p>
+  <p><b>Queda bajar λ</b>, es decir, hacer más robusta la arquitectura. Mirá el mismo proyecto —misma gente, misma automatización, misma inversión— cambiando <i>solamente</i> dónde corre la IA y si tenés plan B:</p>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Arquitectura</th><th>λ</th><th>IDA</th><th>Ahorro</th><th>Recupero</th></tr>
+    <tr class="fila-mal"><td>Una sola nube, sin plan de contingencia</td><td>1,50</td><td>58</td><td>$2.457</td><td>20 meses <span class="mk no">✕</span></td></tr>
+    <tr><td>Una sola nube, con plan de contingencia</td><td>1,30</td><td>50</td><td>$2.703</td><td>19 meses <span class="mk no">✕</span></td></tr>
+    <tr><td>Multi-cloud, con plan de contingencia</td><td>1,10</td><td>42</td><td>$2.948</td><td>17 meses <span class="mk ok">✓</span></td></tr>
+    <tr class="fila-ok"><td>IA local, con plan de contingencia</td><td>1,02</td><td>39</td><td><b>$3.047</b></td><td><b>16 meses</b> <span class="mk ok">✓</span></td></tr>
+  </table>
+  </div>
+
+  <p>No cambió <b>nada</b> del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció un mejor precio de tokens. Lo único que cambió es <b>dónde vive la IA y si hay plan B</b>. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar (16 meses), y el IDA cae de 58 a 39.</p>
+
+  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
+  Cuando el business case de automatización no cierra, <b>la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura</b>. Es la única decisión que mejora las tres cosas a la vez — te sube el ahorro, te acorta el recupero y te baja la dependencia.</div>
+</section>
+
+<section>
+  <h3 class="mod h-hum" style="font-size:1.15rem;">3 · Y una advertencia sobre los números lindos</h3>
+  <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
+  <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 31% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 21 meses.</p>
+  <p>Ese 31% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
+
+</section>
+
+<section>
+  <h2><svg><use href="#i-scale"/></svg> Cómo se aplica fuera de una oficina: banco y retail</h2>
+  <p>El modelo se explica con horas de oficina, pero donde más falta hace es donde hay <b>puestos físicos de atención</b>: una caja de supermercado, una ventanilla de banco, una guardia de gas. La buena noticia es que las cuatro variables se traducen casi solas.</p>
+
+  <h3 class="mod h-aut">Retail — cajas automáticas vs cajas con persona</h3>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Variable</th><th>Qué es en una caja de supermercado</th></tr>
+    <tr><td><b>a</b></td><td>% de transacciones que la caja automática puede procesar sola</td></tr>
+    <tr><td><b>r</b></td><td>Las que exigen humano sí o sí: verificación de edad (alcohol, tabaco), devoluciones, productos sin código, asistencia por accesibilidad</td></tr>
+    <tr><td><b>η</b></td><td>Eficiencia real — el autoservicio es más lento que un cajero entrenado y genera más merma por errores y hurto</td></tr>
+    <tr><td><b class="v-rie">λ</b></td><td>Si se cae el software de punto de venta o el proveedor, ¿podés seguir vendiendo?</td></tr>
+    <tr class="fila-ok"><td><b class="v-con">P_min</b></td><td><b>Cuántas cajas con persona necesitás para sostener la venta en hora pico si el autoservicio no funciona</b></td></tr>
+  </table>
+  </div>
+
+  <h3 class="mod h-hum">Banco — cajeros automáticos y app vs ventanilla</h3>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Variable</th><th>Qué es en una sucursal</th></tr>
+    <tr><td><b>a</b></td><td>% de operaciones que se resuelven por cajero automático o app</td></tr>
+    <tr><td><b>r</b></td><td>Apertura de cuenta con verificación presencial, reclamos, efectivo sobre umbrales, y atención obligatoria por accesibilidad a personas mayores o con discapacidad</td></tr>
+    <tr><td><b class="v-rie">λ</b></td><td>Si se cae el core bancario o el proveedor de la app, ¿tenés ventanilla operativa? Para un banco esto no es comercial: es un evento regulatorio</td></tr>
+    <tr class="fila-ok"><td><b class="v-con">P_min</b></td><td><b>Cuántas ventanillas humanas necesitás para no incumplir la normativa y sostener la operación crítica</b></td></tr>
+  </table>
+  </div>
+  <p class="nota">En banca el modelo funciona incluso mejor que en oficina, porque <b>r deja de ser una estimación</b>: no lo adivinás, lo leés de la normativa del regulador. Ese es el único parámetro del modelo que puede tener respaldo legal en lugar de criterio.</p>
+
+  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> La trampa al aplicarlo: el factor de cobertura</h3>
+  <p>Acá casi todo el mundo se equivoca, y el error es grande. <b>H_min se mide en horas de trabajo, no en puestos simultáneos.</b></p>
+  <p>Si alguien dice <i>"necesito 3 cajas siempre abiertas"</i> y carga <span class="cuenta">H_min = 3 × 160 = 480 h</span>, el modelo le devuelve <b>3 personas</b>. Está mal por más del doble. ¿Por qué? Porque el local abre <b>360 horas al mes</b> (12 h × 30 días) pero <b>una persona trabaja 160</b>. Tres puestos cubiertos durante 360 horas son 1.080 horas de trabajo, no 480.</p>
+
+  <div class="formula-color">factor de cobertura &nbsp;=&nbsp; horas de operación del canal &nbsp;÷&nbsp; horas que trabaja una persona</div>
+  <div class="formula-color"><span class="t t-con">P_min</span> &nbsp;=&nbsp; puestos simultáneos &nbsp;×&nbsp; factor de cobertura</div>
+
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Canal</th><th>Horas de operación/mes</th><th>Factor</th><th>3 puestos simultáneos =</th></tr>
+    <tr><td>Retail, 12 h × 30 días</td><td>360</td><td>2,25</td><td><b>7 personas</b></td></tr>
+    <tr><td>Sucursal de banco, 8 h × 22 días</td><td>176</td><td>1,10</td><td><b>4 personas</b></td></tr>
+    <tr class="fila-mal"><td>Guardia 24/7 (gas, energía, salud)</td><td>720</td><td>4,50</td><td><b>14 personas</b></td></tr>
+  </table>
+  </div>
+
+  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
+  <b>Tres puestos no son tres personas.</b> En un canal 24/7 son catorce. Ese factor de 4,5 es la razón por la que las guardias de servicios críticos parecen sobredimensionadas y no lo están: cubrir un puesto las 24 horas requiere cuatro turnos y medio de gente distinta. Cualquier plan de automatización que ignore esto va a prometer un ahorro que no existe.</div>
+
+  <p class="nota">Si tu demanda no es pareja —un pico de 3 horas y el resto tranquilo— calculá H_min sumando franja por franja: <span class="cuenta">(puestos en pico × horas de pico + puestos fuera de pico × horas fuera de pico) × días</span>. Y agregale un margen: nadie puede contratar a alguien para trabajar exactamente las tres horas del pico todos los días.</p>
+</section>
+
+<section>
+  <h2><svg><use href="#i-book"/></svg> Los límites del modelo</h2>
+  <p>Ningún modelo es honesto si no dice qué <i>no</i> hace. Estos son los cuatro supuestos que este modelo da por ciertos y que en tu empresa pueden no serlo.</p>
+
+  <h3>1 · Supone que la gente que conservás todavía sabe hacerlo</h3>
+  <p>El piso de continuidad asume que esas personas pueden <b>ejecutar el proceso manual el día que haga falta</b>. Pero si hace ocho meses que la IA hace todo y ellos solo revisan, no van a poder. Son <b>guardia pasiva</b>, y la guardia pasiva se oxida.</p>
+  <p>El modelo te da la cantidad, no la capacidad. Mantenerla exige <b>simulacros periódicos de operación manual</b> —igual que un simulacro de incendio— y eso tiene un costo en horas que hoy no está en ninguna fórmula. Un P_min de papel no salva a nadie.</p>
+
+  <h3>2 · Supone que el know-how sigue adentro de la empresa</h3>
+  <p>Relacionado con lo anterior pero distinto: no alcanza con tener gente disponible, tiene que quedar en la empresa <b>quién sepa cómo se seguía trabajando antes</b>. Si automatizaste y en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. La documentación del proceso manual es parte del seguro, no un trámite.</p>
+
+  <h3>3 · Mide costo y continuidad, no ingresos</h3>
+  <p>El modelo cuenta lo que dejás de gastar, nunca lo que podrías ganar de más. <b>Para operaciones críticas eso es exactamente lo correcto:</b> en una guardia de gas o de energía no hay ingreso que justificar — hay una obligación legal de tener gente disponible 24/7 por si pasa algo. El modelo está pensado justamente para calcular <i>cuánta</i> gente es esa.</p>
+  <p class="nota">Pero si tu caso es comercial y automatizar te genera ventas nuevas —atención a las 3 AM, más capacidad en hora pico—, ese ingreso <b>no entra acá</b> y hay que sumarlo por afuera. El modelo es deliberadamente conservador: te dice el piso de la decisión, no el techo.</p>
+
+  <h3>4 · Modela la convivencia permanente, no la degradación temporal</h3>
+  <p>La convivencia entre humano e IA <b>sí está en el modelo</b>, y vive en la variable <b>r</b>. Si de 1.000 horas hay 200 que necesitan la firma de un abogado, un ingeniero o un arquitecto, cargás <span class="cuenta">r = 20%</span> y el modelo entiende que esas 200 horas <b>nunca</b> se automatizan: la IA hace el trabajo, el profesional firma. Es convivencia estructural y permanente, y está bien representada.</p>
+  <p>Lo que el modelo <b>no</b> sabe representar es la degradación <i>temporal</i>: que la IA no se caiga del todo pero funcione peor durante dos semanas —más lenta, con más errores, con límite de consultas—. El modelo es binario: la IA está o no está. En la realidad, la falla más común es ese estado intermedio, donde tenés que poner gente a corregir sin haber perdido el servicio.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
+  Ninguno de los cuatro invalida el modelo: los cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
+</section>
+
+<section>
+  <div class="remate" style="margin-top:0;">
+    El modelo no está en contra de automatizar. Está en contra de automatizar <b>a ciegas</b>. Todas las cuentas de este sitio dicen lo mismo desde ángulos distintos: la pregunta importante no es <b>cuánta gente puedo sacar</b>, sino <b>cuánta gente tengo que conservar</b> — y cuánto me cuesta no haberlo pensado antes.
+    <div class="preg-final">
+      <div><h4>¿Cuál es tu piso?</h4><span class="nota">¿Con cuánta gente operás mañana si la IA no está?</span></div>
+      <div><h4>¿Cuál es tu IDA?</h4><span class="nota">¿Cuán rehén sos de tu propia arquitectura?</span></div>
+    </div>
+  </div>
+  <p class="nota" style="margin-top:16px;">Si todavía no las respondiste con números, volvé a la <b>Calculadora</b> y cargá los de tu empresa. Tarda dos minutos y no se envía nada a ningún lado.</p>
+</section>
+</div>
+
+<footer>
+  <p>Modelo IDA — Humano · Automatización · Riesgo · Continuidad</p>
+  <p>Por <a href="https://cesarriat.com">César Riat</a> · Licencia MIT</p>
+  <a class="cta" href="https://github.com/All-Aideas/Modelo-IDA"><svg class="ic"><use href="#i-arrow"/></svg> Ver en GitHub</a>
+</footer>
+</div>
+
+<!-- Informe imprimible: oculto en pantalla, se arma al pedir la descarga -->
+<div id="informe">
+  <div class="inf-marca">cesarriat.com</div>
+  <div class="inf-cab">
+    <h1>Modelo IDA — Informe de continuidad</h1>
+    <div class="sub" id="inf-fecha"></div>
+  </div>
+  <div id="inf-cuerpo"></div>
+  <div class="inf-pie">
+    <span>Modelo IDA · Humano · Automatización · Riesgo · Continuidad</span>
+    <span>Generado en <b>cesarriat.com</b></span>
+  </div>
+</div>
+
+<script>
+let jugarInit=false, mcInit=false;
+
+// Accesibilidad: vincular cada tab con su panel para lectores de pantalla.
+// Se hace por JS para que no se desincronice al agregar o reordenar pestañas.
+document.querySelector('nav.tabs').setAttribute('role','tablist');
+document.querySelectorAll('nav.tabs button').forEach(b=>{
+  const panel=document.getElementById(b.dataset.tab);
+  b.id='tab-'+b.dataset.tab;
+  b.setAttribute('role','tab');
+  b.setAttribute('aria-controls',b.dataset.tab);
+  b.setAttribute('aria-selected',b.classList.contains('active')?'true':'false');
+  if(panel){ panel.setAttribute('role','tabpanel'); panel.setAttribute('aria-labelledby',b.id); }
+});
+
+document.querySelectorAll('nav.tabs button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav.tabs button').forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-selected','false');});
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    b.setAttribute('aria-selected','true');
+    document.getElementById(b.dataset.tab).classList.add('active');
+    if(window.MathJax) MathJax.typesetPromise();
+    // Los graficos se crean recien cuando su panel es visible (Chart.js necesita medir el canvas)
+    if(b.dataset.tab==='extremos'){ pintarExtremos(); }
+    if(b.dataset.tab==='jugar'){
+      if(!jugarInit){jugarInit=true; renderControles(); setTimeout(updateJugar,30);}
+      else if(chartJugar) setTimeout(()=>chartJugar.resize(),40);
+    }
+    if(b.dataset.tab==='montecarlo'){
+      if(!mcInit){mcInit=true; renderMC(); setTimeout(runMC,30);}
+      else if(chartMC) setTimeout(()=>chartMC.resize(),40);
+    }
+  };
+});
+
+// ---- Graficos de "Casos extremos", generados desde el mismo modelo ----
+// Se dibujan en SVG para que no se desincronicen de las formulas y para que
+// el texto nunca quede cruzado por una linea.
+function svgExtremoA(){
+  const P=10,Pmin=4,W=720,H=380,L=64,R=24,T=34,B=52;
+  const px=a=>L+a/100*(W-L-R), py=v=>T+(1-v/10)*(H-T-B);
+  const F='font-family="Montserrat,Helvetica,Arial,sans-serif"';
+  let ing='',piso='';
+  for(let a=0;a<=100;a++){
+    const n=P*(1-a/100), p=Math.max(Math.ceil(P*(1-a/100)),Pmin);
+    ing+=(a?'L':'M')+px(a).toFixed(1)+' '+py(n).toFixed(1);
+    piso+=(a?'L':'M')+px(a).toFixed(1)+' '+py(p).toFixed(1);
+  }
+  let ejes='';
+  for(let v=0;v<=10;v+=2) ejes+=`<line x1="${L}" y1="${py(v)}" x2="${W-R}" y2="${py(v)}" stroke="#eef1f5" stroke-width="1"/>
+    <text x="${L-9}" y="${py(v)+4}" font-size="11" fill="#8a94a6" text-anchor="end" ${F}>${v}</text>`;
+  for(let a=0;a<=100;a+=20) ejes+=`<text x="${px(a)}" y="${H-B+20}" font-size="11" fill="#8a94a6" text-anchor="middle" ${F}>${a}%</text>`;
+  // La llave de la prima se dibuja en zona vacia, nunca sobre las curvas
+  const xa=92, yTop=py(Pmin), yBot=py(P*(1-xa/100));
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img"
+    aria-label="Al automatizar mas, la dotacion cae hasta chocar con el piso de continuidad y ahi se planta">
+    <text x="${L}" y="18" font-size="13.5" font-weight="800" fill="#2e3a4d" ${F}>Aunque automatices el 100%, el piso te frena</text>
+    ${ejes}
+    <line x1="${L}" y1="${py(Pmin)}" x2="${W-R}" y2="${py(Pmin)}" stroke="#1F7A4D" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path d="${ing}" fill="none" stroke="#c3cad6" stroke-width="2" stroke-dasharray="7 5"/>
+    <path d="${piso}" fill="none" stroke="#D9480F" stroke-width="3"/>
+    <path d="M ${px(xa)} ${yTop} L ${px(xa)} ${yBot}" stroke="#D9480F" stroke-width="1.4"/>
+    <path d="M ${px(xa)-5} ${yTop+6} L ${px(xa)} ${yTop} L ${px(xa)+5} ${yTop+6}" fill="none" stroke="#D9480F" stroke-width="1.4"/>
+    <path d="M ${px(xa)-5} ${yBot-6} L ${px(xa)} ${yBot} L ${px(xa)+5} ${yBot-6}" fill="none" stroke="#D9480F" stroke-width="1.4"/>
+    <text x="${px(xa)-10}" y="${(yTop+yBot)/2-6}" font-size="11.5" font-weight="700" fill="#D9480F" text-anchor="end" ${F}>Prima del seguro operativo:</text>
+    <text x="${px(xa)-10}" y="${(yTop+yBot)/2+9}" font-size="11.5" fill="#D9480F" text-anchor="end" ${F}>gente que el Excel despediría</text>
+    <text x="${px(xa)-10}" y="${(yTop+yBot)/2+23}" font-size="11.5" fill="#D9480F" text-anchor="end" ${F}>y el piso te obliga a conservar</text>
+    <text x="${L+8}" y="${py(Pmin)-8}" font-size="11.5" font-weight="700" fill="#1F7A4D" ${F}>Piso de continuidad = ${Pmin} personas</text>
+    <text x="${L+8}" y="${py(9.3)}" font-size="11.5" fill="#8a94a6" ${F}>— — cuenta ingenua (llega a cero)</text>
+    <text x="${L+8}" y="${py(8.5)}" font-size="11.5" font-weight="700" fill="#D9480F" ${F}>—— modelo con piso</text>
+    <text x="${(L+W-R)/2}" y="${H-10}" font-size="11.5" fill="#8a94a6" text-anchor="middle" ${F}>Automatización efectiva</text>
+    <text x="16" y="${T+10}" font-size="11.5" fill="#8a94a6" ${F}>Personas</text>
+  </svg>`;
+}
+function svgExtremoC(){
+  const API=0.21, HW=5170, FULL=8420, W=720,H=380,L=70,R=24,T=34,B=52, XMAX=45000, YMAX=11000;
+  const px=h=>L+h/XMAX*(W-L-R), py=v=>T+(1-v/YMAX)*(H-T-B);
+  const F='font-family="Montserrat,Helvetica,Arial,sans-serif"';
+  const beHW=HW/API, beFULL=FULL/API;
+  let ejes='';
+  for(let v=0;v<=YMAX;v+=2000) ejes+=`<line x1="${L}" y1="${py(v)}" x2="${W-R}" y2="${py(v)}" stroke="#eef1f5"/>
+    <text x="${L-9}" y="${py(v)+4}" font-size="11" fill="#8a94a6" text-anchor="end" ${F}>$${(v/1000)}k</text>`;
+  for(let h=0;h<=XMAX;h+=15000) ejes+=`<text x="${px(h)}" y="${H-B+20}" font-size="11" fill="#8a94a6" text-anchor="middle" ${F}>${(h/1000)}k h</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img"
+    aria-label="El costo de API sube con el uso; el del servidor propio es fijo. Se cruzan recien a gran escala">
+    <text x="${L}" y="18" font-size="13.5" font-weight="800" fill="#2e3a4d" ${F}>La API sube con el uso; el servidor propio no baja nunca</text>
+    ${ejes}
+    <line x1="${L}" y1="${py(HW)}" x2="${W-R}" y2="${py(HW)}" stroke="#8a94a6" stroke-width="2" stroke-dasharray="6 4"/>
+    <line x1="${L}" y1="${py(FULL)}" x2="${W-R}" y2="${py(FULL)}" stroke="#B02A37" stroke-width="3"/>
+    <line x1="${px(0)}" y1="${py(0)}" x2="${px(XMAX)}" y2="${py(XMAX*API)}" stroke="#D9480F" stroke-width="3"/>
+    <circle cx="${px(beFULL)}" cy="${py(FULL)}" r="4.5" fill="#B02A37"/>
+    <text x="${px(beFULL)}" y="${py(FULL)-12}" font-size="11.5" font-weight="700" fill="#B02A37" text-anchor="middle" ${F}>empatan: 251 personas</text>
+    <text x="${L+8}" y="${py(FULL)-9}" font-size="11.5" font-weight="700" fill="#B02A37" ${F}>Local completo $8.420/mes — fijo</text>
+    <text x="${L+8}" y="${py(HW)-9}" font-size="11.5" fill="#8a94a6" ${F}>Solo el fierro $5.170/mes</text>
+    <text x="${px(16000)}" y="${py(16000*API)-9}" font-size="11.5" font-weight="700" fill="#D9480F" ${F}>API: pagás por uso</text>
+    <text x="${L+8}" y="${py(1400)}" font-size="11.5" font-weight="700" fill="#D9480F" ${F}>Acá la API gana por lejos</text>
+    <text x="${L+8}" y="${py(700)}" font-size="11" fill="#8a94a6" ${F}>60 h/mes de emails = $13 contra $8.420</text>
+    <text x="${(L+W-R)/2}" y="${H-10}" font-size="11.5" fill="#8a94a6" text-anchor="middle" ${F}>Horas automatizadas por mes</text>
+    <text x="14" y="${T+10}" font-size="11.5" fill="#8a94a6" ${F}>Costo/mes</text>
+  </svg>`;
+}
+
+function pintarExtremos(){
+  const a=document.getElementById("graf-A"), c=document.getElementById("graf-C");
+  if(a && !a.dataset.listo){ a.innerHTML=svgExtremoA(); a.dataset.listo="1"; }
+  if(c && !c.dataset.listo){ c.innerHTML=svgExtremoC(); c.dataset.listo="1"; }
+}
+
+// ---- Diagrama interactivo de modulos (pestaña Fórmulas) ----
+// Al hacer clic en un modulo se resaltan los datos que consume y los
+// resultados que alimenta, y se muestra su formula en castellano.
+const MODULOS={
+  hum:{nom:'Humano', ico:'i-mod-hum', cls:'fm-hum', color:'var(--m-hum)',
+    datos:['N','P','hp'], datos_nodo:['Ph','N'], res:['S'],
+    produce:'el costo de <b>una hora de trabajo humano</b>',
+    formula:'costo de la hora humana  =  nómina del mes  ÷  horas totales del área',
+    simbolo:'En las fórmulas aparece como <b class="v-hum">C_h</b>. Las horas totales son las personas multiplicadas por las horas que trabaja cada una.',
+    detalle:'Es la vara contra la que después se compara lo que cuesta la IA. Si la nómina sube y las horas quedan igual, cada hora sale más cara y automatizar se justifica más fácil. Si sumás gente sin subir la nómina en la misma proporción, la hora se abarata y la IA deja de ser tan buen negocio.',
+    usa:'Alimenta el cálculo del ahorro.'},
+  aut:{nom:'Automatización', ico:'i-mod-aut', cls:'fm-aut', color:'var(--m-aut)',
+    datos:['a','r','eta'], datos_nodo:['are'], res:['P','S','IDA'],
+    produce:'la <b class="v-aut">automatización efectiva</b>: la parte del trabajo que la IA reemplaza de verdad',
+    formula:'automatización efectiva  =  lo automatizable  ×  (1 − lo que exige firma)  ×  eficiencia real',
+    simbolo:'En las fórmulas aparece como <b class="v-aut">a_ef</b>, y sus tres ingredientes como <b class="v-aut">a</b>, <b class="v-aut">r</b> y <b class="v-aut">η</b> (eta).',
+    detalle:'Arrancás con lo que técnicamente se puede automatizar, le restás lo que por ley o por norma tiene que firmar una persona, y a eso le aplicás la eficiencia real de la IA, que nunca es del 100%. El número que queda suele ser bastante menor que la promesa inicial: 60% de automatizable con 20% regulado y 80% de eficiencia termina en 38,4% real.',
+    usa:'Es el único módulo que alimenta las tres respuestas.'},
+  rie:{nom:'Riesgo', ico:'i-mod-rie', cls:'fm-rie', color:'var(--m-rie)',
+    datos:['rho'], datos_nodo:['rho'], res:['S','IDA'],
+    produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
+    formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
+    simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es el costo esperado del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
+  con:{nom:'Continuidad', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
+    datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
+    produce:'el <b class="v-con">piso de personas</b>: con cuánta gente te tenés que quedar sí o sí',
+    formula:'piso de personas  =  horas mínimas sin IA  ÷  horas que trabaja una persona   (redondeando para arriba)',
+    simbolo:'En las fórmulas aparece como <b class="v-con">P_min</b>, y las horas mínimas como <b class="v-con">H_min</b>.',
+    detalle:'Las horas mínimas son las que necesitás para sostener solo lo crítico si la IA no está: no toda tu operación, la parte que no puede parar. Se redondea para arriba porque no existe media persona. Ojo con la unidad: son horas de trabajo, no puestos. Si necesitás dos personas presentes al mismo tiempo durante todo el horario, eso son muchas más de dos personas.',
+    usa:'Le pone un freno a la dotación: por más que automatices, nunca bajás de acá.'}
+};
+// Nodos y aristas del diagrama. Las posiciones se calculan solas por capa.
+const DIAG={
+  datos:[
+    {id:'Ph',   t:'Personas y horas',        s:'cuántos son y cuánto trabajan'},
+    {id:'N',    t:'Nómina mensual',          s:'lo que pagás de sueldos'},
+    {id:'are',  t:'Automatizable',           s:'qué parte, cuánta firma, qué eficiencia'},
+    {id:'rho',  t:'Arquitectura',            s:'dónde corre la IA y si hay plan B'},
+    {id:'Hmin', t:'Horas mínimas sin IA',    s:'la operación que no puede parar'},
+    {id:'Cmes', t:'Gasto de IA por mes',     s:'tu factura'},
+    {id:'IM',   t:'Inversión y mantenimiento', s:'lo que ponés una vez y todos los meses'}
+  ],
+  modulos:[
+    {id:'hum', t:'Humano',         s:'→ costo de la hora humana',   c:'--m-hum'},
+    {id:'aut', t:'Automatización', s:'→ automatización efectiva',   c:'--m-aut'},
+    {id:'rie', t:'Riesgo',         s:'→ multiplicador de riesgo',   c:'--m-rie'},
+    {id:'con', t:'Continuidad',    s:'→ piso de personas',          c:'--m-con'}
+  ],
+  res:[
+    {id:'P',   t:'Dotación',  s:'con cuánta gente te quedás'},
+    {id:'S',   t:'Ahorro y recupero', s:'si conviene y en cuánto se paga'},
+    {id:'IDA', t:'IDA',       s:'cuán expuesto quedás'}
+  ],
+  // [origen, destino, modulo al que pertenece la arista]
+  aristas:[
+    ['Ph','hum','hum'], ['N','hum','hum'],
+    ['are','aut','aut'],
+    ['rho','rie','rie'],
+    ['Hmin','con','con'], ['Ph','con','con'],
+    ['hum','S','hum'],
+    ['aut','P','aut'], ['aut','S','aut'], ['aut','IDA','aut'],
+    ['rie','S','rie'], ['rie','IDA','rie'],
+    ['con','P','con'],
+    ['Cmes','S',null], ['IM','S',null],
+    ['P','S',null]
+  ]
+};
+// Las tres respuestas, para poder recorrerlas al reves: de que se alimentan
+const RESULTADOS={
+  P:{nom:"Dotación", sub:"con cuánta gente te quedás",
+    formula:'personas a conservar  =  el MAYOR entre la cuenta económica y el piso de continuidad',
+    simbolo:'En las fórmulas aparece como <b class="v-res">P′</b>.',
+    detalle:'Se hacen dos cuentas y gana la más grande, porque las dos son condiciones que hay que cumplir al mismo tiempo: necesitás cierta gente para el trabajo del día a día, y cierta gente para sobrevivir sin IA. Por eso, por más que automatices el 100%, nunca bajás del piso.',
+    conecta:'Este resultado <b>no es un número aislado</b>: entra directo en el cálculo del ahorro, porque solo ahorrás el sueldo de la gente que efectivamente podés liberar.'},
+  S:{nom:"Ahorro y recupero", sub:"si conviene y en cuánto se paga",
+    formula:'ahorro por mes  =  sueldos que dejás de pagar  −  gasto de IA ajustado por riesgo  −  mantenimiento',
+    simbolo:'En las fórmulas aparecen como <b>S</b> (ahorro por mes) y <b>T</b> (meses para recuperar la inversión, que es la inversión dividida por el ahorro).',
+    detalle:'Es el único resultado que junta los tres módulos económicos: cuánto costaba la hora humana, cuánto trabajo reemplazás, y cuánto encarece tu gasto de IA la fragilidad de tu arquitectura. Si el ahorro da cero o negativo, automatizar cuesta más de lo que ahorra y el proyecto no va.',
+    conecta:'Depende de la <b>Dotación</b>: es el resultado que recibe a otro resultado como insumo. Y a su vez manda al recupero, que es la inversión dividida por este ahorro.'},
+  IDA:{nom:"IDA", sub:"cuán expuesto quedás",
+    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  100   (topeado en 100)',
+    simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil.',
+    conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
+};
+const POS={};
+// Recorrido inverso: que modulos, datos y resultados alimentan a un destino
+function fuentesDe(destino){
+  const esMod=id=>DIAG.modulos.some(m=>m.id===id), esRes=id=>DIAG.res.some(r=>r.id===id);
+  const mods=new Set(), datos=new Set(), res=new Set(), aristas=new Set();
+  DIAG.aristas.forEach(([a,b],i)=>{ if(b===destino){
+    aristas.add(i);
+    if(esMod(a)) mods.add(a); else if(esRes(a)) res.add(a); else datos.add(a);
+  }});
+  mods.forEach(m=>DIAG.aristas.forEach(([a,b],i)=>{ if(b===m){ aristas.add(i); datos.add(a); } }));
+  return {mods:[...mods], datos:[...datos], res:[...res], aristas};
+}
+function construirDiagrama(){
+  const svg=$('diagrama'); if(!svg||svg.dataset.listo) return;
+  const W=1075,H=560, NS='http://www.w3.org/2000/svg';
+  const col=(items,x,w,h,y0,y1)=>{
+    const n=items.length, gap=(y1-y0-n*h)/(n-1||1);
+    items.forEach((it,k)=>{ POS[it.id]={x,y:y0+k*(h+gap),w,h,cx:x+w/2,cy:y0+k*(h+gap)+h/2}; });
+  };
+  col(DIAG.datos,   12, 190, 54, 24, 546);
+  col(DIAG.modulos, 286, 202, 62, 92, 478);
+  // Las respuestas van en DOS capas: Dotación e IDA salen de los módulos,
+  // y el Ahorro necesita además la Dotación, así que va una columna más a la derecha.
+  const ponerRes=(id,x,y,w,h)=>{POS[id]={x,y,w,h,cx:x+w/2,cy:y+h/2};};
+  ponerRes('P',   596, 118, 178, 62);
+  ponerRes('IDA', 596, 398, 178, 62);
+  ponerRes('S',   862, 248, 196, 66);
+
+  const el=(t,a)=>{const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e;};
+  const gE=el('g',{id:'edges'}), gN=el('g',{id:'nodos'});
+
+  // aristas
+  DIAG.aristas.forEach(([a,b,mod],idx)=>{
+    const A=POS[a],B=POS[b]; if(!A||!B) return;
+    let d;
+    if(A.x===B.x){ // misma columna (dotacion -> ahorro): curva por la derecha
+      const xr=A.x+A.w+42;
+      d=`M ${A.x+A.w} ${A.cy} C ${xr} ${A.cy}, ${xr} ${B.cy}, ${B.x+B.w} ${B.cy}`;
+    } else {
+      const x1=A.x+A.w, x2=B.x, dx=(x2-x1)*0.5;
+      d=`M ${x1} ${A.cy} C ${x1+dx} ${A.cy}, ${x2-dx} ${B.cy}, ${x2} ${B.cy}`;
+    }
+    const path=el('path',{d,class:'edge'});
+    path.dataset.mod=mod||''; path.dataset.de=a; path.dataset.a=b; path.dataset.idx=idx;
+    gE.appendChild(path);
+  });
+
+  // nodos
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // Parte el subtitulo en lineas para que NUNCA se salga del rectangulo.
+  const partir=(txt,anchoCaja)=>{
+    const max=Math.floor((anchoCaja-26)/4.85);   // ~4,85 px por caracter a 10px
+    const palabras=txt.split(' '); const lineas=[]; let act='';
+    palabras.forEach(p=>{
+      if((act?act+' '+p:p).length<=max) act=act?act+' '+p:p;
+      else { if(act) lineas.push(act); act=p; }
+    });
+    if(act) lineas.push(act);
+    return lineas.slice(0,2);
+  };
+  const nodo=(it,tipo,color)=>{
+    const P=POS[it.id];
+    const g=el('g',{class:'nodo '+tipo}); g.dataset.nodo=it.id;
+    if(tipo==='mod'){ g.dataset.mod=it.id; g.setAttribute('tabindex','0'); g.setAttribute('role','button'); }
+    g.appendChild(el('rect',{x:P.x,y:P.y,width:P.w,height:P.h,rx:9,
+      fill: tipo==='mod'?'#fff':(tipo==='res'?'#fff':css('--fondo')),
+      stroke: color||css('--borde')}));
+    const lineas = it.s ? partir(it.s,P.w) : [];
+    const altoTexto = 15 + lineas.length*12;               // titulo + subtitulo
+    const y0 = P.y + (P.h-altoTexto)/2 + 12;               // centrado vertical
+    const t1=el('text',{x:P.x+13,y:y0,class:'n-tit'}); t1.textContent=it.t;
+    if(color) t1.setAttribute('fill',color);
+    g.appendChild(t1);
+    lineas.forEach((ln,k)=>{
+      const t2=el('text',{x:P.x+13,y:y0+15+k*12,class:'n-sub'}); t2.textContent=ln; g.appendChild(t2);
+    });
+    gN.appendChild(g);
+  };
+  DIAG.datos.forEach(d=>nodo(d,'dato'));
+  DIAG.modulos.forEach(m=>nodo(m,'mod',css(m.c)));
+  DIAG.res.forEach(r=>nodo(r,'res',css('--navy-oscuro')));
+
+  // rotulos de capa
+  const lay=(x,txt)=>{const t=el('text',{x,y:16,class:'diag-lay'});t.textContent=txt;gN.appendChild(t);};
+  lay(12,'Lo que cargás'); lay(286,'Los cuatro módulos'); lay(596,'Primero salen estas'); lay(862,'Y con la dotación, esta');
+
+  svg.appendChild(gE); svg.appendChild(gN);
+  svg.dataset.listo='1';
+  svg.querySelectorAll('.nodo.mod').forEach(g=>{
+    g.addEventListener('click',()=>mostrarModulo(g.dataset.mod));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();mostrarModulo(g.dataset.mod);} });
+  });
+  svg.querySelectorAll('.nodo.res').forEach(g=>{
+    g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.style.cursor='pointer';
+    g.addEventListener('click',()=>mostrarResultado(g.dataset.nodo));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();mostrarResultado(g.dataset.nodo);} });
+  });
+}
+
+// Click en una respuesta: se enciende TODO lo que la alimenta, hacia atras
+function mostrarResultado(id){
+  const r=RESULTADOS[id], f=fuentesDe(id);
+  construirDiagrama();
+  const svg=$('diagrama');
+  const color=getComputedStyle(document.documentElement).getPropertyValue('--navy-oscuro').trim();
+  const borde=getComputedStyle(document.documentElement).getPropertyValue('--borde').trim();
+  const vivos=new Set([id,...f.mods,...f.datos,...f.res]);
+  if(svg){
+    svg.querySelectorAll('.edge').forEach(e=>{
+      const on=f.aristas.has(+e.dataset.idx);
+      e.classList.toggle('on',on); e.classList.toggle('off',!on);
+      e.style.stroke = on ? color : '';
+    });
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      const n=g.dataset.nodo;
+      g.classList.toggle('off', n!==undefined && !vivos.has(n));
+      g.classList.remove('on');
+      const rect=g.querySelector('rect'); if(!rect) return;
+      if(n===id) rect.setAttribute('stroke-width','3.5');
+      else rect.setAttribute('stroke-width', g.classList.contains('mod')?'2':(g.classList.contains('res')?'2.5':'1'));
+      rect.setAttribute('stroke', vivos.has(n) ? color : borde);
+    });
+  }
+  const nom=x=>{const m=DIAG.modulos.find(k=>k.id===x); return m?m.t:x;};
+  const nomDato=x=>{const d=DIAG.datos.find(k=>k.id===x); return d?d.t:x;};
+  const d=$('flow-detalle');
+  d.style.borderLeftColor=color;
+  d.innerHTML=`<h4 style="color:${color}">Respuesta: ${r.nom}</h4>
+    <p>Contesta: <b>${r.sub}</b>.</p>
+    <div class="fd-form">${r.formula}</div>
+    <p class="fd-usa">${r.simbolo}</p>
+    <p>${r.detalle}</p>
+    <p class="fd-usa"><b>Se alimenta de:</b> ${f.mods.length?'los módulos <b>'+f.mods.map(nom).join('</b>, <b>')+'</b>':'ningún módulo'}${f.res.length?', y del resultado <b>'+f.res.map(x=>RESULTADOS[x].nom).join(', ')+'</b>':''}. Datos de entrada: ${f.datos.map(nomDato).join(' · ')}.</p>
+    <p class="fd-usa"><b>Cómo se conecta con las otras:</b> ${r.conecta}</p>`;
+}
+
+function mostrarModulo(id){
+  const m=MODULOS[id];
+  construirDiagrama();
+  const svg=$('diagrama');
+  if(svg){
+    // encender solo el recorrido de este modulo
+    const vivos=new Set([id,...m.datos_nodo,...m.res]);
+    svg.querySelectorAll('.edge').forEach(e=>{
+      const on = e.dataset.mod===id;
+      e.classList.toggle('on',on); e.classList.toggle('off',!on);
+      e.style.stroke = on ? m.color : '';
+    });
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      const n=g.dataset.nodo;
+      g.classList.toggle('off', n!==undefined && !vivos.has(n));
+      g.classList.toggle('on', g.dataset.mod===id);
+      if(vivos.has(n) && n!==id) g.querySelector('rect').setAttribute('stroke',m.color);
+      else if(n!==id && g.querySelector('rect')) g.querySelector('rect').setAttribute('stroke',
+        getComputedStyle(document.documentElement).getPropertyValue('--borde').trim());
+    });
+  }
+  const d=$('flow-detalle');
+  d.style.borderLeftColor=m.color;
+  d.innerHTML=`<h4 style="color:${m.color}"><svg class="ic-mod"><use href="#${m.ico}"/></svg> Módulo ${m.nom}</h4>
+    <p>Produce ${m.produce}.</p>
+    <div class="fd-form">${m.formula}</div>
+    <p class="fd-usa">${m.simbolo}</p>
+    <p>${m.detalle}</p>
+    <p class="fd-usa"><b>Hacia dónde va:</b> ${m.usa}</p>`;
+}
+function resetFlow(){
+  construirDiagrama();
+  const svg=$('diagrama'), borde=getComputedStyle(document.documentElement).getPropertyValue('--borde').trim();
+  if(svg){
+    svg.querySelectorAll('.edge').forEach(e=>{e.classList.remove('on','off'); e.style.stroke='';});
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      g.classList.remove('off','on');
+      const r=g.querySelector('rect');
+      if(r && !g.classList.contains('mod')) r.setAttribute('stroke', g.classList.contains('res')
+        ? getComputedStyle(document.documentElement).getPropertyValue('--navy-oscuro').trim() : borde);
+    });
+  }
+  const d=$('flow-detalle');
+  d.style.borderLeftColor='var(--borde)';
+  d.innerHTML=`<p style="margin:0 0 8px; color:var(--gris); font-size:.9rem;">Elegí un <b>módulo</b> (columna del medio) para ver hacia adelante qué datos consume y a qué respuestas alimenta. O elegí una <b>respuesta</b> (columna derecha) para ver hacia atrás todo lo que la construye.</p><p style="margin:0; color:var(--gris); font-size:.9rem;">Fijate en la línea que va de <b>Dotación</b> a <b>Ahorro</b>: las respuestas no son tres números sueltos.</p>`;
+}
+
+const $=id=>document.getElementById(id);
+const nf=n=>'$'+Math.round(n).toLocaleString('es-AR');
+const nfd=n=>'$'+(Math.abs(n)<100?n.toFixed(2).replace('.',','):Math.round(n).toLocaleString('es-AR'));
+const NARANJA='#FF6F00', NAVY='#425066', GRIS='#c3cad6', ROJO='#c0392b', VERDE='#2e9e5b';
+const chartFont={family:'Montserrat'};
+
+// ---- Asistente de costo real de la IA ----
+// El modelo no asume ningun costo oculto: guia al usuario para que lo evalue,
+// aunque termine poniendo cero porque ya lo tiene cubierto.
+let ctModo='api', horasIAactual=614.4, ctValor=0.21;
+function calcAsistente(){
+  let v;
+  if(ctModo==='api'){
+    // El costo por hora se DERIVA del gasto mensual y las horas automatizadas.
+    // No se le pide al usuario "tokens por hora": ese numero sale como diagnostico.
+    const precio=num('ctp_precio',0), mes=num('ctp_mes',0);
+    v = precio*mes;
+    const tokHora = horasIAactual>0 ? mes/horasIAactual : 0;
+    $('ctp_opex').textContent=nf(v);
+    $('ctp_horas').textContent=Math.round(horasIAactual).toLocaleString('es-AR');
+    let ref='';
+    if(tokHora<0.5) ref='Está en el rango de tareas livianas: clasificar, etiquetar, responder mails cortos.';
+    else if(tokHora<2) ref='Está en el rango de una conversación de atención o un trámite estándar.';
+    else if(tokHora<8) ref='Está en el rango de resumir o redactar documentos.';
+    else ref='Es un consumo alto, propio de análisis largos sobre documentos extensos. Verificá que sea tu caso.';
+    $('ctp_diag').innerHTML=`Tu consumo equivale a <b>${tokHora.toFixed(2)} millones de tokens por hora</b> de trabajo automatizado. ${ref}<br><span style="color:var(--gris)">Referencias: clasificar mails ≈ 0,2 · chat de atención ≈ 1 · resumen de documentos ≈ 5 · análisis legal largo ≈ 20.</span>`;
+    $('ct-aviso').textContent='Con API pagás por uso: si el volumen baja, el costo baja. Es el modo natural para volúmenes chicos y medianos.';
+  } else {
+    const tot=num('ctl_srv',0)+num('ctl_luz',0)+num('ctl_sys',0)+num('ctl_otros',0);
+    v=tot;
+    $('ctl_total').textContent=nf(tot);
+    $('ctl_horas').textContent=Math.round(horasIAactual).toLocaleString('es-AR');
+    $('ct-aviso').textContent=`Ojo: este costo es FIJO. Pagás ${nf(tot)}/mes uses 10 horas o 10.000. Si automatizás menos, el costo por hora sube.`;
+  }
+  ctValor=v; // siempre un costo MENSUAL, igual que el campo de la calculadora
+  const porHora = horasIAactual>0 ? v/horasIAactual : 0;
+  $('ct-res').innerHTML=`${nf(v)}/mes <span style="font-size:.72rem; opacity:.7; font-weight:400;">≈ ${nfd(porHora)}/hora automatizada</span>`;
+}
+function modoCt(m){
+  ctModo=m;
+  $('ct-modo-api').classList.toggle('on',m==='api');
+  $('ct-modo-local').classList.toggle('on',m==='local');
+  $('ct-panel-api').style.display = m==='api'?'':'none';
+  $('ct-panel-local').style.display = m==='local'?'':'none';
+  calcAsistente();
+}
+
+// ---- Asistente de horas minimas de continuidad ----
+// Traduce "puestos que deben estar cubiertos a la vez" a horas de trabajo.
+let hmValor=352;
+function calcHmin(){
+  const puestos=num('hm_puestos',0), oper=num('hm_oper',1), hp=num('hp',1);
+  const total=puestos*oper, personas=Math.ceil(total/hp), factor=oper/hp;
+  hmValor=total;
+  $('hm_total').textContent=Math.round(total).toLocaleString('es-AR');
+  $('hm_personas').textContent=personas;
+  $('hm_res').textContent=Math.round(total).toLocaleString('es-AR')+' h';
+  $('hm_aviso').innerHTML = puestos>0
+    ? `Tu <b>factor de cobertura</b> es ${factor.toFixed(2)} (${Math.round(oper)} h de operación ÷ ${Math.round(hp)} h que trabaja una persona). Por eso ${puestos} puesto${puestos>1?'s':''} simultáneo${puestos>1?'s':''} necesita${puestos>1?'n':''} <b>${personas} persona${personas>1?'s':''}</b>, no ${puestos}. Esa diferencia es la que casi nadie presupuesta.`
+    : 'Sin puestos simultáneos que cubrir, cargá directamente en el campo de arriba las horas de trabajo que necesitás al mes.';
+}
+
+// ---- Calculadora ----
+// Lee un input numerico protegiendo los divisores: sin esto, P=0 o hp=0
+// producen division por cero y la UI muestra "Infinity" / "$-∞".
+function num(id,min){ const v=parseFloat($(id).value); return isNaN(v)?min:Math.max(v,min); }
+let estado={}, ctHora=2, ctEditado=false;
+function calc(){
+  const P=num('P',1), N=num('N',0), hp=num('hp',1);
+  const a=+$('a').value/100, r=+$('r').value/100, eta=+$('eta').value/100;
+  const CtMes=num('CtMes',0), I=num('I',0), M=num('M',0), Hmin=num('Hmin',0);
+  $('a_v').textContent=$('a').value+'%';
+  $('r_v').textContent=$('r').value+'%';
+  $('eta_v').textContent=$('eta').value+'%';
+  let lambda=1;
+  document.querySelectorAll('#arq input:checked').forEach(c=>lambda+=+c.dataset.rho);
+  // Correr local baja lambda pero encarece la hora: avisarlo, porque el modelo no lo hace solo
+  const rLocal=document.querySelector('#arq input[data-rho="0.02"]');
+  $('aviso-local').style.display = rLocal && rLocal.checked ? 'block' : 'none';
+  const H=P*hp, aef=a*(1-r)*eta, Pmin=Math.ceil(Hmin/hp);
+  const Pecon=Math.ceil(P*(1-aef)), Pfinal=Math.max(Pecon,Pmin);
+  const Ch=N/H;
+  // El ahorro sale de las personas que REALMENTE dejas de pagar, no de las horas
+  // automatizadas: si el piso de continuidad te obliga a retener gente, seguis
+  // pagando esos sueldos aunque la IA haga el trabajo.
+  // El usuario carga el gasto MENSUAL (lo que conoce), pero el estado que se guarda
+  // es el costo por HORA: asi, si despues cambia cuanto automatiza, la factura de IA
+  // escala sola. Sin esto el gasto quedaria plano y se perderia el hallazgo central
+  // del modelo: que pasado el piso, automatizar de mas baja el ahorro.
+  const horasIA=H*aef;
+  if(ctEditado && horasIA>0) ctHora = CtMes/horasIA;
+  ctEditado=false;
+  const CtMesEf = ctHora*horasIA;
+  if($('CtMes')!==document.activeElement) $('CtMes').value=Math.round(CtMesEf);
+  const Ct = ctHora;
+  const sueldo=N/P, liberadas=P-Pfinal, costoIA=CtMesEf*lambda;
+  const S=liberadas*sueldo-costoIA-M;
+  horasIAactual=horasIA; calcAsistente(); calcHmin();
+  const pb=S>0?I/S:Infinity, IDA=Math.min(aef*lambda*100,100);
+  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA};
+  $('out_P').textContent=Pfinal;
+  // Pmin > P no es un error: significa que la empresa YA esta por debajo
+  // del minimo para operar sin IA. Es un hallazgo, no un caso borde.
+  $('out_P_sub').textContent = Pmin>P
+    ? `Atención: tu piso (${Pmin}) supera tu dotación actual (${P}). Hoy ya no podrías sostener la operación crítica sin IA — eso hay que resolverlo antes de automatizar nada.`
+    : Pecon>=Pmin
+      ? `La cuenta económica manda. Tu piso de continuidad es ${Pmin}.`
+      : `El piso de continuidad (${Pmin}) te frena: la economía daría ${Pecon}.`;
+  $('out_aef').textContent=(aef*100).toFixed(0)+'%';
+  $('out_lambda').textContent=lambda.toFixed(2).replace('.',',');
+  $('out_S').textContent=nf(S);
+  $('out_lib').textContent = liberadas===1?'1 persona liberada':`${liberadas} personas liberadas`;
+  const frenoS=$('out_S_freno');
+  if(Pecon<Pmin){
+    frenoS.style.display='block';
+    frenoS.textContent=`El piso te obliga a retener ${Pmin-Pecon} persona${Pmin-Pecon>1?'s':''} que la cuenta económica ya no necesita: seguís pagando ${nf((Pmin-Pecon)*sueldo)}/mes de sueldos mientras la IA hace ese trabajo. Automatizar más desde acá te baja el ahorro, no te lo sube.`;
+  } else { frenoS.style.display='none'; }
+  $('out_IDA').textContent=IDA.toFixed(0);
+  const badge=$('out_IDA_badge'), mini=$('out_IDA_mini');
+  if(IDA<30){badge.className='ida-badge ida-verde'; badge.textContent='Resiliente';
+    mini.textContent=`Un IDA de ${IDA.toFixed(0)} significa baja dependencia: automatizaste poco o con arquitectura robusta. Una caída de IA sería una molestia menor, no un paro operativo.`;}
+  else if(IDA<=60){badge.className='ida-badge ida-amarillo'; badge.textContent='Vigilancia';
+    mini.textContent=`Un IDA de ${IDA.toFixed(0)} es dependencia significativa: necesitás piso de continuidad calculado y simulacros de operación manual. Antes de automatizar más, conviene bajar el riesgo de tu arquitectura: un segundo proveedor, o mover la IA adentro.`;}
+  else{badge.className='ida-badge ida-rojo'; badge.textContent='Crítico';
+    mini.textContent=`Un IDA de ${IDA.toFixed(0)} es crítico: tu operación es prácticamente rehén de tu proveedor de IA. Si sos banco, energía o salud, esto debería ser prioridad de directorio.`;}
+  const al=$('out_alerta');
+  if(S<=0){$('out_pb').textContent='Nunca'; al.className='alerta warn'; al.textContent='Ahorro negativo o nulo: con este riesgo, automatizar cuesta más de lo que ahorra.';}
+  else if(pb>18){$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta warn'; al.textContent='Más de 18 meses: la inversión no se recupera en un plazo razonable.';}
+  else{$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta ok'; al.textContent='Menos de 18 meses: el proyecto tiene sentido.';}
+}
+document.querySelectorAll('#calc input').forEach(el=>{
+  el.addEventListener('input',calc); el.addEventListener('change',calc);
+});
+resetFlow();
+$('CtMes').addEventListener('input',()=>{ctEditado=true;});
+$('ct-modo-api').onclick=()=>modoCt('api');
+$('ct-modo-local').onclick=()=>modoCt('local');
+$('ct-usar').onclick=()=>{ $('CtMes').value=Math.round(ctValor); ctEditado=true; calc(); };
+$('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
+
+// ---- Botones de accion ----
+const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,
+  ctp_precio:0.21,ctp_mes:614,ctl_srv:5170,ctl_luz:250,ctl_sys:3000,ctl_otros:0,
+  hm_puestos:2,hm_oper:176};
+
+$('btn-calcular').onclick=()=>{
+  calc();
+  const box=document.querySelector('.resultado-box');
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+  box.classList.remove('resaltar'); void box.offsetWidth; box.classList.add('resaltar');
+};
+
+$('btn-reiniciar').onclick=()=>{
+  Object.entries(DEFAULTS).forEach(([k,v])=>{ const el=$(k); if(el) el.value=v; });
+  document.querySelectorAll('#arq input[type=radio]').forEach((r,i)=>r.checked=(i===0));
+  document.querySelectorAll('#arq input[type=checkbox]').forEach((c,i)=>c.checked=(i===0));
+  modoCt('api');
+  ctHora=2; ctEditado=false;
+  calc();
+};
+
+function zonaIDA(v){ return v<30?'Resiliente':(v<=60?'Vigilancia':'Crítico'); }
+
+// --- Graficos del informe en SVG: imprimen nitidos y no dependen de Chart.js ---
+function svgIDA(ida){
+  const w=300,h=52,y=18,bh=15,X=v=>v/100*w, px=X(Math.min(Math.max(ida,0),100));
+  const F='font-family="Helvetica,Arial,sans-serif"';
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="${y}" width="${X(30)}" height="${bh}" fill="#1F7A4D"/>
+    <rect x="${X(30)}" y="${y}" width="${X(30)}" height="${bh}" fill="#e6a817"/>
+    <rect x="${X(60)}" y="${y}" width="${X(40)}" height="${bh}" fill="#B02A37"/>
+    <polygon points="${px},${y-1} ${px-5},${y-8} ${px+5},${y-8}" fill="#2e3a4d"/>
+    <text x="${px}" y="${y-11}" font-size="10" font-weight="700" text-anchor="middle" fill="#2e3a4d" ${F}>${ida.toFixed(0)}</text>
+    <text x="0" y="${y+bh+9}" font-size="7" fill="#8a94a6" ${F}>0 · Resiliente</text>
+    <text x="${w/2}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="middle" ${F}>Vigilancia</text>
+    <text x="${w}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="end" ${F}>Crítico · 100</text>
+  </svg>`;
+}
+function svgAhorro(e){
+  const pts=[]; for(let i=0;i<=100;i++){ const aef=i/100;
+    const Pf=Math.max(Math.ceil(e.P*(1-aef)),e.Pmin);
+    pts.push((e.P-Pf)*e.sueldo - e.H*aef*e.lambda*e.Ct - e.M); }
+  const w=300,h=108,pl=40,pr=6,pt=8,pb=20,iw=w-pl-pr,ih=h-pt-pb;
+  const mx=Math.max(...pts,0), mn=Math.min(...pts,0), rango=(mx-mn)||1;
+  const X=i=>pl+i/100*iw, Y=v=>pt+ih-(v-mn)/rango*ih;
+  const d=pts.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  const iOpt=pts.indexOf(mx), iAct=Math.min(100,Math.max(0,Math.round(e.aef*100)));
+  const F='font-family="Helvetica,Arial,sans-serif"';
+  const money=v=>'$'+Math.round(v/1000*10)/10+'k';
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <line x1="${pl}" y1="${Y(0)}" x2="${w-pr}" y2="${Y(0)}" stroke="#c3cad6" stroke-width=".7" stroke-dasharray="3 2"/>
+    <path d="${d}" fill="none" stroke="#FF6F00" stroke-width="1.8"/>
+    <circle cx="${X(iOpt)}" cy="${Y(mx)}" r="3" fill="#1F7A4D"/>
+    <circle cx="${X(iAct)}" cy="${Y(pts[iAct])}" r="3.2" fill="#2e3a4d"/>
+    <text x="${X(iAct)}" y="${Y(pts[iAct])-6}" font-size="7.5" font-weight="700" text-anchor="middle" fill="#2e3a4d" ${F}>hoy</text>
+    <text x="${X(iOpt)}" y="${Y(mx)-6}" font-size="7.5" font-weight="700" text-anchor="middle" fill="#1F7A4D" ${F}>óptimo ${iOpt}%</text>
+    <text x="${pl-3}" y="${Y(mx)+3}" font-size="7" text-anchor="end" fill="#8a94a6" ${F}>${money(mx)}</text>
+    <text x="${pl-3}" y="${Y(0)+3}" font-size="7" text-anchor="end" fill="#8a94a6" ${F}>$0</text>
+    <text x="${pl}" y="${h-6}" font-size="7" fill="#8a94a6" ${F}>0%</text>
+    <text x="${w-pr}" y="${h-6}" font-size="7" text-anchor="end" fill="#8a94a6" ${F}>100% automatización</text>
+  </svg>`;
+}
+function buildInforme(){
+  const e=estado, pc=v=>(v*100).toFixed(1).replace('.',',')+'%';
+  $('inf-fecha').textContent='Generado el '+new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
+  const arq=[...document.querySelectorAll('#arq input:checked')]
+    .map(c=>c.parentElement.textContent.replace(/\s+/g,' ').trim()).join(' · ');
+  const pbTxt = e.S>0 ? Math.round(e.pb)+' meses' : 'No se recupera';
+  const veredicto = e.S<=0
+    ? 'Con estos valores, automatizar cuesta más de lo que ahorra: el proyecto no se sostiene por sí solo. Antes de avanzar hay que bajar el costo real de la IA (λ o C_mes) o revisar si el piso de continuidad deja margen para liberar gente.'
+    : (e.pb>18
+      ? 'El recupero supera los 18 meses, el límite práctico que propone el modelo. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino bajar λ: sumar un segundo proveedor, armar un plan de contingencia o mover la IA adentro.'
+      : 'El recupero entra dentro de los 18 meses: el proyecto se sostiene económicamente con los supuestos cargados.');
+  const lecturaIDA = e.IDA<30
+    ? 'Dependencia baja. Una caída de IA sería una molestia, no un paro operativo.'
+    : (e.IDA<=60
+      ? 'Dependencia significativa. Se requiere piso de continuidad calculado y simulacros de operación manual. Antes de automatizar más, conviene bajar λ.'
+      : 'Dependencia crítica: la operación queda prácticamente rehén del proveedor de IA. En banca, energía o salud esto debería ser tema de directorio.');
+  const freno = e.Pecon<e.Pmin
+    ? `<p class="inf-nota"><b>El piso está activo.</b> La cuenta económica permitiría bajar a ${e.Pecon} personas, pero la continuidad obliga a conservar ${e.Pmin}. Se siguen pagando ${nf((e.Pmin-e.Pecon)*e.sueldo)} por mes en sueldos mientras la IA hace ese trabajo: esa es la prima de seguro operativo. Desde este punto, automatizar más reduce el ahorro en lugar de aumentarlo.</p>`
+    : '';
+  // Break-even economico: el techo de inversion que el ahorro logra devolver
+  const techo18 = e.S>0 ? e.S*18 : 0;
+  const veredictoROI = e.S<=0
+    ? `<b>La inversión no se justifica con ningún monto.</b> El ahorro mensual es ${nf(e.S)}, es decir nulo o negativo: no hay plata que ponés que vuelva, porque la operación no genera excedente. Primero hay que lograr que el ahorro sea positivo, después discutir cuánto invertir.`
+    : (e.I>techo18
+      ? `<b>La inversión de ${nf(e.I)} es demasiado grande para este ahorro.</b> Con ${nf(e.S)} por mes, en 18 meses recuperás como máximo ${nf(techo18)}. Para que el proyecto cierre, la inversión no debería superar ese techo — o hay que aumentar el ahorro, que se logra bajando λ, no automatizando más.`
+      : `<b>La inversión de ${nf(e.I)} está dentro de lo que este ahorro puede devolver.</b> El techo a 18 meses es ${nf(techo18)}, así que hay margen. A 36 meses el proyecto deja ${nf(e.S*36-e.I)} netos sobre lo invertido.`);
+  const clsPb = e.S<=0 ? 'mal' : (e.pb<=18?'ok':'mal');
+  const clsIDA = e.IDA<30?'ok':(e.IDA<=60?'':'mal');
+  const resumen = e.S<=0
+    ? `Con los supuestos cargados el proyecto <b>no se sostiene</b>: automatizar cuesta más de lo que ahorra. Antes de avanzar hay que bajar el costo real de la IA o revisar el piso de continuidad.`
+    : (e.pb>18
+      ? `El proyecto <b>no pasa el filtro de 18 meses</b>. Conservás ${e.Pfinal} personas y ahorrás ${nf(e.S)} por mes, pero la inversión tarda ${Math.round(e.pb)} meses en volver. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino <b>bajar λ</b>.`
+      : `El proyecto <b>se sostiene</b>: conservás ${e.Pfinal} personas, ahorrás ${nf(e.S)} por mes y recuperás la inversión en ${Math.round(e.pb)} meses. Queda pendiente la exposición: con IDA ${e.IDA.toFixed(0)} estás en zona ${zonaIDA(e.IDA).toLowerCase()}.`);
+
+  $('inf-cuerpo').innerHTML=`
+  <div class="inf-kpis">
+    <div class="inf-kpi"><span class="k-lab">Personas a conservar</span><span class="k-val">${e.Pfinal}</span><span class="k-sub">de ${e.P} actuales</span></div>
+    <div class="inf-kpi ${e.S>0?'ok':'mal'}"><span class="k-lab">Ahorro mensual</span><span class="k-val">${nf(e.S)}</span><span class="k-sub">ajustado por riesgo</span></div>
+    <div class="inf-kpi ${clsPb}"><span class="k-lab">Recupero</span><span class="k-val">${e.S>0?Math.round(e.pb):'—'}</span><span class="k-sub">${e.S>0?'meses':'no recupera'}</span></div>
+    <div class="inf-kpi ${clsIDA}"><span class="k-lab">IDA</span><span class="k-val">${e.IDA.toFixed(0)}</span><span class="k-sub">${zonaIDA(e.IDA)}</span></div>
+  </div>
+
+  <div class="inf-veredicto"><b>Resumen ejecutivo.</b> ${resumen}</div>
+
+  <div class="inf-indice"><b>Contenido</b>
+    <span>1 · Datos cargados</span><span>2 · Resultados</span><span>3 · Análisis económico</span><span>4 · Gráficos</span><span>5 · Lectura y recomendación</span>
+  </div>
+
+  <h2>1 · Datos cargados</h2>
+  <table>
+    <tr><th>Concepto</th><th style="text-align:right">Valor</th></tr>
+    <tr><td>Personas actuales en el área</td><td class="num">${e.P}</td></tr>
+    <tr><td>Nómina mensual total</td><td class="num">${nf(e.N)}</td></tr>
+    <tr><td>Horas por persona al mes</td><td class="num">${e.hp} h</td></tr>
+    <tr><td>Horas totales del área</td><td class="num">${Math.round(e.H).toLocaleString('es-AR')} h</td></tr>
+    <tr><td>Costo de la hora humana</td><td class="num">${nf(e.N/e.H)}</td></tr>
+    <tr><td>% automatizable / con firma humana / eficiencia IA</td><td class="num">${pc(e.a)} · ${pc(e.r)} · ${pc(e.eta)}</td></tr>
+    <tr><td>Gasto de IA por mes</td><td class="num">${nf(e.CtMesEf)}</td></tr>
+    <tr><td>Equivale por hora automatizada</td><td class="num">${nfd(e.Ct)}</td></tr>
+    <tr><td>Inversión inicial · mantenimiento mensual</td><td class="num">${nf(e.I)} · ${nf(e.M)}</td></tr>
+    <tr><td>Horas mínimas para operar sin IA</td><td class="num">${Math.round(e.Hmin).toLocaleString('es-AR')} h</td></tr>
+    <tr><td>Arquitectura</td><td class="num" style="font-weight:400">${arq||'sin definir'}</td></tr>
+  </table>
+
+  <h2>2 · Resultados</h2>
+  <table>
+    <tr><th>Indicador</th><th style="text-align:right">Resultado</th></tr>
+    <tr><td>Automatización efectiva (a_ef)</td><td class="num">${pc(e.aef)}</td></tr>
+    <tr><td>Multiplicador de riesgo (λ)</td><td class="num">${e.lambda.toFixed(2).replace('.',',')}</td></tr>
+    <tr><td>Piso de continuidad (P_min)</td><td class="num">${e.Pmin} personas</td></tr>
+    <tr class="inf-destacado"><td><b>Personas a conservar (P')</b></td><td class="num">${e.Pfinal} personas</td></tr>
+    <tr><td>Personas que se liberan</td><td class="num">${e.liberadas}</td></tr>
+    <tr><td>Costo mensual de la IA ajustado por riesgo</td><td class="num">${nf(e.costoIA)}</td></tr>
+    <tr class="inf-destacado"><td><b>Ahorro mensual (S)</b></td><td class="num">${nf(e.S)}</td></tr>
+    <tr class="inf-destacado"><td><b>Recupero de la inversión</b></td><td class="num">${pbTxt}</td></tr>
+    <tr class="inf-destacado"><td><b>Índice de Dependencia de IA (IDA)</b></td><td class="num">${e.IDA.toFixed(0)} — ${zonaIDA(e.IDA)}</td></tr>
+  </table>
+
+  <h2>3 · Análisis económico de la inversión</h2>
+  <table>
+    <tr><th>Concepto</th><th style="text-align:right">Valor</th></tr>
+    <tr><td>Inversión inicial (una sola vez)</td><td class="num">${nf(e.I)}</td></tr>
+    <tr><td>Gasto de IA por mes (ajustado por riesgo λ)</td><td class="num">${nf(e.costoIA)}</td></tr>
+    <tr><td>Mantenimiento mensual</td><td class="num">${nf(e.M)}</td></tr>
+    <tr class="inf-destacado"><td><b>Ahorro neto por mes</b></td><td class="num">${nf(e.S)}</td></tr>
+    <tr><td>Techo de inversión que se justifica (a 18 meses)</td><td class="num">${e.S>0?nf(e.S*18):'—'}</td></tr>
+    <tr><td>Resultado acumulado a 12 meses</td><td class="num">${nf(e.S*12-e.I)}</td></tr>
+    <tr><td>Resultado acumulado a 24 meses</td><td class="num">${nf(e.S*24-e.I)}</td></tr>
+    <tr class="inf-destacado"><td><b>ROI a 36 meses</b></td><td class="num">${e.I>0?(((e.S*36-e.I)/e.I)*100).toFixed(0)+'%':'—'}</td></tr>
+  </table>
+  <p>${veredictoROI}</p>
+
+  <h2>4 · Gráficos</h2>
+  <div class="inf-graf">
+    <div><h3>Exposición (IDA)</h3>${svgIDA(e.IDA)}</div>
+    <div><h3>Ahorro según cuánto automatices</h3>${svgAhorro(e)}</div>
+  </div>
+  <p style="font-size:8.5pt; color:#8a94a6;">La curva naranja es tu ahorro real a medida que automatizás más. El punto oscuro marca dónde estás hoy; el verde, dónde está el máximo. Si el óptimo quedó a tu izquierda, automatizar más te baja el ahorro y te sube la dependencia.</p>
+
+  <h2>5 · Lectura y recomendación</h2>
+  <p><b>Dotación.</b> El modelo indica conservar <b>${e.Pfinal} personas</b>. La cuenta económica por sí sola daría ${e.Pecon}; el piso de continuidad exige ${e.Pmin}. Se toma el mayor de los dos porque ambas condiciones deben cumplirse a la vez.</p>
+  ${freno}
+  <p><b>Economía.</b> ${veredicto}</p>
+  <p><b>Exposición.</b> IDA ${e.IDA.toFixed(0)} sobre 100 (zona ${zonaIDA(e.IDA).toLowerCase()}). ${lecturaIDA}</p>
+  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el costo esperado de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
+}
+$('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
+
+calc();
+
+// ---- JUGAR ----
+let chartJugar=null, modoActual='piso';
+const ctrlDefs={
+  piso:[
+    {id:'jP',label:'Personas actuales',min:2,max:30,val:10,step:1,fmt:v=>v},
+    {id:'jr',label:'% regulado',min:0,max:80,val:20,step:1,fmt:v=>v+'%'},
+    {id:'jeta',label:'Eficiencia IA',min:50,max:100,val:80,step:1,fmt:v=>v+'%'},
+    {id:'jPmin',label:'Piso de continuidad (personas)',min:0,max:15,val:4,step:1,fmt:v=>v},
+  ],
+  ahorro:[
+    {id:'jP2',label:'Personas actuales',min:2,max:30,val:10,step:1,fmt:v=>v},
+    {id:'jPmin2',label:'Piso de continuidad (personas)',min:0,max:15,val:4,step:1,fmt:v=>v},
+    {id:'jCh',label:'Costo hora humana (USD)',min:3,max:30,val:10,step:1,fmt:v=>'$'+v},
+    {id:'jCt',label:'Costo IA por hora automatizada (USD)',min:0.5,max:12,val:2,step:0.5,fmt:v=>'$'+v},
+    {id:'jlam',label:'Multiplicador riesgo λ',min:1,max:5,val:1.5,step:0.1,fmt:v=>v},
+  ],
+  inversion:[
+    {id:'jTmax',label:'Payback máximo exigido (meses)',min:6,max:36,val:18,step:1,fmt:v=>v+' m'},
+    {id:'jP3',label:'Personas actuales',min:2,max:30,val:10,step:1,fmt:v=>v},
+    {id:'jPmin3',label:'Piso de continuidad (personas)',min:0,max:15,val:4,step:1,fmt:v=>v},
+    {id:'jCh3',label:'Costo hora humana (USD)',min:3,max:30,val:10,step:1,fmt:v=>'$'+v},
+    {id:'jCt3',label:'Costo IA por hora automatizada (USD)',min:0.5,max:12,val:2,step:0.5,fmt:v=>'$'+v},
+    {id:'jlam3',label:'Multiplicador riesgo λ',min:1,max:5,val:1.5,step:0.1,fmt:v=>v},
+  ]
+};
+function renderControles(){
+  const cont=$('controles-jugar'); cont.innerHTML='';
+  ctrlDefs[modoActual].forEach(c=>{
+    const div=document.createElement('div'); div.className='campo';
+    div.innerHTML=`<label>${c.label}: <span class="val" id="${c.id}_v" style="color:var(--naranja)">${c.fmt(c.val)}</span></label>
+      <div class="slider-row"><input type="range" id="${c.id}" min="${c.min}" max="${c.max}" value="${c.val}" step="${c.step}" aria-label="${c.label}"></div>`;
+    cont.appendChild(div);
+  });
+  ctrlDefs[modoActual].forEach(c=>{
+    $(c.id).addEventListener('input',()=>{ $(c.id+'_v').textContent=c.fmt(+$(c.id).value); updateJugar(); });
+  });
+}
+function updateJugar(){
+  const xs=[...Array(101).keys()].map(i=>i/100);
+  let labels, datasets, xTitle, yTitle, explica;
+  if(modoActual==='piso'){
+    const P=+$('jP').value, r=+$('jr').value/100, eta=+$('jeta').value/100, Pmin=+$('jPmin').value;
+    const ing=xs.map(a=>Math.ceil(P*(1-a*(1-r)*eta)));
+    const piso=ing.map(v=>Math.max(v,Pmin));
+    labels=xs.map(a=>(a*100).toFixed(0));
+    datasets=[
+      {label:'Sin piso (cuenta ingenua)',data:ing,borderColor:GRIS,borderDash:[6,4],pointRadius:0,tension:.1},
+      {label:'Con piso de continuidad',data:piso,borderColor:NARANJA,borderWidth:3,pointRadius:0,tension:.1},
+      {label:'Piso = '+Pmin,data:xs.map(()=>Pmin),borderColor:NAVY,borderDash:[2,3],pointRadius:0,borderWidth:1.5},
+    ];
+    xTitle='% de horas automatizables'; yTitle='Personas necesarias';
+    explica=`Con piso en ${Pmin}, por más que automatices nunca bajás de ${Pmin} personas. Subí la eficiencia o bajá lo regulado y la curva naranja cae más rápido, pero siempre frena en el piso.`;
+  } else if(modoActual==='ahorro'){
+    const P=+$('jP2').value, Pmin=+$('jPmin2').value, Ch=+$('jCh').value, Ct=+$('jCt').value, lam=+$('jlam').value;
+    const hp=160, H=P*hp, sueldo=hp*Ch, M=500;
+    // Ahorro real: solo contás los sueldos que efectivamente dejás de pagar
+    const Sreal=xs.map(aef=>(P-Math.max(Math.ceil(P*(1-aef)),Pmin))*sueldo - H*aef*lam*Ct - M);
+    const Sing=xs.map(aef=>H*aef*(Ch-lam*Ct)-M);
+    labels=xs.map(a=>(a*100).toFixed(0));
+    const maxS=Math.max(...Sreal), iOpt=Sreal.indexOf(maxS);
+    const aOpt=xs[iOpt]*100;
+    const color=maxS>0?NARANJA:ROJO;
+    datasets=[
+      {label:'Cuenta ingenua (ignora el piso)',data:Sing,borderColor:GRIS,borderDash:[6,4],pointRadius:0,tension:.1},
+      {label:`Ahorro real con piso de ${Pmin}`,data:Sreal,borderColor:color,borderWidth:3,pointRadius:0,stepped:true,
+        fill:{target:'origin',below:'rgba(192,57,43,0.1)',above:'rgba(255,111,0,0.08)'}},
+      {label:`Óptimo ≈ ${aOpt.toFixed(0)}%`,data:xs.map((_,i)=>i===iOpt?maxS:null),borderColor:VERDE,backgroundColor:VERDE,pointRadius:6,showLine:false},
+      {label:'S = 0',data:xs.map(()=>0),borderColor:NAVY,borderDash:[2,3],pointRadius:0,borderWidth:1.5},
+    ];
+    xTitle='Automatización efectiva (%)'; yTitle='Ahorro mensual (USD)';
+    const cr=lam*Ct, aFreno=Math.max(0,(1-Pmin/P)*100);
+    explica=`El costo real de la IA es $${cr.toFixed(1)}/h (λ×Ct) contra $${Ch}/h del humano. La línea gris es la cuenta ingenua: supone que cada hora automatizada es un sueldo menos. La naranja es la real: solo ahorrás sueldos de gente que efectivamente podés liberar. `+
+      (Pmin<P
+        ? `A partir del ${aFreno.toFixed(0)}% de automatización chocás con el piso de ${Pmin} personas y ya no podés liberar a nadie más — pero la factura de IA sigue subiendo, así que el ahorro empieza a CAER. Tu punto óptimo está cerca del ${aOpt.toFixed(0)}%: automatizar más allá de ahí te deja más pobre y más dependiente.`
+        : `Con un piso de ${Pmin} sobre ${P} personas no podés liberar a nadie: automatices lo que automatices, solo sumás costo de IA. El ahorro es negativo desde el arranque.`);
+  } else {
+    // Techo de inversion: cuanto podes poner y todavia recuperarlo en Tmax meses.
+    // Usa el mismo ahorro real que la calculadora (solo sueldos efectivamente liberados).
+    const Tmax=+$('jTmax').value, P=+$('jP3').value, Pmin=+$('jPmin3').value;
+    const Ch=+$('jCh3').value, Ct=+$('jCt3').value, lam=+$('jlam3').value;
+    const hp=160, H=P*hp, sueldo=hp*Ch, M=500;
+    const S=xs.map(aef=>(P-Math.max(Math.ceil(P*(1-aef)),Pmin))*sueldo - H*aef*lam*Ct - M);
+    const techo=S.map(s=>Math.max(s*Tmax,0));
+    labels=xs.map(a=>(a*100).toFixed(0));
+    const maxT=Math.max(...techo), iOpt=techo.indexOf(maxT), aOpt=xs[iOpt]*100;
+    datasets=[
+      {label:`Inversión máxima recuperable en ${Tmax} meses`,data:techo,borderColor:maxT>0?NARANJA:ROJO,borderWidth:3,pointRadius:0,stepped:true,fill:{target:'origin',above:'rgba(255,111,0,0.08)'}},
+      {label:`Techo máximo ≈ ${nf(maxT)} al ${aOpt.toFixed(0)}%`,data:xs.map((_,i)=>i===iOpt?maxT:null),borderColor:VERDE,backgroundColor:VERDE,pointRadius:6,showLine:false},
+    ];
+    xTitle='Automatización efectiva (%)'; yTitle='Inversión máxima que se recupera (USD)';
+    explica=maxT>0
+      ? `Con un payback exigido de ${Tmax} meses, cada punto es <b>lo máximo que podés invertir</b> y todavía recuperarlo. El techo más alto es ${nf(maxT)} y está en el ${aOpt.toFixed(0)}% de automatización — no en el 100%. Si automatizás de más, el ahorro cae y con él cae cuánta plata podés justificar poner. Exigí un payback más corto y el techo baja parejo.`
+      : `Con estos valores el ahorro nunca es positivo: no hay inversión que se recupere, por chica que sea. Bajá λ o el costo de la IA, o revisá si el piso de continuidad te está dejando sin gente para liberar.`;
+  }
+  $('jugar-explica').innerHTML=explica;
+  if(!chartJugar){
+    chartJugar=new Chart($('canvasJugar'),{type:'line',data:{labels,datasets},options:{
+      responsive:true,maintainAspectRatio:false,animation:{duration:250},
+      plugins:{legend:{labels:{boxWidth:16,font:{...chartFont,size:11},color:NAVY}}},
+      scales:{x:{title:{display:true,text:xTitle,color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,maxTicksLimit:11,font:chartFont}},
+              y:{title:{display:true,text:yTitle,color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,font:chartFont}}}
+    }});
+  } else {
+    chartJugar.data.labels=labels; chartJugar.data.datasets=datasets;
+    chartJugar.options.scales.x.title.text=xTitle; chartJugar.options.scales.y.title.text=yTitle;
+    chartJugar.update();
+  }
+}
+document.querySelectorAll('.modo-btn').forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll('.modo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');modoActual=b.dataset.modo;renderControles();updateJugar();};
+});
+// jugar se inicializa al abrir su pestaña (lazy init arriba)
+
+// ---- Comparador ----
+// Dos filas para local: el fierro solo, y el costo completo (fierro + luz + sysadmin).
+// Los mismos numeros que usa la seccion Formulas.
+const SELFHOST_HW=5170, SELFHOST_FULL=8420;
+const modelos=[
+  {n:'DeepSeek V4-Flash', hw:'API en la nube', ch:0.21, lam:1.5, local:false},
+  {n:'Gemini 3.6 Flash', hw:'API en la nube', ch:4.50, lam:1.5, local:false},
+  {n:'DeepSeek V4-Flash', hw:'Local · solo el servidor', fijo:SELFHOST_HW, lam:1.02, local:true},
+  {n:'DeepSeek V4-Flash', hw:'Local · + luz + sysadmin', fijo:SELFHOST_FULL, lam:1.02, local:true, full:true},
+];
+function comp(){
+  const h=+$('hcomp').value;
+  $('hcomp_v').textContent=h.toLocaleString('es-AR')+' h';
+  let ctx='';
+  if(h<=80) ctx='Volumen chico: tarea puntual tipo emails o un proceso acotado.';
+  else if(h<=1600) ctx='Volumen medio: un equipo o un área completa.';
+  else if(h<=10000) ctx='Volumen grande: varios departamentos automatizados.';
+  else ctx='Volumen masivo: operación a escala tipo banco o telco.';
+  $('hcomp_ctx').textContent=ctx;
+  const rows=modelos.map(m=>({...m, costo: m.local?m.fijo:m.ch*h}));
+  const minCosto=Math.min(...rows.map(r=>r.costo));
+  const tbl=$('tabla_comp');
+  tbl.innerHTML='<tr><th>Opción</th><th>Modelo / Hardware</th><th>Costo mensual</th><th>Riesgo λ</th><th>Veredicto</th></tr>';
+  rows.forEach(r=>{
+    const gana=r.costo===minCosto;
+    const tr=document.createElement('tr');
+    if(gana) tr.style.background='#eafaf0';
+    tr.innerHTML=`<td><b>${r.n}</b></td><td>${r.hw}</td><td><b>${nf(r.costo)}</b>/mes</td><td>${r.lam.toFixed(2).replace('.',',')}</td><td>${gana?'Más barato':(r.local?'Menor riesgo':'')}</td>`;
+    tbl.appendChild(tr);
+  });
+  const localFull=rows.find(r=>r.full), dsapi=rows.find(r=>!r.local&&r.n.includes('DeepSeek'));
+  const ratio=localFull.costo/dsapi.costo, hh=h.toLocaleString('es-AR');
+  let msg;
+  if(ratio>3) msg=`Con ${hh} h/mes, el servidor local con su costo completo cuesta ${ratio.toFixed(0)}× más que la API de DeepSeek. La API gana claramente — salvo que la soberanía del dato sea obligatoria (banco, salud, gobierno), donde el λ bajo del local puede justificar el sobrecosto.`;
+  else if(ratio>1) msg=`Con ${hh} h/mes ya te acercás al break-even: el local completo cuesta solo ${ratio.toFixed(1)}× la API y encima te baja el riesgo. Si el dato es sensible, conviene el local.`;
+  else msg=`Con ${hh} h/mes superaste el break-even incluso contando luz y sysadmin: el servidor propio es más barato que la API y te da λ mínimo. Comprá el fierro.`;
+  $('comp_conclusion').textContent=msg;
+}
+$('hcomp').addEventListener('input',comp); comp();
+
+// ---- MONTECARLO ----
+let chartMC=null;
+const mcDefs=[
+  {id:'mcA',label:'% automatizable',min:0,max:100,lo:50,hi:70,fmt:v=>v+'%'},
+  {id:'mcEta',label:'Eficiencia IA (η)',min:50,max:100,lo:65,hi:90,fmt:v=>v+'%'},
+  {id:'mcCt',label:'Costo IA por hora automatizada (USD)',min:0.5,max:12,lo:1.5,hi:4,fmt:v=>'$'+v},
+  {id:'mcLam',label:'Riesgo λ',min:1,max:5,lo:1.3,hi:1.7,fmt:v=>v},
+];
+const mcFijos={r:0.20, P:10, hp:160, Nom:16000, Pmin:4, M:500, I:50000};
+function renderMC(){
+  const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Fijos: 10 personas × 160 h, nómina $16.000/mes (hora humana $10), regulado 20%, piso de continuidad 4 personas, inversión $50.000, mantenimiento $500/mes.</p>';
+  mcDefs.forEach(d=>{
+    const div=document.createElement('div'); div.className='campo';
+    div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>
+      <div class="slider-row" style="font-size:.72rem;color:var(--gris)">min<input type="range" id="${d.id}_lo" min="${d.min}" max="${d.max}" value="${d.lo}" step="${d.min<1?0.5:1}" aria-label="${d.label}, mínimo">
+      max<input type="range" id="${d.id}_hi" min="${d.min}" max="${d.max}" value="${d.hi}" step="${d.min<1?0.5:1}" aria-label="${d.label}, máximo"></div>`;
+    cont.appendChild(div);
+  });
+  mcDefs.forEach(d=>{
+    $(d.id+'_lo').addEventListener('input',()=>$(d.id+'_lo_v').textContent=d.fmt(+$(d.id+'_lo').value));
+    $(d.id+'_hi').addEventListener('input',()=>$(d.id+'_hi_v').textContent=d.fmt(+$(d.id+'_hi').value));
+  });
+}
+function rnd(lo,hi){return lo+Math.random()*(hi-lo);}
+function runMC(){
+  const A=[+$('mcA_lo').value/100,+$('mcA_hi').value/100];
+  const E=[+$('mcEta_lo').value/100,+$('mcEta_hi').value/100];
+  const C=[+$('mcCt_lo').value,+$('mcCt_hi').value];
+  const L=[+$('mcLam_lo').value,+$('mcLam_hi').value];
+  const {r,P,hp,Nom,Pmin,M,I}=mcFijos;
+  const H=P*hp, sueldo=Nom/P;
+  const SIMS=10000, paybacks=[];
+  let neg=0;
+  for(let i=0;i<SIMS;i++){
+    const aef=rnd(...A)*(1-r)*rnd(...E);
+    const Pf=Math.max(Math.ceil(P*(1-aef)),Pmin);
+    const S=(P-Pf)*sueldo - H*aef*rnd(...L)*rnd(...C) - M;
+    if(S<=0){neg++; continue;}
+    const pb=I/S;
+    if(pb<=60) paybacks.push(pb);
+  }
+  // histograma
+  const bins=30, max=60, w=max/bins, counts=new Array(bins).fill(0);
+  paybacks.forEach(p=>{const idx=Math.min(Math.floor(p/w),bins-1); counts[idx]++;});
+  const labels=counts.map((_,i)=>((i*w)).toFixed(0));
+  const colors=counts.map((_,i)=> (i*w)<=18 ? NARANJA : GRIS);
+  const p18=(paybacks.filter(p=>p<=18).length/paybacks.length*100);
+  const sorted=[...paybacks].sort((a,b)=>a-b);
+  const mediana=sorted.length?sorted[Math.floor(sorted.length/2)]:0;
+
+  if(chartMC) chartMC.destroy();
+  chartMC=new Chart($('canvasMC'),{type:'bar',data:{labels,datasets:[{label:'Escenarios',data:counts,backgroundColor:colors,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:300},
+      plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>`~${it[0].label} meses`}}},
+      scales:{x:{title:{display:true,text:'Meses para recuperar la inversión',color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,maxTicksLimit:13,font:chartFont}},
+              y:{title:{display:true,text:'Cantidad de escenarios',color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,font:chartFont}}}}
+  });
+  $('mc-resumen').innerHTML=`Naranja = recupera en ≤18 meses. De 10.000 futuros simulados, <b>${p18.toFixed(0)}%</b> recupera la inversión en menos de 18 meses. Mediana: <b>${mediana.toFixed(0)} meses</b>. ${neg>0?`En ${(neg/100).toFixed(0)}% de los escenarios el ahorro fue negativo (no se recupera nunca).`:''} Movés los rangos y volvés a correr para ver cómo cambia tu probabilidad de éxito.`;
+}
+$('run-mc').addEventListener('click',runMC);
+// montecarlo se inicializa al abrir su pestaña (lazy init arriba)
+</script>
+</body>
+</html>

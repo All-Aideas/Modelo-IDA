@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+
+# Notas de trabajo propias, no van al repo publico
+COMO_SUBIRLO.md
+para-medium/
+
+# Firebase
+.firebase/
+firebase-debug.log
+.firebaserc
