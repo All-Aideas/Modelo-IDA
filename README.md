@@ -39,7 +39,7 @@ Un buen modelo se reconoce en los bordes: cuando lo empujás al extremo, tiene q
 
 La cuenta económica ingenua dice: si automatizás todo, necesitás cero personas. El modelo dice: no. La dotación cae con la automatización *hasta que choca con un piso* —el mínimo de gente para sostener la operación crítica sin IA— y ahí se planta, aunque automatices el 100%.
 
-![Piso de continuidad](assets/g1_piso_continuidad.png)
+![Piso de continuidad](assets/g1_piso_continuidad.svg)
 
 La diferencia entre lo que dice el Excel y lo que dice el piso es tu **prima de seguro operativo**: gente que parece "de más" hasta el martes que se cae la nube.
 
@@ -77,7 +77,7 @@ Montar el servidor local para los emails cuesta **410 veces más** que usar la A
 >
 > **Puede ser cero**, ojo: si ya tenés a alguien que lo absorbe o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado — ver §4 y el asistente de costo real de la calculadora.
 
-![Umbral de inversión](assets/g2_umbral_inversion.png)
+![Local vs API](assets/g2_local_vs_api.svg)
 
 **Misma tarea, tres arquitecturas, conclusiones opuestas.** Fijate también la brecha entre modelos de nube: Gemini 3.6 Flash sale ~20× más caro que DeepSeek Flash para el mismo trabajo. La fórmula no dice "local bueno / nube malo" ni "modelo caro malo": dice cuál conviene *para tu volumen y tu nivel de riesgo tolerable*.
 
@@ -120,10 +120,20 @@ Automatización efectiva = a × (1 − r) × η
 
 Ejemplo: 0,60 × (1 − 0,20) × 0,80 = **38,4%**, no 60%. Primer baño de realidad.
 
+**Un caso concreto: los emails de un retail.** Técnicamente se pueden contestar **el 100%** con IA: leer, entender, redactar, responder. Ese es tu `a` = 100%. Pero por regla de negocio hay correos que **tienen que pasar por una persona sí o sí**: los que mencionan temas legales, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales. Si eso es 1 de cada 5, tu `r` = 20%. Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu `η` = 80%.
+
+`1,00 × (1 − 0,20) × 0,80` = **64%**. Arrancaste creyendo que automatizabas todo y en la práctica sacás dos tercios de la carga. Ese 64% es el número con el que hay que hacer las cuentas.
+
 ### ⚠️ Módulo Riesgo
 ```
-Costo real de la IA = λ × Costo de factura
+Costo real de la IA = λ × Gasto mensual de IA
 ```
+
+**Qué significa ese multiplicador.** Si tu proveedor te factura $1.229 por mes, eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es **cobrarte un extra al momento de decidir** — con λ=1,50 anota $1.844 en la evaluación del proyecto.
+
+¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que la nube única se cae sin plan B perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara *cuando todavía estás a tiempo de cambiarla*.
+
+Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale igual hasta que chocás.
 
 **Dónde corre la IA** — elegís *una sola* de estas tres, son excluyentes:
 
@@ -147,6 +157,14 @@ Costo real de la IA = λ × Costo de factura
 Piso de continuidad (P_min) = Horas mínimas para operar sin IA ÷ Horas por persona
 ```
 Las horas mínimas son las de la operación crítica en modo degradado. La IA local baja P_min; la nube única lo sube.
+
+> **Ojo: esto NO es lo mismo que la firma del médico o del escribano.** Son dos preguntas distintas y es donde más se confunde la gente.
+>
+> `r`, en el módulo Automatización, pregunta: *del trabajo que la IA podría hacer, ¿cuánto no puede por norma?* Es la firma del médico, del escribano, del auditor. Eso pasa **aunque la IA funcione perfecto**: hay tareas que legalmente no se delegan.
+>
+> `P_min`, acá, pregunta otra cosa: *si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?* No importa la firma: importa la **capacidad operativa**.
+>
+> **Cómo estimarlo.** No hace falta un estudio: pensalo en modo degradado y calculá a ojo. *"Si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"* → 200 horas. *"Y alguien tiene que revisar pedidos 4 horas por día"* → 88 horas más. Total ≈ 290 h/mes: ese es tu `H_min`. Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas.
 
 ---
 
@@ -457,7 +475,14 @@ Las dos preguntas para llevarte:
 
 ## 🧮 Calculadora
 
-[**Abrí la calculadora interactiva**](https://cesarriat.com/modelo-ida) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real.
+[**Abrí la calculadora interactiva**](https://cesarriat.com/modelo-ida) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
+
+Qué trae:
+
+- **Costo de la IA por mes** como dato de entrada, que es el número que realmente conocés (tu factura), con un asistente que lo arma componente por componente si usás API o servidor propio.
+- **Diagrama de flujo interactivo** en la pestaña *Fórmulas*: hacés clic en un módulo y ves hacia dónde va, o clic en una respuesta y ves todo lo que la construye.
+- **Asistente de horas mínimas** que traduce "necesito 2 puestos cubiertos" a la cantidad real de personas según el horario de tu operación.
+- **Simulación de Montecarlo** con 10.000 escenarios, **comparador local vs nube** e **informe descargable en PDF** con resumen ejecutivo, análisis de ROI y gráficos.
 
 ## 📄 Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.

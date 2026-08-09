@@ -117,8 +117,12 @@ window.addEventListener('DOMContentLoaded',function(){
   .formula-color.mega{background:var(--navy-oscuro); color:#fff; border-left-color:var(--naranja); font-size:.98rem;}
 
   /* --- Diagrama de flujo con nodos y conexiones animadas --- */
-  .diag-wrap{overflow-x:auto; background:var(--fondo); border:1px solid var(--borde); border-radius:12px; padding:10px 6px; margin:16px 0 0;}
-  .diag-wrap svg{display:block; min-width:940px; width:100%; height:auto;}
+  /* La pestaña Fórmulas usa todo el ancho: el diagrama de flujo lo necesita
+     y el texto lo acompaña, para que no quede uno ancho y el otro angosto. */
+  /* Margen negativo en vez de left+transform: este no genera scroll horizontal */
+  #formula{--ancho:min(calc(100vw - 44px), 1300px); width:var(--ancho); margin-left:calc((100% - var(--ancho))/2);}
+  .diag-wrap{overflow-x:auto; background:var(--fondo); border:1px solid var(--borde); border-radius:12px; padding:12px; margin:16px 0 0;}
+  .diag-wrap svg{display:block; min-width:900px; width:100%; height:auto;}
   .diag-cap{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; font-size:.74rem; color:var(--gris);}
   .diag-cap b{color:var(--navy);}
 
