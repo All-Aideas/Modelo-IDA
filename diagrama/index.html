@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cómo se arma el Modelo IDA — diagrama interactivo</title>
+<meta name="description" content="Los datos que cargás pasan por cuatro módulos y de ahí salen tres respuestas: dotación, ahorro y recupero, e Índice de Dependencia de IA. Hacé clic para ver cómo se conectan.">
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cómo se arma el Modelo IDA — diagrama interactivo">
+<meta property="og:description" content="Hacé clic en un módulo para ver hacia dónde va, o en una respuesta para ver de qué se alimenta.">
+<meta property="og:url" content="https://modelo-ida.web.app/diagrama">
+<meta property="og:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cómo se arma el Modelo IDA — diagrama interactivo">
+<meta name="twitter:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--naranja:#FF6F00;--naranja-claro:#fff3e8;--navy:#425066;--navy-oscuro:#2e3a4d;
+    --fondo:#f7f8fa;--blanco:#fff;--gris:#8a94a6;--borde:#e6eaf0;
+    --m-hum:#2E6F9E;--m-aut:#D9480F;--m-rie:#B02A37;--m-con:#1F7A4D;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Montserrat',sans-serif;background:var(--fondo);color:var(--navy-oscuro);line-height:1.6;}
+  .wrap{max-width:1300px;margin:0 auto;padding:28px 20px 60px;}
+  header{margin-bottom:18px;}
+  header a.volver{color:var(--naranja);text-decoration:none;font-weight:700;font-size:.85rem;}
+  h1{font-size:1.4rem;font-weight:800;color:var(--navy-oscuro);margin:10px 0 8px;}
+  .intro{font-size:.95rem;max-width:760px;margin-bottom:6px;}
+  .diag-wrap{overflow-x:auto;background:var(--blanco);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-top:16px;}
+  .diag-wrap svg{display:block;min-width:900px;width:100%;height:auto;}
+  .edge{fill:none;stroke:#b9c2d0;stroke-width:1.5;stroke-dasharray:5 7;
+    animation:fluir 2.4s linear infinite;transition:stroke .2s,stroke-width .2s,opacity .2s;}
+  @keyframes fluir{to{stroke-dashoffset:-24;}}
+  .edge.off{opacity:.13;animation:none;} .edge.on{stroke-width:3;opacity:1;animation:fluir .85s linear infinite;}
+  .nodo rect{transition:.2s;} .nodo.off{opacity:.24;} .nodo.mod{cursor:pointer;}
+  .nodo .n-tit{font-size:12px;font-weight:700;fill:var(--navy-oscuro);}
+  .nodo .n-sub{font-size:10px;fill:var(--gris);}
+  .nodo.mod rect{stroke-width:2;} .nodo.mod.on rect{stroke-width:3.5;} .nodo.res rect{stroke-width:2.5;}
+  .nodo.res{cursor:pointer;}
+  .diag-lay{font-size:10px;font-weight:800;fill:var(--gris);letter-spacing:.08em;text-transform:uppercase;}
+  .flow-detalle{border-radius:10px;padding:18px 20px;margin-top:16px;border-left:5px solid var(--borde);background:var(--blanco);}
+  .flow-detalle h4{font-size:1.05rem;margin:0 0 6px;display:flex;align-items:center;gap:7px;}
+  .flow-detalle p{font-size:.9rem;margin:0 0 9px;}
+  .flow-detalle .fd-form{font-family:'Courier New',monospace;font-size:1rem;background:var(--fondo);
+    border:1px solid var(--borde);border-radius:7px;padding:12px 14px;margin:10px 0;overflow-x:auto;white-space:nowrap;}
+  .flow-detalle .fd-usa{font-size:.82rem;color:var(--gris);}
+  .ic-mod{width:1.05em;height:1.05em;vertical-align:-.16em;fill:none;stroke:currentColor;
+    stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-right:3px;}
+  footer{margin-top:30px;font-size:.85rem;color:var(--gris);}
+  footer a{color:var(--naranja);font-weight:700;text-decoration:none;}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--naranja);color:#fff;font-weight:800;
+    padding:12px 22px;border-radius:10px;text-decoration:none;margin-top:14px;font-size:.9rem;}
+  .cta:hover{background:#e56400;}
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="i-mod-hum" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.5a7.2 7.2 0 0 1 14.4 0"/></symbol>
+  <symbol id="i-mod-aut" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M12 2.6v2.9M12 18.5v2.9M21.4 12h-2.9M5.5 12H2.6M18.6 5.4l-2 2M7.4 16.6l-2 2M18.6 18.6l-2-2M7.4 7.4l-2-2"/></symbol>
+  <symbol id="i-mod-rie" viewBox="0 0 24 24"><path d="M12 3.4 21.2 19.6a1.3 1.3 0 0 1-1.2 1.9H4a1.3 1.3 0 0 1-1.2-1.9z"/><line x1="12" y1="9.6" x2="12" y2="14.4"/><circle cx="12" cy="17.6" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-mod-con" viewBox="0 0 24 24"><path d="M12 2.8 20 6v6.2c0 4.6-3.2 7.8-8 9.2-4.8-1.4-8-4.6-8-9.2V6z"/><polyline points="8.6 12 11 14.4 15.6 9.8"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <a class="volver" href="https://modelo-ida.web.app">← Modelo IDA</a>
+    <h1>Cómo se arma la cuenta</h1>
+    <p class="intro">Los datos que cargás pasan por <b>cuatro módulos</b>, y de ahí salen las <b>tres respuestas</b> del modelo. Hacé clic en un módulo para ver hacia dónde va, o en una respuesta para ver de qué se alimenta.</p>
+  </header>
+
+  <div class="diag-wrap">
+    <svg id="diagrama" viewBox="0 0 1075 560" role="img"
+      aria-label="Diagrama de flujo: los datos alimentan cuatro modulos y estos producen las tres respuestas"></svg>
+  </div>
+  <div class="flow-detalle" id="flow-detalle"></div>
+
+  <footer>
+    <p>Este diagrama es parte del <b>Modelo IDA</b>: una calculadora para saber cuánta gente necesitás conservar el día que la IA no esté.</p>
+    <a class="cta" href="https://modelo-ida.web.app">Ir a la calculadora completa →</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const POS={};
+
+const MODULOS={
+  hum:{nom:'Humano', ico:'i-mod-hum', cls:'fm-hum', color:'var(--m-hum)',
+    datos:['N','P','hp'], datos_nodo:['Ph','N'], res:['S'],
+    produce:'el costo de <b>una hora de trabajo humano</b>',
+    formula:'costo de la hora humana  =  nómina del mes  ÷  horas totales del área',
+    simbolo:'En las fórmulas aparece como <b class="v-hum">C_h</b>. Las horas totales son las personas multiplicadas por las horas que trabaja cada una.',
+    detalle:'Es la vara contra la que después se compara lo que cuesta la IA. Si la nómina sube y las horas quedan igual, cada hora sale más cara y automatizar se justifica más fácil. Si sumás gente sin subir la nómina en la misma proporción, la hora se abarata y la IA deja de ser tan buen negocio.',
+    usa:'Alimenta el cálculo del ahorro.'},
+  aut:{nom:'Automatización', ico:'i-mod-aut', cls:'fm-aut', color:'var(--m-aut)',
+    datos:['a','r','eta'], datos_nodo:['are'], res:['P','S','IDA'],
+    produce:'la <b class="v-aut">automatización efectiva</b>: la parte del trabajo que la IA reemplaza de verdad',
+    formula:'automatización efectiva  =  lo automatizable  ×  (1 − lo que exige firma)  ×  eficiencia real',
+    simbolo:'En las fórmulas aparece como <b class="v-aut">a_ef</b>, y sus tres ingredientes como <b class="v-aut">a</b>, <b class="v-aut">r</b> y <b class="v-aut">η</b> (eta).',
+    detalle:'Arrancás con lo que técnicamente se puede automatizar, le restás lo que por ley o por norma tiene que firmar una persona, y a eso le aplicás la eficiencia real de la IA, que nunca es del 100%. El número que queda suele ser bastante menor que la promesa inicial: 60% de automatizable con 20% regulado y 80% de eficiencia termina en 38,4% real.',
+    usa:'Es el único módulo que alimenta las tres respuestas.'},
+  rie:{nom:'Riesgo', ico:'i-mod-rie', cls:'fm-rie', color:'var(--m-rie)',
+    datos:['rho'], datos_nodo:['rho'], res:['S','IDA'],
+    produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
+    formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
+    simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es el costo esperado del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
+  con:{nom:'Continuidad', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
+    datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
+    produce:'el <b class="v-con">piso de personas</b>: con cuánta gente te tenés que quedar sí o sí',
+    formula:'piso de personas  =  horas mínimas sin IA  ÷  horas que trabaja una persona   (redondeando para arriba)',
+    simbolo:'En las fórmulas aparece como <b class="v-con">P_min</b>, y las horas mínimas como <b class="v-con">H_min</b>.',
+    detalle:'Las horas mínimas son las que necesitás para sostener solo lo crítico si la IA no está: no toda tu operación, la parte que no puede parar. Se redondea para arriba porque no existe media persona. Ojo con la unidad: son horas de trabajo, no puestos. Si necesitás dos personas presentes al mismo tiempo durante todo el horario, eso son muchas más de dos personas.',
+    usa:'Le pone un freno a la dotación: por más que automatices, nunca bajás de acá.'}
+};
+
+const RESULTADOS={
+  P:{nom:"Dotación", sub:"con cuánta gente te quedás",
+    formula:'personas a conservar  =  el MAYOR entre la cuenta económica y el piso de continuidad',
+    simbolo:'En las fórmulas aparece como <b class="v-res">P′</b>.',
+    detalle:'Se hacen dos cuentas y gana la más grande, porque las dos son condiciones que hay que cumplir al mismo tiempo: necesitás cierta gente para el trabajo del día a día, y cierta gente para sobrevivir sin IA. Por eso, por más que automatices el 100%, nunca bajás del piso.',
+    conecta:'Este resultado <b>no es un número aislado</b>: entra directo en el cálculo del ahorro, porque solo ahorrás el sueldo de la gente que efectivamente podés liberar.'},
+  S:{nom:"Ahorro y recupero", sub:"si conviene y en cuánto se paga",
+    formula:'ahorro por mes  =  sueldos que dejás de pagar  −  gasto de IA ajustado por riesgo  −  mantenimiento',
+    simbolo:'En las fórmulas aparecen como <b>S</b> (ahorro por mes) y <b>T</b> (meses para recuperar la inversión, que es la inversión dividida por el ahorro).',
+    detalle:'Es el único resultado que junta los tres módulos económicos: cuánto costaba la hora humana, cuánto trabajo reemplazás, y cuánto encarece tu gasto de IA la fragilidad de tu arquitectura. Si el ahorro da cero o negativo, automatizar cuesta más de lo que ahorra y el proyecto no va.',
+    conecta:'Depende de la <b>Dotación</b>: es el resultado que recibe a otro resultado como insumo. Y a su vez manda al recupero, que es la inversión dividida por este ahorro.'},
+  IDA:{nom:"IDA", sub:"cuán expuesto quedás",
+    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  100   (topeado en 100)',
+    simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil.',
+    conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
+};
+
+const DIAG={
+  datos:[
+    {id:'Ph',   t:'Personas y horas',        s:'cuántos son y cuánto trabajan'},
+    {id:'N',    t:'Nómina mensual',          s:'lo que pagás de sueldos'},
+    {id:'are',  t:'Automatizable',           s:'qué parte, cuánta firma, qué eficiencia'},
+    {id:'rho',  t:'Arquitectura',            s:'dónde corre la IA y si hay plan B'},
+    {id:'Hmin', t:'Horas mínimas sin IA',    s:'la operación que no puede parar'},
+    {id:'Cmes', t:'Gasto de IA por mes',     s:'tu factura'},
+    {id:'IM',   t:'Inversión y mantenimiento', s:'lo que ponés una vez y todos los meses'}
+  ],
+  modulos:[
+    {id:'hum', t:'Humano',         s:'→ costo de la hora humana',   c:'--m-hum'},
+    {id:'aut', t:'Automatización', s:'→ automatización efectiva',   c:'--m-aut'},
+    {id:'rie', t:'Riesgo',         s:'→ multiplicador de riesgo',   c:'--m-rie'},
+    {id:'con', t:'Continuidad',    s:'→ piso de personas',          c:'--m-con'}
+  ],
+  res:[
+    {id:'P',   t:'Dotación',  s:'con cuánta gente te quedás'},
+    {id:'S',   t:'Ahorro y recupero', s:'si conviene y en cuánto se paga'},
+    {id:'IDA', t:'IDA',       s:'cuán expuesto quedás'}
+  ],
+  // [origen, destino, modulo al que pertenece la arista]
+  aristas:[
+    ['Ph','hum','hum'], ['N','hum','hum'],
+    ['are','aut','aut'],
+    ['rho','rie','rie'],
+    ['Hmin','con','con'], ['Ph','con','con'],
+    ['hum','S','hum'],
+    ['aut','P','aut'], ['aut','S','aut'], ['aut','IDA','aut'],
+    ['rie','S','rie'], ['rie','IDA','rie'],
+    ['con','P','con'],
+    ['Cmes','S',null], ['IM','S',null],
+    ['P','S',null]
+  ]
+};
+
+function fuentesDe(destino){
+  const esMod=id=>DIAG.modulos.some(m=>m.id===id), esRes=id=>DIAG.res.some(r=>r.id===id);
+  const mods=new Set(), datos=new Set(), res=new Set(), aristas=new Set();
+  DIAG.aristas.forEach(([a,b],i)=>{ if(b===destino){
+    aristas.add(i);
+    if(esMod(a)) mods.add(a); else if(esRes(a)) res.add(a); else datos.add(a);
+  }});
+  mods.forEach(m=>DIAG.aristas.forEach(([a,b],i)=>{ if(b===m){ aristas.add(i); datos.add(a); } }));
+  return {mods:[...mods], datos:[...datos], res:[...res], aristas};
+}
+
+function construirDiagrama(){
+  const svg=$('diagrama'); if(!svg||svg.dataset.listo) return;
+  const W=1075,H=560, NS='http://www.w3.org/2000/svg';
+  const col=(items,x,w,h,y0,y1)=>{
+    const n=items.length, gap=(y1-y0-n*h)/(n-1||1);
+    items.forEach((it,k)=>{ POS[it.id]={x,y:y0+k*(h+gap),w,h,cx:x+w/2,cy:y0+k*(h+gap)+h/2}; });
+  };
+  col(DIAG.datos,   12, 190, 54, 24, 546);
+  col(DIAG.modulos, 286, 202, 62, 92, 478);
+  // Las respuestas van en DOS capas: Dotación e IDA salen de los módulos,
+  // y el Ahorro necesita además la Dotación, así que va una columna más a la derecha.
+  const ponerRes=(id,x,y,w,h)=>{POS[id]={x,y,w,h,cx:x+w/2,cy:y+h/2};};
+  ponerRes('P',   596, 118, 178, 62);
+  ponerRes('IDA', 596, 398, 178, 62);
+  ponerRes('S',   862, 248, 196, 66);
+
+  const el=(t,a)=>{const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e;};
+  const gE=el('g',{id:'edges'}), gN=el('g',{id:'nodos'});
+
+  // aristas
+  DIAG.aristas.forEach(([a,b,mod],idx)=>{
+    const A=POS[a],B=POS[b]; if(!A||!B) return;
+    let d;
+    if(A.x===B.x){ // misma columna (dotacion -> ahorro): curva por la derecha
+      const xr=A.x+A.w+42;
+      d=`M ${A.x+A.w} ${A.cy} C ${xr} ${A.cy}, ${xr} ${B.cy}, ${B.x+B.w} ${B.cy}`;
+    } else {
+      const x1=A.x+A.w, x2=B.x, dx=(x2-x1)*0.5;
+      d=`M ${x1} ${A.cy} C ${x1+dx} ${A.cy}, ${x2-dx} ${B.cy}, ${x2} ${B.cy}`;
+    }
+    const path=el('path',{d,class:'edge'});
+    path.dataset.mod=mod||''; path.dataset.de=a; path.dataset.a=b; path.dataset.idx=idx;
+    gE.appendChild(path);
+  });
+
+  // nodos
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // Parte el subtitulo en lineas para que NUNCA se salga del rectangulo.
+  const partir=(txt,anchoCaja)=>{
+    const max=Math.floor((anchoCaja-26)/4.85);   // ~4,85 px por caracter a 10px
+    const palabras=txt.split(' '); const lineas=[]; let act='';
+    palabras.forEach(p=>{
+      if((act?act+' '+p:p).length<=max) act=act?act+' '+p:p;
+      else { if(act) lineas.push(act); act=p; }
+    });
+    if(act) lineas.push(act);
+    return lineas.slice(0,2);
+  };
+  const nodo=(it,tipo,color)=>{
+    const P=POS[it.id];
+    const g=el('g',{class:'nodo '+tipo}); g.dataset.nodo=it.id;
+    if(tipo==='mod'){ g.dataset.mod=it.id; g.setAttribute('tabindex','0'); g.setAttribute('role','button'); }
+    g.appendChild(el('rect',{x:P.x,y:P.y,width:P.w,height:P.h,rx:9,
+      fill: tipo==='mod'?'#fff':(tipo==='res'?'#fff':css('--fondo')),
+      stroke: color||css('--borde')}));
+    const lineas = it.s ? partir(it.s,P.w) : [];
+    const altoTexto = 15 + lineas.length*12;               // titulo + subtitulo
+    const y0 = P.y + (P.h-altoTexto)/2 + 12;               // centrado vertical
+    const t1=el('text',{x:P.x+13,y:y0,class:'n-tit'}); t1.textContent=it.t;
+    if(color) t1.setAttribute('fill',color);
+    g.appendChild(t1);
+    lineas.forEach((ln,k)=>{
+      const t2=el('text',{x:P.x+13,y:y0+15+k*12,class:'n-sub'}); t2.textContent=ln; g.appendChild(t2);
+    });
+    gN.appendChild(g);
+  };
+  DIAG.datos.forEach(d=>nodo(d,'dato'));
+  DIAG.modulos.forEach(m=>nodo(m,'mod',css(m.c)));
+  DIAG.res.forEach(r=>nodo(r,'res',css('--navy-oscuro')));
+
+  // rotulos de capa
+  const lay=(x,txt)=>{const t=el('text',{x,y:16,class:'diag-lay'});t.textContent=txt;gN.appendChild(t);};
+  lay(12,'Lo que cargás'); lay(286,'Los cuatro módulos'); lay(596,'Primero salen estas'); lay(862,'Y con la dotación, esta');
+
+  svg.appendChild(gE); svg.appendChild(gN);
+  svg.dataset.listo='1';
+  svg.querySelectorAll('.nodo.mod').forEach(g=>{
+    g.addEventListener('click',()=>mostrarModulo(g.dataset.mod));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();mostrarModulo(g.dataset.mod);} });
+  });
+  svg.querySelectorAll('.nodo.res').forEach(g=>{
+    g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.style.cursor='pointer';
+    g.addEventListener('click',()=>mostrarResultado(g.dataset.nodo));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();mostrarResultado(g.dataset.nodo);} });
+  });
+}
+
+function mostrarModulo(id){
+  const m=MODULOS[id];
+  construirDiagrama();
+  const svg=$('diagrama');
+  if(svg){
+    // encender solo el recorrido de este modulo
+    const vivos=new Set([id,...m.datos_nodo,...m.res]);
+    svg.querySelectorAll('.edge').forEach(e=>{
+      const on = e.dataset.mod===id;
+      e.classList.toggle('on',on); e.classList.toggle('off',!on);
+      e.style.stroke = on ? m.color : '';
+    });
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      const n=g.dataset.nodo;
+      g.classList.toggle('off', n!==undefined && !vivos.has(n));
+      g.classList.toggle('on', g.dataset.mod===id);
+      if(vivos.has(n) && n!==id) g.querySelector('rect').setAttribute('stroke',m.color);
+      else if(n!==id && g.querySelector('rect')) g.querySelector('rect').setAttribute('stroke',
+        getComputedStyle(document.documentElement).getPropertyValue('--borde').trim());
+    });
+  }
+  const d=$('flow-detalle');
+  d.style.borderLeftColor=m.color;
+  d.innerHTML=`<h4 style="color:${m.color}"><svg class="ic-mod"><use href="#${m.ico}"/></svg> Módulo ${m.nom}</h4>
+    <p>Produce ${m.produce}.</p>
+    <div class="fd-form">${m.formula}</div>
+    <p class="fd-usa">${m.simbolo}</p>
+    <p>${m.detalle}</p>
+    <p class="fd-usa"><b>Hacia dónde va:</b> ${m.usa}</p>`;
+}
+
+function mostrarResultado(id){
+  const r=RESULTADOS[id], f=fuentesDe(id);
+  construirDiagrama();
+  const svg=$('diagrama');
+  const color=getComputedStyle(document.documentElement).getPropertyValue('--navy-oscuro').trim();
+  const borde=getComputedStyle(document.documentElement).getPropertyValue('--borde').trim();
+  const vivos=new Set([id,...f.mods,...f.datos,...f.res]);
+  if(svg){
+    svg.querySelectorAll('.edge').forEach(e=>{
+      const on=f.aristas.has(+e.dataset.idx);
+      e.classList.toggle('on',on); e.classList.toggle('off',!on);
+      e.style.stroke = on ? color : '';
+    });
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      const n=g.dataset.nodo;
+      g.classList.toggle('off', n!==undefined && !vivos.has(n));
+      g.classList.remove('on');
+      const rect=g.querySelector('rect'); if(!rect) return;
+      if(n===id) rect.setAttribute('stroke-width','3.5');
+      else rect.setAttribute('stroke-width', g.classList.contains('mod')?'2':(g.classList.contains('res')?'2.5':'1'));
+      rect.setAttribute('stroke', vivos.has(n) ? color : borde);
+    });
+  }
+  const nom=x=>{const m=DIAG.modulos.find(k=>k.id===x); return m?m.t:x;};
+  const nomDato=x=>{const d=DIAG.datos.find(k=>k.id===x); return d?d.t:x;};
+  const d=$('flow-detalle');
+  d.style.borderLeftColor=color;
+  d.innerHTML=`<h4 style="color:${color}">Respuesta: ${r.nom}</h4>
+    <p>Contesta: <b>${r.sub}</b>.</p>
+    <div class="fd-form">${r.formula}</div>
+    <p class="fd-usa">${r.simbolo}</p>
+    <p>${r.detalle}</p>
+    <p class="fd-usa"><b>Se alimenta de:</b> ${f.mods.length?'los módulos <b>'+f.mods.map(nom).join('</b>, <b>')+'</b>':'ningún módulo'}${f.res.length?', y del resultado <b>'+f.res.map(x=>RESULTADOS[x].nom).join(', ')+'</b>':''}. Datos de entrada: ${f.datos.map(nomDato).join(' · ')}.</p>
+    <p class="fd-usa"><b>Cómo se conecta con las otras:</b> ${r.conecta}</p>`;
+}
+
+function resetFlow(){
+  construirDiagrama();
+  const svg=$('diagrama'), borde=getComputedStyle(document.documentElement).getPropertyValue('--borde').trim();
+  if(svg){
+    svg.querySelectorAll('.edge').forEach(e=>{e.classList.remove('on','off'); e.style.stroke='';});
+    svg.querySelectorAll('.nodo').forEach(g=>{
+      g.classList.remove('off','on');
+      const r=g.querySelector('rect');
+      if(r && !g.classList.contains('mod')) r.setAttribute('stroke', g.classList.contains('res')
+        ? getComputedStyle(document.documentElement).getPropertyValue('--navy-oscuro').trim() : borde);
+    });
+  }
+  const d=$('flow-detalle');
+  d.style.borderLeftColor='var(--borde)';
+  d.innerHTML=`<p style="margin:0 0 8px; color:var(--gris); font-size:.9rem;">Elegí un <b>módulo</b> (columna del medio) para ver hacia adelante qué datos consume y a qué respuestas alimenta. O elegí una <b>respuesta</b> (columna derecha) para ver hacia atrás todo lo que la construye.</p><p style="margin:0; color:var(--gris); font-size:.9rem;">Fijate en la línea que va de <b>Dotación</b> a <b>Ahorro</b>: las respuestas no son tres números sueltos.</p>`;
+}
+
+construirDiagrama();
+resetFlow();
+})();
+</script>
+</body>
+</html>
