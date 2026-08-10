@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "*.md",
+      "LICENSE"
+    ],
+    "cleanUrls": false,
+    "trailingSlash": false,
+    "headers": [
+      {
+        "source": "**/*.@(png|gif|svg|jpg|jpeg|webp)",
+        "headers": [{ "key": "Cache-Control", "value": "max-age=2592000" }]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      }
+    ]
+  }
+}

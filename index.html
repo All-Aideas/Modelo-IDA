@@ -7,19 +7,19 @@
 <meta name="description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA. Por César Riat.">
 <meta name="author" content="César Riat">
 
-<!-- EDITAR: si cambiás la ruta de publicación, actualizá el dominio en estas 3 líneas (deben ser URLs absolutas) -->
+<!-- EDITAR: si cambiás el dominio, actualizá estas 3 líneas (deben ser URLs absolutas) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Modelo IDA">
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
 <meta property="og:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Calculadora interactiva, gratis y sin registro.">
-<meta property="og:url" content="https://cesarriat.com/modelo-ida/">
-<meta property="og:image" content="https://cesarriat.com/modelo-ida/assets/g1_piso_continuidad.png">
+<meta property="og:url" content="https://modelo-ida.web.app/">
+<meta property="og:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
 <meta property="og:image:alt" content="Gráfico del piso de continuidad: la dotación cae con la automatización hasta chocar con un mínimo.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
 <meta name="twitter:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA).">
-<meta name="twitter:image" content="https://cesarriat.com/modelo-ida/assets/g1_piso_continuidad.png">
+<meta name="twitter:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -539,9 +539,12 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="panel" id="explica">
 <section>
   <h2><svg><use href="#i-book"/></svg> El problema, desde cero</h2>
-  <p>Hoy un call center se puede automatizar al 100% con IA. La pregunta ya no es "¿se puede?". La pregunta es: <b>¿qué pasa si de un día para otro no podés usar IA?</b></p>
-  <p>Puede pasar de muchas formas: se cae el proveedor de nube, el modelo se discontinúa, el precio se dispara, una regulación te prohíbe procesar datos afuera, o te cortan el servicio. El 20 de abril de 2026, ChatGPT, Claude y Gemini se cayeron casi al mismo tiempo: quienes usaban uno como respaldo del otro se quedaron sin plan B.</p>
-  <p>El punto ciego: cuando una empresa automatiza, calcula cuánta gente puede <b>reducir</b>. Nadie calcula cuánta gente tiene que <b>conservar</b>. Este segundo número es el que te salva.</p>
+  <p>Hoy un call center se puede automatizar al 100% con IA. Técnicamente no queda ninguna tarea que un agente no pueda hacer —leer un email, responder por voz, por WhatsApp, contestar mensajes en redes sociales—: atender, resolver, escalar, registrar. La pregunta ya no es "¿se puede?".</p>
+  <p>La pregunta es otra: <b>¿qué pasa si de un día para otro no podés usar IA?</b></p>
+  <p>Puede pasar por muchos caminos: se cae el proveedor de nube, el modelo que usás se discontinúa, el precio cambia 10 veces, una regulación nueva te prohíbe procesar datos afuera del país, o te cortan el servicio por una disputa comercial.</p>
+  <p>Y acá está el punto ciego: cuando una empresa automatiza, calcula cuánta gente puede <b>reducir</b>. Nadie calcula cuánta gente tiene que <b>conservar</b>. Son dos números distintos, y el segundo es el que te salva.</p>
+  <p>Los marcos que existen hoy —las normas de continuidad de negocio como ISO 22301, la nueva ISO/IEC 42001 de gestión de IA, los análisis de impacto y los mapas de dependencia— te ayudan a <i>identificar</i> el problema. Lo que no te dan es el número: cuántas personas, cuánta inversión tiene sentido, cuán expuesto estás. Este modelo propone esa cuenta.</p>
+  <p>Aplica a cualquier industria, aunque pega distinto según la criticidad. Para un call center, si la IA se cae perdés ventas. Para un retail, góndolas vacías en fecha pico. Para un banco, es un evento regulatorio. Para una transportadora de gas, es un problema de seguridad pública. Mismo modelo, distinta severidad.</p>
   <h3>Qué es el IDA</h3>
   <p>El <b>Índice de Dependencia de IA</b> es un número de <b>0 a 100</b> que resume cuán expuesta está tu operación si la IA deja de estar disponible. Combina dos cosas: cuánto automatizaste y cuán frágil es la arquitectura que lo sostiene.</p>
   <div class="ida-escala">
@@ -813,7 +816,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="grafico-svg" id="graf-A"></div>
   <h3>Extremo B — Una sola nube sin plan B → el riesgo λ</h3>
   <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo real de la IA alcanza al humano, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
-  <img class="grafico" src="/modelo-ida/assets/g4_riesgo_animado.gif" alt="Riesgo animado">
+  <img class="grafico" src="assets/g4_riesgo_animado.gif" alt="Riesgo animado">
   <h3>Extremo C — DeepSeek local para los mails → la inversión I</h3>
   <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$13/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
 

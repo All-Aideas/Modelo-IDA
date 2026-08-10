@@ -7,7 +7,7 @@ node_modules/
 COMO_SUBIRLO.md
 para-medium/
 
-# Firebase
+# Firebase (firebase.json y .firebaserc SI van al repo: solo dicen a qué
+# proyecto se despliega, no tienen credenciales)
 .firebase/
 firebase-debug.log
-.firebaserc

@@ -1,96 +1,60 @@
 # Desplegar en Firebase
 
-Objetivo: publicar el Modelo IDA en **`cesarriat.com/modelo-ida`**, dentro del sitio de Hosting que ya tenés, **sin tocar tu web actual**.
+El Modelo IDA vive en su **propio proyecto de Firebase** (`modelo-ida`), separado de `cesarriat-web`. URL final:
+
+- **https://modelo-ida.web.app**
+- https://modelo-ida.firebaseapp.com (la misma, alias)
+
+`cesarriat.com` no se toca en ningún momento: son proyectos distintos.
 
 ---
 
-## Por qué esta opción y no un sitio separado
+## Los comandos
 
-En Firebase, tener **varios sitios de Hosting en un mismo proyecto requiere plan Blaze**. En el plan gratuito hay un solo sitio por proyecto — por eso la consola no deja crear otro.
-
-Y ojo con dos atajos que **no** sirven:
-
-- **"Agregar app"** registra una app cliente y te devuelve el código de `initializeApp()` con las claves del SDK. Sirve para usar Analytics, Auth o Firestore desde JavaScript. **No crea sitios ni URLs.**
-- **Un segundo sitio de Hosting** (si algún día pasás a Blaze) te daría un *dominio* distinto (`modelo-ida.web.app`), nunca una *ruta* de `cesarriat.com`. Las rutas pertenecen a un solo sitio.
-
-Con la carpeta se consigue exactamente la URL que querías, en el plan gratis y sin configuración nueva.
-
----
-
-## Los pasos
-
-### 1. Copiar la carpeta
-
-En tu repo `cesarriat-web`, dentro de `public/`:
-
-```
-cesarriat-web/
-└── public/
-    ├── index.html          ← tu web, no se toca
-    ├── ...                 ← el resto de tu sitio, no se toca
-    └── modelo-ida/         ← NUEVO
-        ├── index.html
-        └── assets/
-```
-
-Del repo del Modelo IDA copiá solo **`index.html` y `assets/`**. Los `.md` y el `LICENSE` no hacen falta para el sitio.
-
-### 2. Desplegar
+Desde esta carpeta (`modelo-ida/`), en CMD o PowerShell:
 
 ```bash
-cd /ruta/a/cesarriat-web
+npm install -g firebase-tools
+```
+
+Solo la primera vez, para instalar la herramienta.
+
+```bash
+firebase login
+```
+
+Abre el navegador para que entres con tu cuenta de Google. También una sola vez.
+
+```bash
 firebase deploy --only hosting
 ```
 
-No hay que tocar `firebase.json` ni `.firebaserc`. Tus headers de caché ya son correctos: un año para JS y CSS, sin caché para HTML.
+Y listo. Al terminar te imprime la URL.
 
 ---
 
-## ⚠️ El único riesgo real
+## Por qué NO hay que correr `firebase init`
 
-`firebase deploy` **reemplaza todo el contenido del sitio con lo que haya en tu carpeta local**. No hace un merge con lo que está publicado.
+Ya están en el repo los dos archivos que ese comando genera:
 
-Es decir: **no pisa `cesarriat.com` por agregar una subcarpeta**, pero sí lo pisaría si desplegaras desde un `public/` incompleto. Mientras despliegues desde tu repo completo, no hay problema.
+- **`firebase.json`** — qué publicar y con qué caché
+- **`.firebaserc`** — a qué proyecto (`modelo-ida`)
 
-Antes de desplegar, confirmá que están las dos cosas:
+Correr `firebase init hosting` te preguntaría cosas y, en el paso "¿sobrescribo `index.html`?", un Enter de más te reemplaza el sitio por la página de bienvenida de Firebase. Con la config ya puesta, ese riesgo no existe.
 
-```bash
-ls public/index.html public/modelo-ida/index.html
-```
+Si aun así lo corrés por curiosidad: cuando pregunte por `index.html`, respondé **No**.
 
-Si alguna falta, no despliegues.
+## Qué se publica y qué no
 
----
+`firebase.json` usa `"public": "."` (esta misma carpeta) e ignora lo que no va al sitio:
 
-## Un detalle que ya está resuelto
+| Se publica | Se ignora |
+|---|---|
+| `index.html` | `*.md` (README, esta guía) |
+| `assets/` | `LICENSE` |
+| | `.git/`, `.gitignore`, `firebase.json` |
 
-Tu `firebase.json` tiene `trailingSlash: false`, así que la página se sirve en `cesarriat.com/modelo-ida` **sin barra final**. Con esa URL, el navegador resuelve las rutas relativas contra la raíz del dominio: un `assets/foo.gif` se buscaría en `cesarriat.com/assets/foo.gif` y no cargaría.
-
-Por eso la única imagen que quedaba con ruta relativa ahora usa ruta absoluta (`/modelo-ida/assets/...`). Los otros dos gráficos se generan como SVG dentro del HTML, así que no dependen de rutas.
-
-**Consecuencia:** para verlo en tu máquina ya no alcanza con abrir el archivo con doble clic; necesitás un servidor local:
-
-```bash
-cd public && python -m http.server 8080
-# después: http://localhost:8080/modelo-ida/
-```
-
----
-
-## Si algún día pasás a Blaze
-
-Con plan Blaze podés darle dominio propio:
-
-1. Hosting → **Agregar otro sitio** → ID `modelo-ida` → te da `modelo-ida.web.app`
-2. `firebase target:apply hosting modelo-ida modelo-ida`
-3. En `firebase.json`, `hosting` pasa de objeto a array con un bloque por sitio (agregándole `"target": "web"` al que ya tenés)
-4. `firebase deploy --only hosting:modelo-ida`
-
-Al quedar el sitio en la raíz de su dominio, las rutas relativas volverían a funcionar y podrías revertir la ruta absoluta del GIF. Son 3 líneas en `index.html`, las marcadas con el comentario `EDITAR`.
-
----
-
-## Antes de publicar
+## Verificar antes de publicar
 
 Desde la raíz del proyecto del artículo:
 
@@ -98,4 +62,30 @@ Desde la raíz del proyecto del artículo:
 node .claude/skills/verificar-modelo/verificar.js
 ```
 
-Y cuando publiques en Medium, reemplazá el `#` del botón "Leer el artículo" en `index.html` por la URL real.
+Y para ver el sitio en tu máquina tal como va a quedar publicado:
+
+```bash
+firebase serve --only hosting
+```
+
+Levanta en `http://localhost:5000`. Es más fiel que abrir el archivo con doble clic, porque respeta las rutas y los headers reales.
+
+---
+
+## Dominio propio (opcional)
+
+Si algún día querés `modelo-ida.cesarriat.com`:
+
+Firebase Console → proyecto `modelo-ida` → Hosting → **Agregar dominio personalizado**. Te da un registro DNS para cargar donde tengas el dominio. La URL `.web.app` sigue funcionando en paralelo.
+
+Si lo hacés, actualizá el dominio en las 3 líneas de `index.html` marcadas con el comentario `EDITAR` — son las etiquetas que arman la vista previa al compartir el enlace por WhatsApp o LinkedIn.
+
+---
+
+## Cada vez que actualices el sitio
+
+```bash
+firebase deploy --only hosting
+```
+
+Reemplaza el contenido publicado por lo que tengas en la carpeta. Como este proyecto solo aloja el Modelo IDA, no hay riesgo de pisar nada más.

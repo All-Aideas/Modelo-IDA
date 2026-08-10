@@ -8,15 +8,15 @@
 
 ## 1. El problema
 
-Hoy un call center se puede automatizar al 100% con IA. Técnicamente no queda ninguna tarea que un agente de voz no pueda hacer: atender, resolver, escalar, registrar. La pregunta ya no es "¿se puede?".
+Hoy un call center se puede automatizar al 100% con IA. Técnicamente no queda ninguna tarea que un agente no pueda hacer —leer un email, responder por voz, por WhatsApp, contestar mensajes en redes sociales—: atender, resolver, escalar, registrar. La pregunta ya no es "¿se puede?".
 
 La pregunta es otra: **¿qué pasa si de un día para otro no podés usar IA?**
 
-No es paranoia. Puede pasar por muchos caminos: se cae el proveedor de nube, el modelo que usás se discontinúa, el precio cambia 10 veces, una regulación nueva te prohíbe procesar datos afuera del país, o te cortan el servicio por una disputa comercial. El 20 de abril de 2026, ChatGPT, Claude y Gemini —las tres plataformas que la mayoría trata como respaldo una de otra— se cayeron al mismo tiempo. Los que tenían "multi-modelo" como plan B descubrieron que el plan B se caía junto con el plan A.
+Puede pasar por muchos caminos: se cae el proveedor de nube, el modelo que usás se discontinúa, el precio cambia 10 veces, una regulación nueva te prohíbe procesar datos afuera del país, o te cortan el servicio por una disputa comercial.
 
 Y acá está el punto ciego: cuando una empresa automatiza, calcula cuánta gente puede reducir. **Nadie calcula cuánta gente tiene que conservar.** Son dos números distintos, y el segundo es el que te salva.
 
-Los marcos que existen hoy —las normas de continuidad de negocio como ISO 22301, la nueva ISO/IEC 42001 de gestión de IA, los análisis de impacto y los mapas de dependencia— te ayudan a *identificar* el problema: te muestran que dependés de la IA y dónde está el punto único de falla. Lo que no te dan es el número: cuántas personas, cuánta inversión tiene sentido, cuán expuesto estás. Este proyecto propone esa cuenta.
+Los marcos que existen hoy —las normas de continuidad de negocio como ISO 22301, la nueva ISO/IEC 42001 de gestión de IA, los análisis de impacto y los mapas de dependencia— te ayudan a *identificar* el problema. Lo que no te dan es el número: cuántas personas, cuánta inversión tiene sentido, cuán expuesto estás. Este artículo propone esa cuenta.
 
 Y aplica a cualquier industria, aunque pega distinto según la criticidad:
 
