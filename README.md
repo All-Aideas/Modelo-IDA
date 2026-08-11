@@ -37,7 +37,11 @@ Mismo modelo, distinta severidad. Por eso la fórmula es general y los parámetr
 
 ## 2. Cómo se arma la cuenta
 
-Los datos que cargás en la calculadora pasan por **cuatro módulos**, y de ahí salen las **tres respuestas** del modelo. En el sitio esto es un **diagrama de flujo interactivo**: hacés clic en un módulo y ves hacia dónde va, o en una respuesta y ves de qué se alimenta — [probalo acá](https://modelo-ida.web.app/diagrama).
+Los datos que cargás en la calculadora pasan por **cuatro módulos**, y de ahí salen las **tres respuestas** del modelo:
+
+![Diagrama de flujo del Modelo IDA: los datos alimentan cuatro módulos — Humano, Automatización, Riesgo, Continuidad — y estos producen tres respuestas — Dotación, Ahorro y recupero, IDA](assets/g5_diagrama_flujo.svg)
+
+Esta es una foto fija. **En el sitio es un diagrama interactivo**: hacés clic en un módulo y ves hacia dónde va, o en una respuesta y ves de qué se alimenta — [probalo acá](https://modelo-ida.web.app/diagrama).
 
 En texto, el mismo recorrido — los cuatro módulos no son fórmulas sueltas, cada uno produce **un número intermedio**, y esos cuatro números alimentan **tres resultados**. El modelo es un embudo, no una ecuación única:
 

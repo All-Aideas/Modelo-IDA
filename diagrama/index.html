@@ -340,14 +340,30 @@ function mostrarResultado(id){
 
 function resetFlow(){
   construirDiagrama();
-  const svg=$('diagrama'), borde=getComputedStyle(document.documentElement).getPropertyValue('--borde').trim();
+  const svg=$('diagrama'), css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const borde=css('--borde'), navyOsc=css('--navy-oscuro');
   if(svg){
     svg.querySelectorAll('.edge').forEach(e=>{e.classList.remove('on','off'); e.style.stroke='';});
     svg.querySelectorAll('.nodo').forEach(g=>{
       g.classList.remove('off','on');
-      const r=g.querySelector('rect');
-      if(r && !g.classList.contains('mod')) r.setAttribute('stroke', g.classList.contains('res')
-        ? getComputedStyle(document.documentElement).getPropertyValue('--navy-oscuro').trim() : borde);
+      const r=g.querySelector('rect'); if(!r) return;
+      // Antes esto solo restauraba dato/res y se olvidaba de los modulos: despues de
+      // hacer un click, los que quedaban "apagados" (gris) se quedaban grises para
+      // siempre, aunque resetFlow() se llamara de nuevo. Cada tipo tiene su propio color.
+      // El stroke-width tambien queda pisado en linea por mostrarModulo/mostrarResultado
+      // (el nodo elegido se engrosa a 3.5); sin esto quedaba mas grueso para siempre
+      // aunque el CSS deberia taparlo, mejor no depender de esa carrera.
+      if(g.classList.contains('mod')){
+        const mod=DIAG.modulos.find(m=>m.id===g.dataset.mod);
+        r.setAttribute('stroke', mod ? css(mod.c) : borde);
+        r.setAttribute('stroke-width','2');
+      } else if(g.classList.contains('res')){
+        r.setAttribute('stroke', navyOsc);
+        r.setAttribute('stroke-width','2.5');
+      } else {
+        r.setAttribute('stroke', borde);
+        r.setAttribute('stroke-width','1');
+      }
     });
   }
   const d=$('flow-detalle');
