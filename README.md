@@ -1,8 +1,11 @@
-# 🤖 Modelo IDA — ¿Cuánta gente necesita tu empresa el día que la IA no esté?
+# Modelo IDA — ¿Cuánta gente necesita tu empresa el día que la IA no esté?
 
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible. Sirve igual para un call center, un banco, un retail o una transportadora de gas.
 
 **[Probá la calculadora interactiva](https://cesarriat.com/modelo-ida)** · [Leer el artículo en Medium](#) · Autor: [César Riat](https://cesarriat.com)
+
+---
+
 
 ---
 
@@ -29,88 +32,39 @@ Y aplica a cualquier industria, aunque pega distinto según la criticidad:
 
 Mismo modelo, distinta severidad. Por eso la fórmula es general y los parámetros los pone cada empresa.
 
+
 ---
 
-## 2. Aprendé los parámetros con casos extremos
+## 2. Cómo se arma la cuenta
 
-Un buen modelo se reconoce en los bordes: cuando lo empujás al extremo, tiene que decir cosas sensatas. Y de paso, cada extremo te enseña una variable.
+Los datos que cargás en la calculadora pasan por **cuatro módulos**, y de ahí salen las **tres respuestas** del modelo. En el sitio esto es un **diagrama de flujo interactivo**: hacés clic en un módulo y ves hacia dónde va, o en una respuesta y ves de qué se alimenta — [probalo acá](https://modelo-ida.web.app/diagrama).
 
-### Extremo A — "Automatizo el call center al 100%" → te enseña el piso **P_min**
+En texto, el mismo recorrido — los cuatro módulos no son fórmulas sueltas, cada uno produce **un número intermedio**, y esos cuatro números alimentan **tres resultados**. El modelo es un embudo, no una ecuación única:
 
-La cuenta económica ingenua dice: si automatizás todo, necesitás cero personas. El modelo dice: no. La dotación cae con la automatización *hasta que choca con un piso* —el mínimo de gente para sostener la operación crítica sin IA— y ahí se planta, aunque automatices el 100%.
+```
+Lo que cargás          Los cuatro módulos            Los tres resultados
+─────────────          ──────────────────            ───────────────────
+P, h_p, N        →     Humano        → C_h      ┐
+a, r, η          →     Automatización→ a_ef     ├→   P'   ¿con cuánta gente me quedo?
+ρ, C_mes         →     Riesgo        → λ        ├→   S, T ¿conviene y en cuánto se paga?
+H_min            →     Continuidad   → P_min    ┘→   IDA  ¿cuán expuesto quedo?
+I, M             →     (entran directo en S y T)
 
-![Piso de continuidad](assets/g1_piso_continuidad.svg)
-
-La diferencia entre lo que dice el Excel y lo que dice el piso es tu **prima de seguro operativo**: gente que parece "de más" hasta el martes que se cae la nube.
-
-Y esa prima **tiene precio, no es gratis**: son sueldos que seguís pagando mientras la IA hace ese trabajo. El modelo se los cobra al proyecto en la fórmula de ahorro (ver §4), que es justamente lo que casi ningún business case de automatización hace.
-
-### Extremo B — "Una sola nube y sin plan B" → te enseña el riesgo **λ**
-
-Dos empresas automatizan lo mismo y pagan el mismo precio por token. Una corre todo sobre un solo proveedor, sin contingencia. La otra reparte entre dos y tiene procedimiento manual ensayado. ¿Pagan lo mismo? En la factura sí; en la realidad no. La primera "maneja sin seguro": el riesgo no aparece en la factura mensual, aparece todo junto el día del choque.
-
-Ese riesgo se convierte en un recargo sobre el costo de la IA: el **multiplicador λ**. Si λ crece tanto que el costo real de la hora de IA alcanza al de la hora humana, la curva de ahorro se aplana. Si lo supera, **pagás por automatizar**.
-
-![Riesgo animado](assets/g4_riesgo_animado.gif)
-
-### Extremo C — "Monto DeepSeek local para automatizar los mails" → te enseña la inversión **I**
-
-El caso que más confunde, porque mezcla dos verdades. Y acá van números reales, verificados en agosto de 2026.
-
-**Verdad 1:** correr la IA en tus propios servidores **casi elimina el riesgo**. Nadie te corta el servicio, no dependés de ninguna nube, tus datos no salen del edificio. λ baja a casi 1. El modelo abierto de referencia hoy es **DeepSeek V4-Flash** (284B parámetros, licencia MIT): necesita ~175 GB de VRAM y entra en **2× GPUs H200**. Alquilar ese servidor 24/7 cuesta del orden de **USD 5.170 por mes**, fijo, uses lo que uses.
-
-**Verdad 2:** ese costo es fijo y brutal si tu volumen es chico. La pregunta que la fórmula responde: **¿para qué tarea lo montás?**
-
-Comparemos las tres opciones para automatizar emails que consumen **15 horas por semana** (~60 h/mes), asumiendo ~1 millón de tokens por hora de trabajo:
-
-| Opción | Costo mensual para la tarea de emails | Riesgo (λ) |
-|---|---|---|
-| **API DeepSeek V4-Flash** ($0,14 / $0,28 por millón) | **~$13/mes** | Alto (nube única) |
-| **API Gemini 3.6 Flash** ($1,50 / $7,50 por millón) | **~$270/mes** | Alto (nube única) |
-| **DeepSeek local** (2× H200) | **~$5.170/mes** | Casi nulo |
-
-Montar el servidor local para los emails cuesta **410 veces más** que usar la API de DeepSeek. Pagás $5.170 para reemplazar $13 de API. Absurdo, por más que el riesgo local sea casi cero: la tarea es demasiado chica para justificar el fierro.
-
-> **⚠️ Y el fierro no es el costo completo.** Esos $5.170 son solo el alquiler. Correr IA propia necesita además **electricidad** (~$250/mes con 2,1 kW constantes) y sobre todo **alguien que la mantenga**: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real **$8.420/mes**, y la brecha contra la API salta de 410× a **668×**.
->
-> La ironía vale decirla: ese sysadmin cuesta **casi el doble** que la persona administrativa que estabas reemplazando. Automatizaste para no pagar un puesto y contrataste uno más caro.
->
-> **Puede ser cero**, ojo: si ya tenés a alguien que lo absorbe o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado — ver §4 y el asistente de costo real de la calculadora.
-
-![Local vs API](assets/g2_local_vs_api.svg)
-
-**Misma tarea, tres arquitecturas, conclusiones opuestas.** Fijate también la brecha entre modelos de nube: Gemini 3.6 Flash sale ~20× más caro que DeepSeek Flash para el mismo trabajo. La fórmula no dice "local bueno / nube malo" ni "modelo caro malo": dice cuál conviene *para tu volumen y tu nivel de riesgo tolerable*.
-
-### Extremo D — "El mismo DeepSeek local, pero a escala" → te enseña el volumen **H**
-
-Ahora tomá el mismo servidor y ponelo en una operación que automatiza atención, back office y procesamiento a gran escala. El punto de equilibrio contra la API de DeepSeek depende de qué costos cuentes:
-
-| Qué contás | Costo fijo/mes | Break-even | Equivale a |
-|---|---|---|---|
-| Solo el servidor | $5.170 | 24.600 millones de tokens/mes | 154 personas-equivalente |
-| **Servidor + luz + sysadmin** | **$8.420** | **40.100 millones de tokens/mes** | **251 personas-equivalente** |
-
-A 1M tokens por hora de trabajo, esas son 154 o 251 personas operando a tiempo completo sobre IA.
-
-Por debajo de ese volumen, la API es más barata y sin dolores de cabeza de infraestructura. Por encima, el servidor propio empieza a ganar **y encima te baja λ al mínimo** — lo cual, para un banco, una empresa de salud o energía, puede ser decisivo aunque los números de costo estuvieran empatados: la **soberanía del dato** vuelve irrelevante el cálculo de tokens.
-
-El mismo hardware que era un disparate para los emails es la **mejor decisión posible** a escala. No cambió la tecnología ni el precio: cambió el volumen (H) y la criticidad del dato.
-
-> **La regla que se lleva el lector:** la IA local no se justifica por moda ni por miedo. Se justifica cuando tu volumen supera el break-even **o** cuando la criticidad del dato hace que λ importe más que el costo. Nunca antes.
-
-> **Resumen:** el piso te frena por supervivencia, **λ** por riesgo, **I** por plata, y **H** es la palanca que puede dar vuelta cualquiera de las tres cuentas.
+                       ...y además:  P'  ──────────→  S
+                       (solo ahorrás el sueldo de quien podés liberar)
+```
 
 ---
 
 ## 3. Los cuatro módulos
 
-### 🧑 Módulo Humano
+### Módulo Humano
 ```
 Costo hora humana (Ch) = Nómina mensual ÷ Horas totales
 ```
 Ejemplo: $16.000/mes, 10 personas, 1.600 h → **$10/hora**.
 
-### ⚙️ Módulo Automatización
+### Módulo Automatización
 ```
 Automatización efectiva = a × (1 − r) × η
 ```
@@ -124,7 +78,7 @@ Ejemplo: 0,60 × (1 − 0,20) × 0,80 = **38,4%**, no 60%. Primer baño de reali
 
 `1,00 × (1 − 0,20) × 0,80` = **64%**. Arrancaste creyendo que automatizabas todo y en la práctica sacás dos tercios de la carga. Ese 64% es el número con el que hay que hacer las cuentas.
 
-### ⚠️ Módulo Riesgo
+### Módulo Riesgo
 ```
 Costo real de la IA = λ × Gasto mensual de IA
 ```
@@ -152,7 +106,7 @@ Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale 
 
 **El trade-off central:** la IA local desploma λ pero infla I. La nube achica I pero infla λ. No hay opción gratis — la fórmula te dice cuál precio te conviene pagar según tu volumen H.
 
-### 🛟 Módulo Continuidad
+### Módulo Continuidad
 ```
 Piso de continuidad (P_min) = Horas mínimas para operar sin IA ÷ Horas por persona
 ```
@@ -166,24 +120,10 @@ Las horas mínimas son las de la operación crítica en modo degradado. La IA lo
 >
 > **Cómo estimarlo.** No hace falta un estudio: pensalo en modo degradado y calculá a ojo. *"Si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"* → 200 horas. *"Y alguien tiene que revisar pedidos 4 horas por día"* → 88 horas más. Total ≈ 290 h/mes: ese es tu `H_min`. Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas.
 
+
 ---
 
-## 4. Cómo se unen los módulos
-
-Los cuatro módulos no son fórmulas sueltas: cada uno produce **un número intermedio**, y esos cuatro números alimentan **tres resultados**. El modelo es un embudo, no una ecuación única:
-
-```
-Lo que cargás          Los cuatro módulos            Los tres resultados
-─────────────          ──────────────────            ───────────────────
-P, h_p, N        →     Humano        → C_h      ┐
-a, r, η          →     Automatización→ a_ef     ├→   P'   ¿con cuánta gente me quedo?
-ρ, C_mes         →     Riesgo        → λ        ├→   S, T ¿conviene y en cuánto se paga?
-H_min            →     Continuidad   → P_min    ┘→   IDA  ¿cuán expuesto quedo?
-I, M             →     (entran directo en S y T)
-
-                       ...y además:  P'  ──────────→  S
-                       (solo ahorrás el sueldo de quien podés liberar)
-```
+## 4. Cómo se unen: los resultados
 
 ### Resultado 1 — Cuánta gente conservar (P')
 ```
@@ -216,7 +156,7 @@ Fijate que S **arranca con P'**, el resultado anterior: solo ahorrás el sueldo 
 4. **Ahorro:** `$4.800 − $1.843 − $500 = $2.457/mes`.
 5. **Para qué sirve S:** es el semáforo y el divisor del recupero. Si S ≤ 0, automatizar cuesta más de lo que ahorra. Si S > 0, `T = $50.000 ÷ $2.457 = 20 meses`. Regla práctica: **arriba de 18 meses, no avances** — este proyecto, con la cuenta honesta, no pasa.
 
-> #### ⚠️ La trampa que esta fórmula evita
+> #### La trampa que esta fórmula evita
 >
 > La cuenta intuitiva es `horas automatizadas × costo hora humana`: 614,4 h × $10 = **$6.144**. Es falso: vos no pagás horas, pagás sueldos. Automatizar 3,84 personas-equivalente cuando solo podés echar 3 **no ahorra 3,84 sueldos, ahorra 3**.
 >
@@ -246,9 +186,9 @@ El `MÍNIMO` no es decorativo: con automatización alta y arquitectura frágil e
 
 | IDA | Zona | Qué significa |
 |---|---|---|
-| **< 30** | 🟢 Resiliente | Una caída de IA es una molestia |
-| **30–60** | 🟡 Vigilancia | Necesitás piso calculado y simulacros manuales |
-| **> 60** | 🔴 Crítico | Tu operación es rehén de tu proveedor |
+| **< 30** | Resiliente | Una caída de IA es una molestia |
+| **30–60** | Vigilancia | Necesitás piso calculado y simulacros manuales |
+| **> 60** | Crítico | Tu operación es rehén de tu proveedor |
 
 **Por qué el IDA no incluye la plata.** Es deliberado: ahorrar y estar expuesto son cosas distintas. Podés tener un proyecto que ahorra bien y recupera rápido —excelente negocio— y estar igual en zona amarilla de dependencia. Si metieras el dinero adentro del IDA, un ahorro grande te *taparía* el riesgo y el índice te diría que estás bien justo cuando más frágil estás. El dinero ya tiene su fórmula: es S.
 
@@ -296,9 +236,9 @@ La inversión **no aparece en ninguna fórmula de los módulos**. Solo en la div
 
 | Inversión | Ahorro mensual | IDA | Recupero |
 |---|---|---|---|
-| $25.000 | $2.457 | 58 | 10 meses ✅ |
-| $50.000 | $2.457 | 58 | 20 meses ❌ |
-| $200.000 | $2.457 | 58 | 81 meses ❌ |
+| $25.000 | $2.457 | 58 | 10 meses ✓ |
+| $50.000 | $2.457 | 58 | 20 meses ✗ |
+| $200.000 | $2.457 | 58 | 81 meses ✗ |
 
 El ahorro no se mueve, el IDA no se mueve. Y está bien: la inversión es un gasto de una sola vez, no cambia cuánta plata te entra por mes ni cuán dependiente quedás.
 
@@ -343,14 +283,87 @@ Para el proyecto de 10 personas del ejemplo: con API DeepSeek el ahorro es **$4.
 Pyme: 10 personas, $16.000 nómina, 160 h c/u (1.600 h/mes), a=60%, r=20%, η=80%, nube única sin contingencia (λ=1,5), IA $2/h, H_min 640 h, inversión $50.000, mant. $500/mes.
 - Automatización efectiva: `0,60 × 0,80 × 0,80` = **38,4%**
 - Dotación: `MÁXIMO(7 , 4)` = **7 personas** (el piso de 4 no se activa) → liberás **3**
-- Ahorro: `3 × 1.600 − 1.843 − 500` = **$2.457/mes** → recupero **20 meses** ❌
+- Ahorro: `3 × 1.600 − 1.843 − 500` = **$2.457/mes** → recupero **20 meses** ✗
 - **IDA 58 — vigilancia.**
 
 Este ejemplo es deliberado: con la cuenta ingenua el proyecto parecía cerrar en 13 meses y daba luz verde. Con la cuenta honesta —que solo acredita los sueldos realmente liberados— se va a 20 meses y **no pasa el filtro**. La respuesta correcta no es cancelar: es bajar λ (segundo proveedor, plan de contingencia) o bajar la inversión inicial, y volver a correr el número.
 
+
 ---
 
-## 5. Para los más avanzados: Montecarlo
+## 5. Aprendé los parámetros con casos extremos
+
+Un buen modelo se reconoce en los bordes: cuando lo empujás al extremo, tiene que decir cosas sensatas. Y de paso, cada extremo te enseña una variable.
+
+### Extremo A — "Automatizo el call center al 100%" → te enseña el piso **P_min**
+
+La cuenta económica ingenua dice: si automatizás todo, necesitás cero personas. El modelo dice: no. La dotación cae con la automatización *hasta que choca con un piso* —el mínimo de gente para sostener la operación crítica sin IA— y ahí se planta, aunque automatices el 100%.
+
+![Piso de continuidad](assets/g1_piso_continuidad.svg)
+
+La diferencia entre lo que dice el Excel y lo que dice el piso es tu **prima de seguro operativo**: gente que parece "de más" hasta el martes que se cae la nube.
+
+Y esa prima **tiene precio, no es gratis**: son sueldos que seguís pagando mientras la IA hace ese trabajo. El modelo se los cobra al proyecto en la fórmula de ahorro (ver §4), que es justamente lo que casi ningún business case de automatización hace.
+
+### Extremo B — "Una sola nube y sin plan B" → te enseña el riesgo **λ**
+
+Dos empresas automatizan lo mismo y pagan el mismo precio por token. Una corre todo sobre un solo proveedor, sin contingencia. La otra reparte entre dos y tiene procedimiento manual ensayado. ¿Pagan lo mismo? En la factura sí; en la realidad no. La primera "maneja sin seguro": el riesgo no aparece en la factura mensual, aparece todo junto el día del choque.
+
+Ese riesgo se convierte en un recargo sobre el costo de la IA: el **multiplicador λ**. Si λ crece tanto que el costo real de la hora de IA alcanza al de la hora humana, la curva de ahorro se aplana. Si lo supera, **pagás por automatizar**.
+
+![Riesgo animado](assets/g4_riesgo_animado.gif)
+
+### Extremo C — "Monto DeepSeek local para automatizar los mails" → te enseña la inversión **I**
+
+El caso que más confunde, porque mezcla dos verdades. Y acá van números reales, verificados en agosto de 2026.
+
+**Verdad 1:** correr la IA en tus propios servidores **casi elimina el riesgo**. Nadie te corta el servicio, no dependés de ninguna nube, tus datos no salen del edificio. λ baja a casi 1. El modelo abierto de referencia hoy es **DeepSeek V4-Flash** (284B parámetros, licencia MIT): necesita ~175 GB de VRAM y entra en **2× GPUs H200**. Alquilar ese servidor 24/7 cuesta del orden de **USD 5.170 por mes**, fijo, uses lo que uses.
+
+**Verdad 2:** ese costo es fijo y brutal si tu volumen es chico. La pregunta que la fórmula responde: **¿para qué tarea lo montás?**
+
+Comparemos las tres opciones para automatizar emails que consumen **15 horas por semana** (~60 h/mes), asumiendo ~1 millón de tokens por hora de trabajo:
+
+| Opción | Costo mensual para la tarea de emails | Riesgo (λ) |
+|---|---|---|
+| **API DeepSeek V4-Flash** ($0,14 / $0,28 por millón) | **~$13/mes** | Alto (nube única) |
+| **API Gemini 3.6 Flash** ($1,50 / $7,50 por millón) | **~$270/mes** | Alto (nube única) |
+| **DeepSeek local** (2× H200) | **~$5.170/mes** | Casi nulo |
+
+Montar el servidor local para los emails cuesta **410 veces más** que usar la API de DeepSeek. Pagás $5.170 para reemplazar $13 de API. Absurdo, por más que el riesgo local sea casi cero: la tarea es demasiado chica para justificar el fierro.
+
+> **Y el fierro no es el costo completo.** Esos $5.170 son solo el alquiler. Correr IA propia necesita además **electricidad** (~$250/mes con 2,1 kW constantes) y sobre todo **alguien que la mantenga**: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real **$8.420/mes**, y la brecha contra la API salta de 410× a **668×**.
+>
+> La ironía vale decirla: ese sysadmin cuesta **casi el doble** que la persona administrativa que estabas reemplazando. Automatizaste para no pagar un puesto y contrataste uno más caro.
+>
+> **Puede ser cero**, ojo: si ya tenés a alguien que lo absorbe o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado — ver §4 y el asistente de costo real de la calculadora.
+
+![Local vs API](assets/g2_local_vs_api.svg)
+
+**Misma tarea, tres arquitecturas, conclusiones opuestas.** Fijate también la brecha entre modelos de nube: Gemini 3.6 Flash sale ~20× más caro que DeepSeek Flash para el mismo trabajo. La fórmula no dice "local bueno / nube malo" ni "modelo caro malo": dice cuál conviene *para tu volumen y tu nivel de riesgo tolerable*.
+
+### Extremo D — "El mismo DeepSeek local, pero a escala" → te enseña el volumen **H**
+
+Ahora tomá el mismo servidor y ponelo en una operación que automatiza atención, back office y procesamiento a gran escala. El punto de equilibrio contra la API de DeepSeek depende de qué costos cuentes:
+
+| Qué contás | Costo fijo/mes | Break-even | Equivale a |
+|---|---|---|---|
+| Solo el servidor | $5.170 | 24.600 millones de tokens/mes | 154 personas-equivalente |
+| **Servidor + luz + sysadmin** | **$8.420** | **40.100 millones de tokens/mes** | **251 personas-equivalente** |
+
+A 1M tokens por hora de trabajo, esas son 154 o 251 personas operando a tiempo completo sobre IA.
+
+Por debajo de ese volumen, la API es más barata y sin dolores de cabeza de infraestructura. Por encima, el servidor propio empieza a ganar **y encima te baja λ al mínimo** — lo cual, para un banco, una empresa de salud o energía, puede ser decisivo aunque los números de costo estuvieran empatados: la **soberanía del dato** vuelve irrelevante el cálculo de tokens.
+
+El mismo hardware que era un disparate para los emails es la **mejor decisión posible** a escala. No cambió la tecnología ni el precio: cambió el volumen (H) y la criticidad del dato.
+
+> **La regla que se lleva el lector:** la IA local no se justifica por moda ni por miedo. Se justifica cuando tu volumen supera el break-even **o** cuando la criticidad del dato hace que λ importe más que el costo. Nunca antes.
+
+> **Resumen:** el piso te frena por supervivencia, **λ** por riesgo, **I** por plata, y **H** es la palanca que puede dar vuelta cualquiera de las tres cuentas.
+
+
+---
+
+## 6. Para los más avanzados: Montecarlo
 
 Todo lo de arriba usa números fijos. La realidad no: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. La **simulación de Montecarlo** corre la misma fórmula 10.000 veces con rangos en vez de números fijos.
 
@@ -362,11 +375,11 @@ Ese 31% es incómodo y por eso vale la pena: dice que con estos rangos el proyec
 
 ---
 
-## 6. Conclusiones
+## 7. Conclusiones
 
 Dos son las que importan (6.1 y 6.2): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La tercera (6.3) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
 
-### 6.1 · El máximo de automatización no es el óptimo
+### 7.1 · El máximo de automatización no es el óptimo
 
 La intuición dice que cuanto más automatices, más ahorrás. Es falso, y el modelo muestra exactamente dónde deja de serlo.
 
@@ -382,7 +395,7 @@ Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua promet
 
 > **Pasado el piso, automatizar de más te deja más pobre y más dependiente al mismo tiempo:** el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.
 
-### 6.2 · Lo que salva un proyecto es la arquitectura, no despedir más gente
+### 7.2 · Lo que salva un proyecto es la arquitectura, no despedir más gente
 
 Cuando el número no cierra, el reflejo de cualquier gerente es **recortar más gente**. La conclusión anterior ya dijo que eso no funciona: no podés bajar del piso, y automatizar más te empeora las dos cosas. ¿Qué queda?
 
@@ -390,16 +403,16 @@ Cuando el número no cierra, el reflejo de cualquier gerente es **recortar más 
 
 | Arquitectura | λ | IDA | Ahorro | Recupero |
 |---|---|---|---|---|
-| Una sola nube, sin plan de contingencia | 1,50 | 58 | $2.457 | 20 meses ❌ |
-| Una sola nube, con plan de contingencia | 1,30 | 50 | $2.703 | 19 meses ❌ |
-| Multi-cloud, con plan de contingencia | 1,10 | 42 | $2.948 | 17 meses ✅ |
-| **IA local, con plan de contingencia** | **1,02** | **39** | **$3.047** | **16 meses** ✅ |
+| Una sola nube, sin plan de contingencia | 1,50 | 58 | $2.457 | 20 meses ✗ |
+| Una sola nube, con plan de contingencia | 1,30 | 50 | $2.703 | 19 meses ✗ |
+| Multi-cloud, con plan de contingencia | 1,10 | 42 | $2.948 | 17 meses ✓ |
+| **IA local, con plan de contingencia** | **1,02** | **39** | **$3.047** | **16 meses** ✓ |
 
 No cambió **nada** del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció mejor precio de tokens. Lo único que cambió es **dónde vive la IA y si hay plan B**. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar (16), y el IDA cae de 58 a 39.
 
 > **Cuando el business case de automatización no cierra, la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura.** Es la única decisión que mejora las tres cosas a la vez — sube el ahorro, acorta el recupero y baja la dependencia.
 
-### 6.3 · Cómo se aplica fuera de una oficina: banco y retail
+### 7.3 · Cómo se aplica fuera de una oficina: banco y retail
 
 El modelo se explica con horas de oficina, pero donde más falta hace es donde hay **puestos físicos de atención**.
 
@@ -424,7 +437,7 @@ El modelo se explica con horas de oficina, pero donde más falta hace es donde h
 
 En banca el modelo funciona incluso mejor, porque **r deja de ser una estimación**: no lo adivinás, lo leés de la normativa del regulador. Es el único parámetro que puede tener respaldo legal en lugar de criterio.
 
-#### ⚠️ La trampa al aplicarlo: el factor de cobertura
+#### La trampa al aplicarlo: el factor de cobertura
 
 **H_min se mide en horas de trabajo, no en puestos simultáneos.**
 
@@ -447,7 +460,7 @@ Si la demanda no es pareja, calculá H_min franja por franja: `(puestos en pico 
 
 ---
 
-## 7. Los límites del modelo
+## 8. Los límites del modelo
 
 Ningún modelo es honesto si no dice qué *no* hace.
 
@@ -463,7 +476,7 @@ Ningún modelo es honesto si no dice qué *no* hace.
 
 ---
 
-## 8. Cierre: la conjetura
+## 9. Cierre: la conjetura
 
 Los bancos no eligen cuánto capital de reserva tienen: **Basilea** se los exige. Mi conjetura es que vamos hacia lo mismo con la IA: las empresas de servicios críticos van a tener que demostrar una **reserva mínima de capacidad humana** —un P_min auditado y un IDA declarado— igual que hoy declaran capital. En Europa, **DORA** ya obliga al sector financiero a gestionar el riesgo de dependencia de proveedores tecnológicos; extenderlo de "sistemas" a "personas" y de finanzas a toda industria crítica es el paso natural.
 
@@ -473,7 +486,7 @@ Las dos preguntas para llevarte:
 
 ---
 
-## 🧮 Calculadora
+## Calculadora
 
 [**Abrí la calculadora interactiva**](https://cesarriat.com/modelo-ida) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
 
@@ -484,10 +497,10 @@ Qué trae:
 - **Asistente de horas mínimas** que traduce "necesito 2 puestos cubiertos" a la cantidad real de personas según el horario de tu operación.
 - **Simulación de Montecarlo** con 10.000 escenarios, **comparador local vs nube** e **informe descargable en PDF** con resumen ejecutivo, análisis de ROI y gráficos.
 
-## 📄 Licencia
+## Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.
 
-## 🙋 Autor
+## Autor
 **César Riat** — Consultor en IA · [cesarriat.com](https://cesarriat.com)
 
 *Cuando publiques el artículo en Medium, reemplazá el `#` del link de arriba por la URL real.*

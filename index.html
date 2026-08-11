@@ -385,6 +385,10 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="campo">
         <label>Costo de la IA por mes (USD)</label>
         <input type="number" id="CtMes" value="1229" min="0" step="50">
+        <p class="hint" id="ct-fijo-aviso" style="display:none; background:var(--m-con-claro); border-left:3px solid var(--m-con); padding:8px 10px; border-radius:6px; margin-top:6px;">
+          Este monto quedó <b>fijo</b> (servidor propio): no se mueve aunque cambies la automatización — el costo por hora se ajusta solo, como pasa de verdad con un servidor alquilado.
+          <a href="#" id="ct-fijo-soltar" style="color:var(--m-con); font-weight:700;">Volver a variable</a>
+        </p>
       </div>
       <details class="asistente">
         <summary>¿Qué número pongo acá? Abrí el asistente de costo real</summary>
@@ -986,7 +990,7 @@ window.addEventListener('DOMContentLoaded',function(){
   </div>
 
   <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
-  <b>Tres puestos no son tres personas.</b> En un canal 24/7 son catorce. Ese factor de 4,5 es la razón por la que las guardias de servicios críticos parecen sobredimensionadas y no lo están: cubrir un puesto las 24 horas requiere cuatro turnos y medio de gente distinta. Cualquier plan de automatización que ignore esto va a prometer un ahorro que no existe.</div>
+  <b>Tres puestos no son tres personas.</b> En un canal 24/7 son catorce. Ese factor de 4,5 es la razón por la que las guardias de servicios críticos parecen sobredimensionadas y no lo están: cubrir un puesto las 24 horas requiere cuatro turnos y medio de gente distinta —mañana, tarde, noche y dos francos rotativos— cubiertos por personas diferentes. Cualquier plan de automatización que ignore esto va a prometer un ahorro que no existe.</div>
 
   <p class="nota">Si tu demanda no es pareja —un pico de 3 horas y el resto tranquilo— calculá H_min sumando franja por franja: <span class="cuenta">(puestos en pico × horas de pico + puestos fuera de pico × horas fuera de pico) × días</span>. Y agregale un margen: nadie puede contratar a alguien para trabajar exactamente las tres horas del pico todos los días.</p>
 </section>
@@ -1492,7 +1496,7 @@ function calcHmin(){
 // Lee un input numerico protegiendo los divisores: sin esto, P=0 o hp=0
 // producen division por cero y la UI muestra "Infinity" / "$-∞".
 function num(id,min){ const v=parseFloat($(id).value); return isNaN(v)?min:Math.max(v,min); }
-let estado={}, ctHora=2, ctEditado=false;
+let estado={}, ctHora=2, ctEditado=false, ctFijo=false;
 function calc(){
   const P=num('P',1), N=num('N',0), hp=num('hp',1);
   const a=+$('a').value/100, r=+$('r').value/100, eta=+$('eta').value/100;
@@ -1511,16 +1515,30 @@ function calc(){
   // El ahorro sale de las personas que REALMENTE dejas de pagar, no de las horas
   // automatizadas: si el piso de continuidad te obliga a retener gente, seguis
   // pagando esos sueldos aunque la IA haga el trabajo.
-  // El usuario carga el gasto MENSUAL (lo que conoce), pero el estado que se guarda
-  // es el costo por HORA: asi, si despues cambia cuanto automatiza, la factura de IA
-  // escala sola. Sin esto el gasto quedaria plano y se perderia el hallazgo central
-  // del modelo: que pasado el piso, automatizar de mas baja el ahorro.
+  //
+  // El gasto de IA tiene DOS comportamientos posibles, y hay que elegir uno:
+  //  - VARIABLE (API, el default): el costo por hora es lo fijo; el gasto mensual
+  //    escala con las horas automatizadas. Es lo que preserva el hallazgo central
+  //    del modelo (pasado el piso, automatizar de mas baja el ahorro).
+  //  - FIJO (servidor propio, ctFijo=true): el gasto mensual NO se mueve aunque
+  //    cambie la automatizacion -- es lo que de verdad pasa con un servidor
+  //    alquilado. Lo que sube o baja es el costo por hora, como consecuencia.
+  // Antes esto no se distinguia: el modo "servidor propio" del asistente
+  // calculaba bien el numero una vez, pero al mover el slider de automatizacion
+  // la factura mensual se recalculaba como si fuera variable. Ese era el bug.
   const horasIA=H*aef;
-  if(ctEditado && horasIA>0) ctHora = CtMes/horasIA;
-  ctEditado=false;
-  const CtMesEf = ctHora*horasIA;
-  if($('CtMes')!==document.activeElement) $('CtMes').value=Math.round(CtMesEf);
+  let CtMesEf;
+  if(ctFijo){
+    CtMesEf=CtMes;
+    ctHora = horasIA>0 ? CtMesEf/horasIA : 0;
+  } else {
+    if(ctEditado && horasIA>0) ctHora = CtMes/horasIA;
+    ctEditado=false;
+    CtMesEf = ctHora*horasIA;
+    if($('CtMes')!==document.activeElement) $('CtMes').value=Math.round(CtMesEf);
+  }
   const Ct = ctHora;
+  $('ct-fijo-aviso').style.display = ctFijo ? 'block' : 'none';
   const sueldo=N/P, liberadas=P-Pfinal, costoIA=CtMesEf*lambda;
   const S=liberadas*sueldo-costoIA-M;
   horasIAactual=horasIA; calcAsistente(); calcHmin();
@@ -1556,14 +1574,27 @@ function calc(){
   else if(pb>18){$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta warn'; al.textContent='Más de 18 meses: la inversión no se recupera en un plazo razonable.';}
   else{$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta ok'; al.textContent='Menos de 18 meses: el proyecto tiene sentido.';}
 }
+// Este listener tiene que registrarse ANTES del bucle genérico de abajo:
+// los listeners de un mismo evento corren en el orden en que se agregan, y
+// calc() necesita ver ctFijo ya actualizado, no el valor de la vuelta anterior.
+// Una edicion manual del campo se toma como "quiero fijar este numero como
+// referencia variable" (comportamiento API, el default). Si querés un monto
+// realmente fijo, usá el asistente en modo "Servidor propio" y "Usar este valor".
+$('CtMes').addEventListener('input',()=>{ctEditado=true; ctFijo=false;});
+
 document.querySelectorAll('#calc input').forEach(el=>{
   el.addEventListener('input',calc); el.addEventListener('change',calc);
 });
 resetFlow();
-$('CtMes').addEventListener('input',()=>{ctEditado=true;});
 $('ct-modo-api').onclick=()=>modoCt('api');
 $('ct-modo-local').onclick=()=>modoCt('local');
-$('ct-usar').onclick=()=>{ $('CtMes').value=Math.round(ctValor); ctEditado=true; calc(); };
+$('ct-usar').onclick=()=>{
+  $('CtMes').value=Math.round(ctValor);
+  ctFijo = (ctModo==='local');   // "servidor propio" = costo fijo; "API" = variable
+  ctEditado=true;
+  calc();
+};
+$('ct-fijo-soltar').onclick=(ev)=>{ ev.preventDefault(); ctFijo=false; ctEditado=true; calc(); };
 $('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
 
 // ---- Botones de accion ----
@@ -1583,7 +1614,7 @@ $('btn-reiniciar').onclick=()=>{
   document.querySelectorAll('#arq input[type=radio]').forEach((r,i)=>r.checked=(i===0));
   document.querySelectorAll('#arq input[type=checkbox]').forEach((c,i)=>c.checked=(i===0));
   modoCt('api');
-  ctHora=2; ctEditado=false;
+  ctHora=2; ctEditado=false; ctFijo=false;
   calc();
 };
 
@@ -1901,7 +1932,7 @@ const mcDefs=[
 ];
 const mcFijos={r:0.20, P:10, hp:160, Nom:16000, Pmin:4, M:500, I:50000};
 function renderMC(){
-  const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Fijos: 10 personas × 160 h, nómina $16.000/mes (hora humana $10), regulado 20%, piso de continuidad 4 personas, inversión $50.000, mantenimiento $500/mes.</p>';
+  const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Fijos: 10 personas × 160 h, nómina $16.000/mes (hora humana $10), <b>regulado 20% (r)</b>, piso de continuidad 4 personas, inversión $50.000, mantenimiento $500/mes.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es un dato duro de tu industria —lo que exige firma humana por normativa—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
   mcDefs.forEach(d=>{
     const div=document.createElement('div'); div.className='campo';
     div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>
