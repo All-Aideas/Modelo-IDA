@@ -381,7 +381,7 @@ Ese 31% es incómodo y por eso vale la pena: dice que con estos rangos el proyec
 
 ## 7. Conclusiones
 
-Dos son las que importan (6.1 y 6.2): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La tercera (6.3) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
+Dos son las que importan (7.1 y 7.2): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La tercera (7.3) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
 
 ### 7.1 · El máximo de automatización no es el óptimo
 
