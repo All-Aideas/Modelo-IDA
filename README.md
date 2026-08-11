@@ -2,7 +2,7 @@
 
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible. Sirve igual para un call center, un banco, un retail o una transportadora de gas.
 
-**[Probá la calculadora interactiva](https://cesarriat.com/modelo-ida)** · [Leer el artículo en Medium](https://medium.com/@cesarriat/modelo-ida-cu%C3%A1nta-gente-necesita-tu-empresa-el-d%C3%ADa-que-la-ia-no-est%C3%A9-7d39bab79cfd) · Autor: [César Riat](https://cesarriat.com)
+**[Probá la calculadora interactiva](https://modelo-ida.web.app)** · [Leer el artículo en Medium](https://medium.com/@cesarriat/modelo-ida-cu%C3%A1nta-gente-necesita-tu-empresa-el-d%C3%ADa-que-la-ia-no-est%C3%A9-7d39bab79cfd) · Autor: [César Riat](https://cesarriat.com)
 
 ---
 
@@ -492,7 +492,7 @@ Las dos preguntas para llevarte:
 
 ## Calculadora
 
-[**Abrí la calculadora interactiva**](https://cesarriat.com/modelo-ida) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
+[**Abrí la calculadora interactiva**](https://modelo-ida.web.app) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
 
 Qué trae:
 
