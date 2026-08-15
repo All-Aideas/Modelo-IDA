@@ -6,9 +6,6 @@
 
 ---
 
-
----
-
 ## 1. El problema
 
 Hoy un call center se puede automatizar al 100% con IA. Técnicamente no queda ninguna tarea que un agente no pueda hacer —leer un email, responder por voz, por WhatsApp, contestar mensajes en redes sociales—: atender, resolver, escalar, registrar. La pregunta ya no es "¿se puede?".
@@ -44,6 +41,8 @@ Los datos que cargás en la calculadora pasan por **cuatro módulos**, y de ahí
 Esta es una foto fija. **En el sitio es un diagrama interactivo**: hacés clic en un módulo y ves hacia dónde va, o en una respuesta y ves de qué se alimenta — [probalo acá](https://modelo-ida.web.app/diagrama).
 
 En texto, el mismo recorrido — los cuatro módulos no son fórmulas sueltas, cada uno produce **un número intermedio**, y esos cuatro números alimentan **tres resultados**. El modelo es un embudo, no una ecuación única:
+
+Ojo con un atajo mental frecuente: no se salta directo del % de automatización al ahorro en dólares. En el medio pasa por P' — el modelo primero decide **cuánta gente te queda de verdad**, y recién con ese número calcula la plata. Por eso hay una flecha extra en el diagrama:
 
 ```
 Lo que cargás          Los cuatro módulos            Los tres resultados
@@ -87,13 +86,9 @@ Ejemplo: 0,60 × (1 − 0,20) × 0,80 = **38,4%**, no 60%. Primer baño de reali
 Costo real de la IA = λ × Gasto mensual de IA
 ```
 
-**Qué significa ese multiplicador.** Si tu proveedor te factura $1.229 por mes, eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es **cobrarte un extra al momento de decidir** — con λ=1,50 anota $1.844 en la evaluación del proyecto.
+Seguí con la misma pyme del ejemplo: automatizaste el 38,4% de la carga y elegiste un proveedor de IA en la nube —una sola nube, sin backup en otro proveedor— que te factura $1.229 por mes. Todavía no armaste un plan de contingencia para el día que se caiga.
 
-¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que la nube única se cae sin plan B perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara *cuando todavía estás a tiempo de cambiarla*.
-
-Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale igual hasta que chocás.
-
-**Dónde corre la IA** — elegís *una sola* de estas tres, son excluyentes:
+Esas dos decisiones tienen precio, aunque no aparezcan en la factura. **Dónde corre la IA** — elegís *una sola* de estas tres, son excluyentes:
 
 | Arquitectura | Recargo a λ |
 |---|---|
@@ -108,13 +103,26 @@ Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale 
 | Sin plan de contingencia | +20% |
 | Datos sensibles en nube externa | +15% |
 
-**El trade-off central:** la IA local desploma λ pero infla I. La nube achica I pero infla λ. No hay opción gratis — la fórmula te dice cuál precio te conviene pagar según tu volumen H.
+Tu caso: nube única (+30%) y sin plan de contingencia (+20%) → λ = 1 + 0,30 + 0,20 = **1,50**.
+
+El costo real de tu proyecto, para decidir si conviene, no es $1.229: es 1,50 × $1.229 = **$1.844 por mes**. La factura no cambia —seguís pagando $1.229—, pero el modelo te cobra $615 extra en la evaluación: es la prima de seguro por la arquitectura frágil que elegiste. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara *cuando todavía estás a tiempo de cambiarla*.
+
+Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale igual hasta que chocás.
+
+No hay arquitectura gratis, hay que elegir qué precio pagar. Si corrieras esa misma IA en tus propios servidores, λ bajaría mucho —menos riesgo— pero tendrías que poner la inversión inicial de armar y mantener esos servidores. Si te quedás en la nube de un solo proveedor, la inversión inicial es baja —pagás por mes, nada más— pero el riesgo es mayor porque quedás atado a ese proveedor. ¿Cuál conviene? Depende de cuánto volumen proceses: con poco volumen la nube sale más barata aunque sea más riesgosa; con mucho volumen, tu propia infraestructura empieza a compensar el riesgo que evitás. Ese es exactamente el trade-off que ves en números reales en la sección 5 (Casos extremos) y en la 7.2.
 
 ### Módulo Continuidad
 ```
 Piso de continuidad (P_min) = Horas mínimas para operar sin IA ÷ Horas por persona
 ```
-Las horas mínimas son las de la operación crítica en modo degradado. La IA local baja P_min; la nube única lo sube.
+
+Ahora la pregunta incómoda: si mañana la IA se cae, ¿con cuánta gente seguís? No es cero, aunque hoy automatices el 38,4%.
+
+Pensalo en modo degradado y calculá a ojo, no hace falta un estudio: *"¿cuántas horas por mes tengo que cubrir sí o sí, aunque no tenga IA?"*. *"Si se cae todo tengo que atender 800 llamados al mes, y una persona atiende 2 por hora"* → 400 horas. *"Y alguien tiene que revisar pedidos 8 horas por día"* → 240 horas más. Total ≈ 640 h/mes: ese es tu `H_min`.
+
+Piso de continuidad = 640 horas ÷ 160 horas por persona = **4 personas**
+
+Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a bajar de 4 en este equipo. Son las horas de la operación crítica en modo degradado —si esa IA corriera en tus propios servidores te recuperarías más rápido y este piso bajaría; si dependés de una sola nube externa, recuperarte tarda más y el piso sube.
 
 > **Ojo: esto NO es lo mismo que la firma del médico o del escribano.** Son dos preguntas distintas y es donde más se confunde la gente.
 >
@@ -122,7 +130,7 @@ Las horas mínimas son las de la operación crítica en modo degradado. La IA lo
 >
 > `P_min`, acá, pregunta otra cosa: *si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?* No importa la firma: importa la **capacidad operativa**.
 >
-> **Cómo estimarlo.** No hace falta un estudio: pensalo en modo degradado y calculá a ojo. *"Si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"* → 200 horas. *"Y alguien tiene que revisar pedidos 4 horas por día"* → 88 horas más. Total ≈ 290 h/mes: ese es tu `H_min`. Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas.
+> Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas.
 
 
 ---
@@ -136,10 +144,10 @@ P' = MÁXIMO entre:
    (b) Piso de continuidad P_min                                ← la cuenta de supervivencia
 ```
 
-Hace **dos cuentas distintas y se queda con la más grande**:
+Con esos dos números en la mano —38,4% de automatización efectiva y un piso de 4 personas—, el modelo hace **dos cuentas distintas y se queda con la más grande**:
 
 1. **Cuenta económica:** si automatizás el 38,4%, te sobra ese 38,4% de la gente → `10 × (1 − 0,384) = 6,16 → 7 personas` (redondeo hacia arriba: no existe 6,16 empleados).
-2. **Cuenta de supervivencia:** el `P_min` del módulo Continuidad → `640 ÷ 160 = 4 personas`. No sale de automatizar: sale de preguntarte cuánta gente necesitás el día que la IA no está.
+2. **Cuenta de supervivencia:** el `P_min` que acabás de calcular en el módulo Continuidad → 4 personas.
 3. **`MÁXIMO(7 , 4) = 7`.**
 
 **¿Por qué la más grande?** Porque las dos son condiciones que tenés que cumplir *al mismo tiempo*: al menos 7 para el trabajo diario, al menos 4 para sobrevivir sin IA. Solo el mayor cumple las dos.
@@ -152,7 +160,7 @@ S = (P − P') × sueldo − λ × Gasto mensual de IA − Mantenimiento
 T = Inversión ÷ S
 ```
 
-Fijate que S **arranca con P'**, el resultado anterior: solo ahorrás el sueldo de la gente que efectivamente podés liberar.
+Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorrás con eso — y acá importa el atajo que marcamos antes: fijate que S **arranca con P'**, el resultado anterior: solo ahorrás el sueldo de la gente que efectivamente podés liberar.
 
 1. **Cuánta gente liberás de verdad:** `P − P' = 10 − 7 = 3 personas`. No son 3,84 (el 38,4% de 10): no se despiden fracciones de persona, y si el piso se activa liberás todavía menos.
 2. **Ahorro en sueldos:** cada persona cuesta `N ÷ P = $1.600/mes` → `3 × $1.600 = $4.800`.
@@ -184,9 +192,11 @@ Fijate que S **arranca con P'**, el resultado anterior: solo ahorrás el sueldo 
 ```
 IDA = MÍNIMO( Automatización efectiva × λ × 100 , 100 )
 ```
+Con el ahorro ya resuelto —$2.457 por mes, se paga en 20 meses— falta la otra pregunta: ¿qué tan expuesto quedaste?
+
 `0,384 × 1,50 × 100 = 58` → zona amarilla.
 
-El `MÍNIMO` no es decorativo: con automatización alta y arquitectura frágil el producto se pasa de 100 (el techo teórico es 177). Todo lo que supere 100 ya es "máxima dependencia posible", así que el índice se topea para que la escala 0–100 signifique siempre lo mismo.
+El `MÍNIMO` no es decorativo: con automatización alta y arquitectura frágil el producto se pasa de 100 (el techo teórico es 165: a_ef=1 con λ máximo de 1,65 — una sola nube, sin plan de contingencia y datos sensibles afuera). Todo lo que supere 100 ya es "máxima dependencia posible", así que el índice se topea para que la escala 0–100 signifique siempre lo mismo.
 
 | IDA | Zona | Qué significa |
 |---|---|---|
@@ -369,13 +379,15 @@ El mismo hardware que era un disparate para los emails es la **mejor decisión p
 
 ## 6. Para los más avanzados: Montecarlo
 
-Todo lo de arriba usa números fijos. La realidad no: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. La **simulación de Montecarlo** corre la misma fórmula 10.000 veces con rangos en vez de números fijos.
+Todo lo de arriba usa números fijos: exactamente $1.229 por mes de IA, exactamente 640 horas de piso, exactamente 38,4% de automatización. Pero en la vida real esos números se mueven de mes a mes: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes.
+
+Montecarlo es, en el fondo, una idea simple: en vez de correr la cuenta una sola vez con el número "promedio", la **simulación de Montecarlo** la corre **10.000 veces**, moviendo un poco cada variable dentro de un rango razonable cada vez —como si probaras 10.000 futuros posibles para tu proyecto— y te quedás con el promedio de esos 10.000 resultados.
 
 ![Montecarlo](assets/g3_montecarlo.png)
 
-El resultado deja de ser *"recuperás en 20 meses"* y pasa a ser *"31% de probabilidad de recuperar en menos de 18 meses; mediana 21"*. Montecarlo no reemplaza la fórmula: la alimenta.
+El resultado deja de ser *"recuperás en 20 meses"* y pasa a ser *"26% de probabilidad de recuperar en menos de 18 meses; mediana 22 entre los que sí recuperan"*. Los porcentajes se calculan sobre las 10.000 corridas completas — incluyendo el ~7% de escenarios donde el ahorro es negativo o el recupero pasa de 60 meses, que serían fáciles de barrer bajo la alfombra. Montecarlo no reemplaza la fórmula: la alimenta.
 
-Ese 31% es incómodo y por eso vale la pena: dice que con estos rangos el proyecto es más una apuesta que un plan. La palanca para moverlo casi nunca es automatizar más — es bajar λ o bajar la inversión inicial.
+Ese 26% es incómodo y por eso vale la pena: dice que con estos rangos el proyecto es más una apuesta que un plan. La palanca para moverlo casi nunca es automatizar más — es bajar λ o bajar la inversión inicial.
 
 ---
 
@@ -464,7 +476,28 @@ Si la demanda no es pareja, calculá H_min franja por franja: `(puestos en pico 
 
 ---
 
-## 8. Los límites del modelo
+## 8. Qué existe afuera — y qué hueco llena esto (benchmark)
+
+Antes de confiar en una calculadora nueva, la pregunta correcta es: **¿por qué no existía?** Alrededor de la IA hay muchísimo software de retorno, de riesgo y de cumplimiento. Lo honesto es mostrar qué hace cada categoría, qué pregunta no contesta, y dónde queda el hueco que este modelo intenta llenar.
+
+| Qué hay hoy | Qué resuelve bien | La pregunta que no contesta |
+|---|---|---|
+| **Calculadoras de ROI de IA** | Cuánto ahorrás automatizando: horas por costo, payback simple. | Asumen riesgo cero y continuidad gratis. Te dicen a cuánta gente podés *bajar*; nunca cuánta tenés que *conservar*. |
+| **Índices académicos de dependencia de IA** | Miden cuánto depende de la IA una economía o un sector, a nivel macro. | No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde. |
+| **Normas de gestión (ISO/IEC 42001, ISO 22301)** | Te exigen plan de contingencia y evaluación de riesgos: definen el *qué*. | Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión. |
+| **Plataformas de riesgo y seguridad de IA** | Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento. | Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse *sin* IA. |
+
+Cada pieza existe por separado. Lo que no existía es la **unión**: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.
+
+**Qué pasa hoy porque esta cuenta no se hace.** Se despide con el Excel del ROI y el piso de continuidad se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas empresas resultó no tener gente suficiente que supiera ejecutarlo. El plan de contingencia que exige la norma se escribe sin número: promete "volver a operación manual" con una dotación que ya no alcanza para operar manualmente. El directorio discute cuánto ahorra la IA, nunca cuán rehén queda del proveedor. Y la inversión se aprueba con el escenario promedio: "recuperás en 20 meses" suena a plan, hasta que lo corrés 10.000 veces y solo el 26% de los futuros recupera en menos de 18.
+
+**Qué hace distinto este modelo.** Tres cosas: cuantifica la dotación mínima de continuidad (P') que ningún software de RRHH ni de ROI calcula; traduce la fragilidad de arquitectura a plata (λ), convirtiendo "una sola nube sin plan B" en un costo económico directo; y es preventivo y probabilístico — avisa antes de la caída, con porcentajes calculados sobre las 10.000 corridas completas, incluyendo los escenarios donde el proyecto no cierra.
+
+**Lo que este modelo todavía no tiene.** Los coeficientes de λ salen de criterio experto e incidentes públicos, no de un dataset calibrado por sector: son un punto de partida razonable, no una verdad revelada. Y todavía no publica casos reales con métricas de antes y después. Las dos cosas están en la hoja de ruta; mientras tanto, todas las fórmulas están a la vista y podés desafiarlas con tus propios números.
+
+---
+
+## 9. Los límites del modelo
 
 Ningún modelo es honesto si no dice qué *no* hace.
 
@@ -480,7 +513,7 @@ Ningún modelo es honesto si no dice qué *no* hace.
 
 ---
 
-## 9. Cierre: la conjetura
+## 10. Cierre: la conjetura
 
 Los bancos no eligen cuánto capital de reserva tienen: **Basilea** se los exige. Mi conjetura es que vamos hacia lo mismo con la IA: las empresas de servicios críticos van a tener que demostrar una **reserva mínima de capacidad humana** —un P_min auditado y un IDA declarado— igual que hoy declaran capital. En Europa, **DORA** ya obliga al sector financiero a gestionar el riesgo de dependencia de proveedores tecnológicos; extenderlo de "sistemas" a "personas" y de finanzas a toda industria crítica es el paso natural.
 

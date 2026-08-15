@@ -321,6 +321,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <symbol id="i-mod-con" viewBox="0 0 24 24"><path d="M12 2.8 20 6v6.2c0 4.6-3.2 7.8-8 9.2-4.8-1.4-8-4.6-8-9.2V6z"/><polyline points="8.6 12 11 14.4 15.6 9.8"/></symbol>
   <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><polyline points="3 4 3 9.5 8.5 9.5"/></symbol>
   <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/><line x1="8.5" y1="13" x2="15.5" y2="13"/><line x1="8.5" y1="16.5" x2="13" y2="16.5"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><path d="M12 3.5v2.6M12 17.9v2.6M3.5 12h2.6M17.9 12h2.6"/></symbol>
   <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9.5 18h5"/><path d="M10.5 21h3"/><path d="M12 3a6 6 0 00-3.6 10.8c.5.4.9 1 .9 1.7v.5h5.4v-.5c0-.7.4-1.3.9-1.7A6 6 0 0012 3z"/></symbol>
 </svg>
 
@@ -331,6 +332,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
 <nav class="tabs">
   <button class="active" data-tab="calc"><svg><use href="#i-calc"/></svg> Calculadora</button>
+  <button data-tab="benchmark"><svg><use href="#i-radar"/></svg> Benchmark</button>
   <button data-tab="explica"><svg><use href="#i-book"/></svg> Cómo funciona</button>
   <button data-tab="formula"><svg><use href="#i-flask"/></svg> Fórmulas</button>
   <button data-tab="jugar"><svg><use href="#i-sliders"/></svg> Explorar gráficos</button>
@@ -535,6 +537,46 @@ window.addEventListener('DOMContentLoaded',function(){
 </section>
 </div>
 
+<!-- ========== BENCHMARK ========== -->
+<div class="panel" id="benchmark">
+<section>
+  <h2><svg><use href="#i-radar"/></svg> Qué existe afuera — y qué hueco llena esto</h2>
+  <p>Antes de confiar en una calculadora nueva, la pregunta correcta es: <b>¿por qué no existía?</b> Alrededor de la IA hay muchísimo software de retorno, de riesgo y de cumplimiento. Lo honesto es mostrar qué hace cada categoría, qué pregunta no contesta, y dónde queda el hueco que este modelo intenta llenar.</p>
+
+  <h3>Las cuatro categorías que ya existen</h3>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Qué hay hoy</th><th>Qué resuelve bien</th><th>La pregunta que no contesta</th></tr>
+    <tr><td><b>Calculadoras de ROI de IA</b></td><td>Cuánto ahorrás automatizando: horas por costo, payback simple.</td><td>Asumen riesgo cero y continuidad gratis. Te dicen a cuánta gente podés <i>bajar</i>; nunca cuánta tenés que <i>conservar</i>.</td></tr>
+    <tr><td><b>Índices académicos de dependencia de IA</b></td><td>Miden cuánto depende de la IA una economía o un sector, a nivel macro.</td><td>No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde.</td></tr>
+    <tr><td><b>Normas de gestión (ISO/IEC 42001, ISO 22301)</b></td><td>Te exigen plan de contingencia y evaluación de riesgos: definen el <i>qué</i>.</td><td>Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión.</td></tr>
+    <tr><td><b>Plataformas de riesgo y seguridad de IA</b></td><td>Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento.</td><td>Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse <i>sin</i> IA.</td></tr>
+  </table>
+  </div>
+  <p class="nota">Cada pieza existe por separado. Lo que no existía es la <b>unión</b>: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.</p>
+
+  <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
+  <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas empresas resultó no tener gente suficiente que supiera ejecutarlo.</p>
+  <p><b>El plan de contingencia se escribe sin número.</b> La norma exige "volver a operación manual", y el documento lo promete — con una dotación que ya no alcanza para operar manualmente. El papel cumple; la operación no.</p>
+  <p><b>El directorio no tiene métrica de exposición.</b> Se discute cuánto ahorra la IA — nunca cuán rehén queda la empresa del proveedor. Sin un número comparable entre áreas y entre empresas, la dependencia no entra en la agenda hasta que se corta.</p>
+  <p><b>La inversión se aprueba con el escenario promedio.</b> "Recuperás en 20 meses" suena a plan. Corrido 10.000 veces con rangos realistas, solo el 26% de los futuros recupera en menos de 18 — eso es una apuesta, y conviene saberlo antes de firmar.</p>
+
+  <h3>Qué hace distinto este modelo</h3>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Diferencia</th><th>Por qué importa</th></tr>
+    <tr><td><b>Cuantifica la dotación mínima de continuidad (P')</b></td><td>Ningún software de RRHH ni de ROI te calcula el piso humano. Este modelo te dice "automatizá, pero tu piso de supervivencia son 4 personas; abajo de eso, el día que falle el proveedor no operás".</td></tr>
+    <tr><td><b>Traduce la fragilidad de arquitectura a plata (λ)</b></td><td>Una sola nube sin plan B deja de ser una observación técnica y pasa a ser un costo económico directo que castiga el ahorro y sube el IDA.</td></tr>
+    <tr><td><b>Es preventivo y probabilístico</b></td><td>Avisa <i>antes</i> de la caída, no después. Y el Montecarlo reporta los porcentajes sobre las 10.000 corridas completas — incluyendo los escenarios donde el proyecto no cierra, que serían fáciles de esconder.</td></tr>
+  </table>
+  </div>
+
+  <h3>Lo que este modelo todavía no tiene</h3>
+  <p>El benchmark honesto incluye los huecos propios. Los coeficientes de λ (+30% una sola nube, +20% sin plan de contingencia, +15% datos sensibles afuera) salen de criterio experto e incidentes públicos, no de un dataset calibrado por sector: son un punto de partida razonable, no una verdad revelada. Y el modelo todavía no publica casos reales con métricas de antes y después. Las dos cosas están en la hoja de ruta; mientras tanto, todas las fórmulas están a la vista y la cuenta corre entera en tu navegador — podés desafiarla con tus propios números.</p>
+  <p class="nota">Volvé a la <b>Calculadora</b> para correr tu caso, o seguí en <b>Cómo funciona</b> para ver la lógica desde cero.</p>
+</section>
+</div>
+
 <!-- ========== CÓMO FUNCIONA ========== -->
 <div class="panel" id="explica">
 <section>
@@ -690,7 +732,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span style="color:var(--gris)">— nunca dinero</span></p>
   <div class="formula-color">IDA &nbsp;=&nbsp; min<b>(</b> <span class="t t-aut">a_ef</span> · <span class="t t-rie">λ</span> · 100 &nbsp;,&nbsp; 100 <b>)</b></div>
   <p><span class="cuenta">IDA = 0,384 × 1,50 × 100 = 58</span> → zona amarilla, vigilancia.</p>
-  <p class="nota">El <span class="cuenta">min( , 100)</span> no es decorativo: con automatización alta y arquitectura muy frágil el producto se pasa de 100 (el techo teórico es 177, con a_ef=1 y todos los agravantes marcados). Cualquier valor por encima de 100 ya es "máxima dependencia posible", así que el índice se topea ahí para que la escala 0–100 signifique siempre lo mismo.</p>
+  <p class="nota">El <span class="cuenta">min( , 100)</span> no es decorativo: con automatización alta y arquitectura muy frágil el producto se pasa de 100 (el techo teórico es 165: a_ef=1 con λ máximo de 1,65 — una sola nube, sin plan de contingencia y datos sensibles afuera). Cualquier valor por encima de 100 ya es "máxima dependencia posible", así que el índice se topea ahí para que la escala 0–100 signifique siempre lo mismo.</p>
   <p><b>Por qué el IDA no incluye la plata.</b> Es la pregunta más común y es deliberado: <b>ahorrar y estar expuesto son cosas distintas</b>. Podés tener un proyecto que ahorra bien y recupera rápido —excelente negocio— y al mismo tiempo estar en zona amarilla de dependencia. Si metieras el dinero adentro del IDA, un ahorro grande te "taparía" el riesgo y el índice te diría que estás bien justo cuando más frágil estás. Por eso el IDA mide solo dos cosas: <b>cuánto delegaste</b> (a_ef) por <b>cuán frágil es lo que lo sostiene</b> (λ). El dinero ya tiene su propia fórmula, que es S.</p>
   <p class="nota">Comprobalo: dos empresas con la misma automatización del 38,4% pero distinta arquitectura → con una sola nube (λ=1,50) da IDA 58; con IA local (λ=1,02) da IDA 39. Mismo trabajo automatizado, mitad de exposición.</p>
 </section>
@@ -936,8 +978,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <section>
   <h3 class="mod h-hum" style="font-size:1.15rem;">3 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
-  <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 31% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 21 meses.</p>
-  <p>Ese 31% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
+  <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan (y un 7% que directamente no recupera nunca o tarda más de 60 meses).</p>
+  <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
 
 </section>
 
@@ -1943,7 +1985,7 @@ const mcDefs=[
   {id:'mcA',label:'% automatizable',min:0,max:100,lo:50,hi:70,fmt:v=>v+'%'},
   {id:'mcEta',label:'Eficiencia IA (η)',min:50,max:100,lo:65,hi:90,fmt:v=>v+'%'},
   {id:'mcCt',label:'Costo IA por hora automatizada (USD)',min:0.5,max:12,lo:1.5,hi:4,fmt:v=>'$'+v},
-  {id:'mcLam',label:'Riesgo λ',min:1,max:5,lo:1.3,hi:1.7,fmt:v=>v},
+  {id:'mcLam',label:'Riesgo λ',min:1,max:5,lo:1.3,hi:1.7,step:0.1,fmt:v=>v},
 ];
 const mcFijos={r:0.20, P:10, hp:160, Nom:16000, Pmin:4, M:500, I:50000};
 function renderMC(){
@@ -1951,8 +1993,8 @@ function renderMC(){
   mcDefs.forEach(d=>{
     const div=document.createElement('div'); div.className='campo';
     div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>
-      <div class="slider-row" style="font-size:.72rem;color:var(--gris)">min<input type="range" id="${d.id}_lo" min="${d.min}" max="${d.max}" value="${d.lo}" step="${d.min<1?0.5:1}" aria-label="${d.label}, mínimo">
-      max<input type="range" id="${d.id}_hi" min="${d.min}" max="${d.max}" value="${d.hi}" step="${d.min<1?0.5:1}" aria-label="${d.label}, máximo"></div>`;
+      <div class="slider-row" style="font-size:.72rem;color:var(--gris)">min<input type="range" id="${d.id}_lo" min="${d.min}" max="${d.max}" value="${d.lo}" step="${d.step||(d.min<1?0.5:1)}" aria-label="${d.label}, mínimo">
+      max<input type="range" id="${d.id}_hi" min="${d.min}" max="${d.max}" value="${d.hi}" step="${d.step||(d.min<1?0.5:1)}" aria-label="${d.label}, máximo"></div>`;
     cont.appendChild(div);
   });
   mcDefs.forEach(d=>{
@@ -1969,21 +2011,27 @@ function runMC(){
   const {r,P,hp,Nom,Pmin,M,I}=mcFijos;
   const H=P*hp, sueldo=Nom/P;
   const SIMS=10000, paybacks=[];
-  let neg=0;
+  let neg=0, tarde=0;
   for(let i=0;i<SIMS;i++){
     const aef=rnd(...A)*(1-r)*rnd(...E);
     const Pf=Math.max(Math.ceil(P*(1-aef)),Pmin);
     const S=(P-Pf)*sueldo - H*aef*rnd(...L)*rnd(...C) - M;
     if(S<=0){neg++; continue;}
     const pb=I/S;
-    if(pb<=60) paybacks.push(pb);
+    if(pb>60){tarde++; continue;}
+    paybacks.push(pb);
   }
   // histograma
   const bins=30, max=60, w=max/bins, counts=new Array(bins).fill(0);
   paybacks.forEach(p=>{const idx=Math.min(Math.floor(p/w),bins-1); counts[idx]++;});
   const labels=counts.map((_,i)=>((i*w)).toFixed(0));
-  const colors=counts.map((_,i)=> (i*w)<=18 ? NARANJA : GRIS);
-  const p18=(paybacks.filter(p=>p<=18).length/paybacks.length*100);
+  const colors=counts.map((_,i)=> (i*w)<18 ? NARANJA : GRIS);
+  // Las probabilidades se calculan sobre las 10.000 corridas, NUNCA sobre el
+  // subconjunto que entro al histograma: dividir por paybacks.length escondia
+  // los escenarios malos (ahorro negativo o recupero >60 meses), inflaba el %
+  // de exito y daba NaN cuando ningun escenario recuperaba.
+  const p18=paybacks.filter(p=>p<=18).length/SIMS*100;
+  const pNeg=neg/SIMS*100, pTarde=tarde/SIMS*100;
   const sorted=[...paybacks].sort((a,b)=>a-b);
   const mediana=sorted.length?sorted[Math.floor(sorted.length/2)]:0;
 
@@ -1994,7 +2042,9 @@ function runMC(){
       scales:{x:{title:{display:true,text:'Meses para recuperar la inversión',color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,maxTicksLimit:13,font:chartFont}},
               y:{title:{display:true,text:'Cantidad de escenarios',color:NAVY,font:{...chartFont,weight:'700'}},ticks:{color:NAVY,font:chartFont}}}}
   });
-  $('mc-resumen').innerHTML=`Naranja = recupera en ≤18 meses. De 10.000 futuros simulados, <b>${p18.toFixed(0)}%</b> recupera la inversión en menos de 18 meses. Mediana: <b>${mediana.toFixed(0)} meses</b>. ${neg>0?`En ${(neg/100).toFixed(0)}% de los escenarios el ahorro fue negativo (no se recupera nunca).`:''} Movés los rangos y volvés a correr para ver cómo cambia tu probabilidad de éxito.`;
+  $('mc-resumen').innerHTML = paybacks.length===0
+    ? `De 10.000 futuros simulados, <b>ninguno</b> recupera la inversión dentro de 60 meses${neg>0?` — en el ${pNeg.toFixed(0)}% el ahorro fue directamente negativo`:''}. Con estos rangos el proyecto no cierra: bajá λ, el costo por hora o la inversión inicial, y volvé a correr.`
+    : `Naranja = recupera en ≤18 meses. De 10.000 futuros simulados: <b>${p18.toFixed(0)}%</b> recupera la inversión en menos de 18 meses · <b>${pNeg.toFixed(0)}%</b> nunca la recupera (ahorro negativo) · <b>${pTarde.toFixed(0)}%</b> recupera pero tarda más de 60 meses. Mediana de los que recuperan dentro de 60 meses: <b>${mediana.toFixed(0)} meses</b>. Los tres porcentajes se calculan sobre las 10.000 corridas. Movés los rangos y volvés a correr para ver cómo cambia tu probabilidad de éxito.`;
 }
 $('run-mc').addEventListener('click',runMC);
 // montecarlo se inicializa al abrir su pestaña (lazy init arriba)
