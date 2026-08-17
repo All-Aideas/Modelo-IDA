@@ -927,7 +927,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="panel" id="conclusiones">
 <section>
   <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
-  <p>Si te llevás dos cosas de todo este modelo, que sean las dos primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA.</p>
+  <p>Si te llevás tres cosas de todo este modelo, que sean las tres primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b> y los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro.</p>
   <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
 </section>
 
@@ -980,7 +980,46 @@ window.addEventListener('DOMContentLoaded',function(){
 </section>
 
 <section>
-  <h3 class="mod h-hum" style="font-size:1.15rem;">3 · Y una advertencia sobre los números lindos</h3>
+  <h3 class="mod h-con" style="font-size:1.15rem;">3 · Cuándo conviene comprar el fierro: hay dos umbrales, no uno</h3>
+  <p>La conclusión anterior dice que bajes λ, y la IA local es la que más lo baja. Pero recién vimos que para una empresa de 10 personas el servidor propio da <b>−$4.288 por mes</b>. ¿Entonces IA local nunca sirve? No: <b>sirve a partir de cierta escala</b>, y el modelo permite calcular exactamente cuál. Lo interesante es que <b>no hay un umbral, hay dos</b>, y contestan preguntas distintas.</p>
+
+  <h4 style="font-size:.95rem; margin:16px 0 6px;">Umbral 1 — Viabilidad: ¿el fierro se paga con los sueldos que liberás?</h4>
+  <p>El servidor cuesta <b>$8.420 por mes fijo</b> (con luz y sysadmin), uses 2 horas o 2.000. Ese costo no se mueve, así que la única pregunta es cuántos sueldos liberás contra él:</p>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Personas que liberás</th><th>Ahorro mensual con servidor propio</th><th></th></tr>
+    <tr class="fila-mal"><td>3 <span class="hint">(el ejemplo de 10 personas)</span></td><td>−$4.288</td><td><span class="mk no">✕</span> pérdida</td></tr>
+    <tr><td>5</td><td>−$1.088</td><td><span class="mk no">✕</span> pérdida</td></tr>
+    <tr class="fila-ok"><td><b>6</b></td><td><b>+$512</b></td><td><span class="mk ok">✓</span> punto de quiebre</td></tr>
+    <tr><td>10</td><td>+$6.912</td><td><span class="mk ok">✓</span></td></tr>
+    <tr><td>20</td><td>+$22.912</td><td><span class="mk ok">✓</span></td></tr>
+  </table>
+  </div>
+  <p><b>Por debajo de ~6 personas liberadas, comprar el fierro es pérdida segura</b>, no importa lo que hagas con el resto de las variables: el costo fijo se come todo el ahorro. Por eso automatizar 2 horas de trabajo con servidor propio es un disparate, y automatizar el trabajo de 20 personas es un buen negocio. La misma máquina, el mismo precio.</p>
+
+  <h4 style="font-size:.95rem; margin:16px 0 6px;">Umbral 2 — Conveniencia: ¿el fierro le gana a alquilar la API?</h4>
+  <p>Acá está lo que sorprende. Que el servidor deje de dar pérdida no significa que convenga: primero tiene que ganarle a la alternativa de alquilar. Y ese umbral <b>depende por completo de qué API estarías usando si no comprases</b>:</p>
+  <div class="formula-color" style="font-size:.95rem;">horas de IA para empatar &nbsp;=&nbsp; costo fijo mensual del fierro &nbsp;÷&nbsp; costo por hora de la API</div>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Si tu alternativa fuera…</th><th>Costo por hora automatizada</th><th>Local conviene a partir de</th></tr>
+    <tr><td><b>API DeepSeek V4-Flash</b> <span class="hint">(el más barato)</span></td><td>$0,21</td><td>40.100 h/mes = <b>251 personas-equivalente</b></td></tr>
+    <tr><td><b>API Gemini 3.6 Flash</b> <span class="hint">(20× más caro)</span></td><td>$4,50</td><td>1.871 h/mes = <b>12 personas-equivalente</b></td></tr>
+  </table>
+  </div>
+  <p>Mismo servidor, mismo precio, y el umbral se movió <b>20 veces</b> — de 251 personas a 12. Lo único que cambió es contra qué lo comparás. Por eso la pregunta "¿me conviene IA local?" está mal formulada si no decís <i>contra qué</i> y <i>a qué escala</i>.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Las tres zonas, para decidir en dos minutos</span>
+  <b>Menos de ~6 personas liberadas:</b> el fierro es pérdida segura. Alquilá.<br>
+  <b>Entre eso y el break-even de tu API:</b> el servidor propio funciona, pero la API funciona mejor. Alquilá igual, salvo que la soberanía del dato pese más que la plata.<br>
+  <b>Arriba del break-even:</b> local gana en costo <i>y</i> en λ al mismo tiempo. Es el único punto del modelo donde no hay que elegir entre ahorro y riesgo.</div>
+
+  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
+  No preguntes si conviene la IA local. Preguntá <b>contra qué la comparás y a qué escala</b>: el mismo servidor es un disparate para tres personas y la mejor decisión posible para trescientas. <b>El costo fijo no se discute, se supera con volumen</b> — y el modelo te dice desde qué volumen exacto.</div>
+</section>
+
+<section>
+  <h3 class="mod h-hum" style="font-size:1.15rem;">4 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
   <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan (y un 7% que directamente no recupera nunca o tarda más de 60 meses).</p>
   <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
@@ -1492,8 +1531,9 @@ function resetFlow(){
 }
 
 const $=id=>document.getElementById(id);
-const nf=n=>'$'+Math.round(n).toLocaleString('es-AR');
-const nfd=n=>'$'+(Math.abs(n)<100?n.toFixed(2).replace('.',','):Math.round(n).toLocaleString('es-AR'));
+// El signo va ANTES del simbolo de moneda: "-$4.288", no "$-4.288".
+const nf=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-AR');
+const nfd=n=>(n<0?'-':'')+'$'+(Math.abs(n)<100?Math.abs(n).toFixed(2).replace('.',','):Math.abs(Math.round(n)).toLocaleString('es-AR'));
 const NARANJA='#FF6F00', NAVY='#425066', GRIS='#c3cad6', ROJO='#c0392b', VERDE='#2e9e5b';
 const chartFont={family:'Montserrat'};
 

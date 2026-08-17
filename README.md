@@ -393,7 +393,7 @@ Ese 26% es incómodo y por eso vale la pena: dice que con estos rangos el proyec
 
 ## 7. Conclusiones
 
-Dos son las que importan (7.1 y 7.2): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La tercera (7.3) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
+Tres son las que importan (7.1, 7.2 y 7.3): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La cuarta (7.4) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
 
 ### 7.1 · El máximo de automatización no es el óptimo
 
@@ -432,7 +432,40 @@ No cambió **nada** del negocio entre la primera fila y la última. No se automa
 
 > **Cuando el business case de automatización no cierra, la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura.** Es la única decisión que mejora las tres cosas a la vez — sube el ahorro, acorta el recupero y baja la dependencia.
 
-### 7.3 · Cómo se aplica fuera de una oficina: banco y retail
+### 7.3 · Cuándo conviene comprar el fierro: hay dos umbrales, no uno
+
+La conclusión anterior dice que bajes λ, y la IA local es la que más lo baja. Pero para una empresa de 10 personas el servidor propio da **−$4.288 por mes**. ¿Entonces IA local nunca sirve? No: **sirve a partir de cierta escala**, y el modelo permite calcular cuál. Lo interesante es que **no hay un umbral, hay dos**, y contestan preguntas distintas.
+
+**Umbral 1 — Viabilidad: ¿el fierro se paga con los sueldos que liberás?** El servidor cuesta **$8.420/mes fijo** (con luz y sysadmin), uses 2 horas o 2.000. La única pregunta es cuántos sueldos liberás contra él:
+
+| Personas que liberás | Ahorro mensual con servidor propio | |
+|---|---|---|
+| 3 (el ejemplo de 10 personas) | −$4.288 | ✕ pérdida |
+| 5 | −$1.088 | ✕ pérdida |
+| **6** | **+$512** | ✓ punto de quiebre |
+| 10 | +$6.912 | ✓ |
+| 20 | +$22.912 | ✓ |
+
+**Por debajo de ~6 personas liberadas, comprar el fierro es pérdida segura**, no importa qué hagas con el resto de las variables: el costo fijo se come todo el ahorro. Por eso automatizar 2 horas de trabajo con servidor propio es un disparate y automatizar el trabajo de 20 personas es un buen negocio. La misma máquina, el mismo precio.
+
+**Umbral 2 — Conveniencia: ¿el fierro le gana a alquilar la API?** Que el servidor deje de dar pérdida no significa que convenga: primero tiene que ganarle a alquilar. Y ese umbral **depende por completo de qué API estarías usando si no comprases**:
+
+```
+horas de IA para empatar = costo fijo mensual del fierro ÷ costo por hora de la API
+```
+
+| Si tu alternativa fuera… | Costo por hora automatizada | Local conviene a partir de |
+|---|---|---|
+| **API DeepSeek V4-Flash** (el más barato) | $0,21 | 40.100 h/mes = **251 personas-equivalente** |
+| **API Gemini 3.6 Flash** (20× más caro) | $4,50 | 1.871 h/mes = **12 personas-equivalente** |
+
+Mismo servidor, mismo precio, y el umbral se movió **20 veces** — de 251 personas a 12. Lo único que cambió es contra qué lo comparás. Por eso la pregunta "¿me conviene IA local?" está mal formulada si no decís *contra qué* y *a qué escala*.
+
+> **Las tres zonas, para decidir en dos minutos.** Menos de ~6 personas liberadas: el fierro es pérdida segura, alquilá. Entre eso y el break-even de tu API: el servidor propio funciona, pero la API funciona mejor — alquilá igual, salvo que la soberanía del dato pese más que la plata. Arriba del break-even: local gana en costo *y* en λ al mismo tiempo, el único punto del modelo donde no hay que elegir entre ahorro y riesgo.
+
+> **La frase para llevarse:** no preguntes si conviene la IA local. Preguntá **contra qué la comparás y a qué escala**: el mismo servidor es un disparate para tres personas y la mejor decisión posible para trescientas. **El costo fijo no se discute, se supera con volumen** — y el modelo te dice desde qué volumen exacto.
+
+### 7.4 · Cómo se aplica fuera de una oficina: banco y retail
 
 El modelo se explica con horas de oficina, pero donde más falta hace es donde hay **puestos físicos de atención**.
 
