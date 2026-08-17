@@ -500,6 +500,12 @@ window.addEventListener('DOMContentLoaded',function(){
           <p class="hint" id="hm_aviso" style="margin-top:8px;"></p>
         </div>
       </details>
+      <div class="campo">
+        <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
+        <input type="number" id="R" value="0" min="0" step="1">
+        <p class="hint" style="margin-top:6px;">Ojo con este número, es el más fácil de inflar. <b>No es la plantilla de la empresa.</b> Toyota tiene 200.000 empleados y eso no significa que 200.000 personas puedan atender reclamos de garantía: contá solo a las que <b>hoy</b> podrían sentarse a hacer esta tarea concreta en modo degradado. Si tenés que capacitar a alguien primero, no cuenta.</p>
+        <div class="alerta warn" id="aviso-R" style="display:none;"></div>
+      </div>
     </div>
   </div>
   <div class="acciones">
@@ -521,6 +527,7 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="res-num" id="out_IDA">58</div>
       <span class="ida-badge ida-amarillo" id="out_IDA_badge">Vigilancia</span>
       <div class="ida-mini" id="out_IDA_mini"></div>
+      <div class="res-sub" id="out_IDA_sub" style="display:none;"></div>
     </div>
     <div class="res-item">
       <div class="res-label">Ahorro mensual ajustado por riesgo</div>
@@ -683,6 +690,14 @@ window.addEventListener('DOMContentLoaded',function(){
   <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
   <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo: <i>"si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que revisar pedidos 4 horas por día"</i> → 88 horas más. Total ≈ 290 horas al mes: ese es tu <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona te da el piso.<br><br>
   Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</div>
+
+  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>
+  <p class="nota">El piso <b class="v-con">P_min</b> mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea <b>no está tan expuesta</b> como un call center de 200 donde nadie más sabe. <b class="v-con">R</b> es esa gente: las personas de <b>fuera del área</b> que podrían cubrir la operación crítica el día que la IA no esté.</p>
+  <div class="formula-color">cobertura &nbsp;=&nbsp; mín<b>(</b> <span class="t t-dato">R</span> ÷ <span class="t t-con">P_min</span> &nbsp;,&nbsp; 1 <b>)</b></div>
+  <div class="ejemplo e-con"><span class="tit">El error que hay que evitar: R no es la plantilla de la empresa</span>
+  Toyota tiene unos 200.000 empleados y eso <b>no significa que R sea 200.000</b>. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que <b>hoy, sin capacitación previa</b>, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.<br><br>
+  La regla es simple: <b>si primero tenés que enseñarle, no cuenta.</b> R es capacidad disponible el día de la caída, no capacidad potencial.<br><br>
+  <b>Y es el número más fácil de inflar de todo el modelo.</b> Es tentador poner un R generoso porque baja el IDA y el tablero queda lindo. Por eso el modelo nunca deja que el respaldo te lleve el índice a cero — ver la fórmula del IDA más abajo— y por eso este número es el primero que hay que auditar cuando alguien te muestra un IDA sospechosamente bajo.</div>
 </section>
 
 <section>
@@ -729,9 +744,17 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="nota" style="margin-top:14px;"><b>Una aclaración honesta sobre λ:</b> S es el <i>ahorro ajustado por riesgo</i>, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor todos los meses: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al momento de decidir. Tu contador va a ver un ahorro mayor —el mismo número con λ=1—; tu director de riesgo va a querer ver este.</p>
 
   <h3 class="res-h">Resultado 3 — Cuán expuesto quedás (IDA)</h3>
-  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span style="color:var(--gris)">— nunca dinero</span></p>
-  <div class="formula-color">IDA &nbsp;=&nbsp; min<b>(</b> <span class="t t-aut">a_ef</span> · <span class="t t-rie">λ</span> · 100 &nbsp;,&nbsp; 100 <b>)</b></div>
-  <p><span class="cuenta">IDA = 0,384 × 1,50 × 100 = 58</span> → zona amarilla, vigilancia.</p>
+  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad</span> <span style="color:var(--gris)">— nunca dinero</span></p>
+  <div class="formula-color">IDA &nbsp;=&nbsp; min<b>(</b> <span class="t t-aut">a_ef</span> · <span class="t t-rie">λ</span> · <b>(</b>1 − <span class="t t-con">cobertura</span> · 0,7<b>)</b> · 100 &nbsp;,&nbsp; 100 <b>)</b></div>
+  <p><span class="cuenta">IDA = 0,384 × 1,50 × (1 − 0 × 0,7) × 100 = 58</span> → zona amarilla, vigilancia. En el ejemplo no hay respaldo externo declarado (R = 0), así que el tercer factor vale 1 y no cambia nada.</p>
+  <div class="ejemplo e-con"><span class="tit">Qué hace el tercer factor y por qué nunca llega a cero</span>
+  Sin este término el índice era <b>ciego al recorte</b>: una sola persona automatizada en una empresa donde otras veinte saben hacer la tarea daba <b>el mismo IDA</b> que un call center donde nadie más sabe. Son situaciones opuestas y el índice las leía igual.<br><br>
+  Con <b class="v-con">R</b>, esa diferencia aparece. Todos estos casos corren sobre una sola nube sin plan de contingencia (λ = 1,50):<br><br>
+  <span class="cuenta">Área de 1 persona automatizada al 100%, nadie más sabe → IDA 100</span><br>
+  <span class="cuenta">La misma área, con 20 personas afuera que saben → IDA 45</span><br>
+  <span class="cuenta">Call center de 200, 60% automatizado, nadie más sabe → IDA 90</span><br>
+  <span class="cuenta">El mismo call center, con 40 que pueden cubrir → IDA 59</span><br><br>
+  <b>El descuento se topea en 0,7 a propósito.</b> Aunque tengas respaldo de sobra, la caída igual te cuesta: esa gente <b>abandona su propio puesto</b> para venir a cubrir —así que la interrupción se propaga a otra área— y hace tiempo que no hace esta tarea todos los días. Por eso el respaldo externo puede bajarte el IDA hasta un 70%, nunca hasta cero. <b>Nadie queda inmune por tener gente de reserva.</b></div>
   <p class="nota">El <span class="cuenta">min( , 100)</span> no es decorativo: con automatización alta y arquitectura muy frágil el producto se pasa de 100 (el techo teórico es 165: a_ef=1 con λ máximo de 1,65 — una sola nube, sin plan de contingencia y datos sensibles afuera). Cualquier valor por encima de 100 ya es "máxima dependencia posible", así que el índice se topea ahí para que la escala 0–100 signifique siempre lo mismo.</p>
   <p><b>Por qué el IDA no incluye la plata.</b> Es la pregunta más común y es deliberado: <b>ahorrar y estar expuesto son cosas distintas</b>. Podés tener un proyecto que ahorra bien y recupera rápido —excelente negocio— y al mismo tiempo estar en zona amarilla de dependencia. Si metieras el dinero adentro del IDA, un ahorro grande te "taparía" el riesgo y el índice te diría que estás bien justo cuando más frágil estás. Por eso el IDA mide solo dos cosas: <b>cuánto delegaste</b> (a_ef) por <b>cuán frágil es lo que lo sostiene</b> (λ). El dinero ya tiene su propia fórmula, que es S.</p>
   <p class="nota">Comprobalo: dos empresas con la misma automatización del 38,4% pero distinta arquitectura → con una sola nube (λ=1,50) da IDA 58; con IA local (λ=1,02) da IDA 39. Mismo trabajo automatizado, mitad de exposición.</p>
@@ -823,7 +846,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="nota">Se lee en dos mitades: <i>los sueldos que dejás de pagar</i>, menos <i>lo que te cuesta la IA ajustada por riesgo</i>, menos mantenimiento. Con los números del ejemplo: [10 − max(7, 4)] × 1.600 − 1.600 × 0,384 × 1,5 × 2 − 500 = 4.800 − 1.843 − 500 = <b>$2.457</b>.</p>
 
   <p class="nota" style="margin-bottom:4px;"><b>Índice de Dependencia</b></p>
-  <div class="formula-color mega">IDA = min<b>(</b> <span class="t t-aut">a·(1−r)·η</span> · <span class="t t-rie">(1+Σρ)</span> · 100 , 100 <b>)</b></div>
+  <div class="formula-color mega">IDA = min<b>(</b> <span class="t t-aut">a·(1−r)·η</span> · <span class="t t-rie">(1+Σρ)</span> · <b>[</b>1 − min(<span class="t t-dato">R</span> ÷ <span class="t t-con">⌈H_min ÷ h_p⌉</span>, 1)·0,7<b>]</b> · 100 , 100 <b>)</b></div>
 
   <p style="margin-top:18px;"><b>¿Y una sola mega fórmula que junte los tres resultados?</b> No, y no por falta de ganas: vienen en unidades distintas —<b>personas</b>, <b>dólares por mes</b> y un <b>índice de 0 a 100</b>—. Sumarlos daría un número sin significado. Pero sí hay un <b>orden obligatorio</b>: <span class="t t-res">P'</span> se calcula primero porque <b>S depende de él</b>. Esa dependencia es lo que hace honesto al modelo — es la que le cobra a la empresa el costo de su propio piso de continuidad.</p>
   <p class="nota">Las tres respuestas, juntas, son la decisión completa: <b class="v-res">P'</b> te dice con cuánta gente te quedás, <b>S y T</b> si el proyecto se paga, y el <b>IDA</b> cuán expuesto quedás después de hacerlo. Un proyecto puede aprobar las dos primeras y reprobar la tercera: ahí es donde el modelo gana su sueldo.</p>
@@ -1086,6 +1109,13 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>2 · Supone que el know-how sigue adentro de la empresa</h3>
   <p>Relacionado con lo anterior pero distinto: no alcanza con tener gente disponible, tiene que quedar en la empresa <b>quién sepa cómo se seguía trabajando antes</b>. Si automatizaste y en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. La documentación del proceso manual es parte del seguro, no un trámite.</p>
+  <p><b>Y acá es donde este límite muerde más fuerte: en <span class="v-con">R</span>, el respaldo externo.</b> El piso <b class="v-con">P_min</b> al menos habla de gente que está en el área todos los días. R habla de gente que <i>supuestamente</i> sabe hacer la tarea pero <b>hace tiempo que no la hace</b> —o que quizás nunca la hizo en esta versión del proceso—. El modelo <b>no tiene forma de verificarlo</b>: R es una declaración tuya, y es el único número del modelo que <b>baja</b> el riesgo en lugar de subirlo. Todos los demás castigan; este premia.</p>
+  <div class="ejemplo e-con"><span class="tit">Cómo auditar un R antes de creerle</span>
+  Tres preguntas, y si alguna falla el número no vale:<br><br>
+  <b>1 · ¿Lo hicieron alguna vez, con este proceso?</b> No "algo parecido en otra sucursal hace cinco años". Este proceso, esta versión.<br>
+  <b>2 · ¿Está documentado el modo manual?</b> Si la única forma de aprenderlo era mirando a alguien que ya no está, R es cero por más gente que figure.<br>
+  <b>3 · ¿Se probó alguna vez que puedan venir?</b> Porque tienen su propio trabajo. Si nadie ensayó el traspaso, no sabés cuántas horas tardan en estar operativos — y las primeras horas de una caída son las que cuentan.<br><br>
+  <b>Si las tres respuestas no son un sí claro, poné R = 0 y quedate con el IDA crudo.</b> Un respaldo declarado y no probado es exactamente el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.</div>
 
   <h3>3 · Mide costo y continuidad, no ingresos</h3>
   <p>El modelo cuenta lo que dejás de gastar, nunca lo que podrías ganar de más. <b>Para operaciones críticas eso es exactamente lo correcto:</b> en una guardia de gas o de energía no hay ingreso que justificar — hay una obligación legal de tener gente disponible 24/7 por si pasa algo. El modelo está pensado justamente para calcular <i>cuánta</i> gente es esa.</p>
@@ -1285,6 +1315,7 @@ const DIAG={
     {id:'are',  t:'Automatizable',           s:'qué parte, cuánta firma, qué eficiencia'},
     {id:'rho',  t:'Arquitectura',            s:'dónde corre la IA y si hay plan B'},
     {id:'Hmin', t:'Horas mínimas sin IA',    s:'la operación que no puede parar'},
+    {id:'R',    t:'Respaldo externo',        s:'quiénes de afuera saben hacerlo'},
     {id:'Cmes', t:'Gasto de IA por mes',     s:'tu factura'},
     {id:'IM',   t:'Inversión y mantenimiento', s:'lo que ponés una vez y todos los meses'}
   ],
@@ -1292,7 +1323,7 @@ const DIAG={
     {id:'hum', t:'Humano',         s:'→ costo de la hora humana',   c:'--m-hum'},
     {id:'aut', t:'Automatización', s:'→ automatización efectiva',   c:'--m-aut'},
     {id:'rie', t:'Riesgo',         s:'→ multiplicador de riesgo',   c:'--m-rie'},
-    {id:'con', t:'Continuidad',    s:'→ piso de personas',          c:'--m-con'}
+    {id:'con', t:'Continuidad',    s:'→ piso y cobertura',          c:'--m-con'}
   ],
   res:[
     {id:'P',   t:'Dotación',  s:'con cuánta gente te quedás'},
@@ -1304,11 +1335,11 @@ const DIAG={
     ['Ph','hum','hum'], ['N','hum','hum'],
     ['are','aut','aut'],
     ['rho','rie','rie'],
-    ['Hmin','con','con'], ['Ph','con','con'],
+    ['Hmin','con','con'], ['Ph','con','con'], ['R','con','con'],
     ['hum','S','hum'],
     ['aut','P','aut'], ['aut','S','aut'], ['aut','IDA','aut'],
     ['rie','S','rie'], ['rie','IDA','rie'],
-    ['con','P','con'],
+    ['con','P','con'], ['con','IDA','con'],
     ['Cmes','S',null], ['IM','S',null],
     ['P','S',null]
   ]
@@ -1326,9 +1357,9 @@ const RESULTADOS={
     detalle:'Es el único resultado que junta los tres módulos económicos: cuánto costaba la hora humana, cuánto trabajo reemplazás, y cuánto encarece tu gasto de IA la fragilidad de tu arquitectura. Si el ahorro da cero o negativo, automatizar cuesta más de lo que ahorra y el proyecto no va.',
     conecta:'Depende de la <b>Dotación</b>: es el resultado que recibe a otro resultado como insumo. Y a su vez manda al recupero, que es la inversión dividida por este ahorro.'},
   IDA:{nom:"IDA", sub:"cuán expuesto quedás",
-    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  100   (topeado en 100)',
+    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  (1 − cobertura de respaldo × 0,7)  ×  100   (topeado en 100)',
     simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
-    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
     conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
 };
 const POS={};
@@ -1643,8 +1674,24 @@ function calc(){
   const sueldo=N/P, liberadas=P-Pfinal, costoIA=CtMesEf*lambda;
   const S=liberadas*sueldo-costoIA-M;
   horasIAactual=horasIA; calcAsistente(); calcHmin();
-  const pb=S>0?I/S:Infinity, IDA=Math.min(aef*lambda*100,100);
-  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA};
+  // Respaldo externo (R): gente de FUERA del area que sabe hacer la tarea.
+  // Sin esto el IDA era ciego al recorte: una sola persona automatizada en una
+  // empresa donde veinte podrian cubrirla daba el mismo indice que un call
+  // center entero donde nadie mas sabe hacerlo. La cobertura descuenta el IDA,
+  // pero NUNCA hasta cero: esa gente abandona su propio puesto para venir y no
+  // hace esta tarea todos los dias (ver limite del know-how).
+  const R=num('R',0);
+  const cobertura = Pmin>0 ? Math.min(R/Pmin,1) : 0;
+  const DESC_MAX=0.7;                       // tope del descuento por respaldo
+  const factorR = 1-cobertura*DESC_MAX;
+  const pb=S>0?I/S:Infinity;
+  const IDAcrudo=Math.min(aef*lambda*100,100);
+  const IDA=Math.min(aef*lambda*factorR*100,100);
+  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo};
+  $('aviso-R').style.display = R>0 ? 'block' : 'none';
+  if(R>0) $('aviso-R').innerHTML = cobertura>=1
+    ? `Con ${R===1?'esa persona':'esas '+R+' personas'} cubrís entero tu piso de ${Pmin}. El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, pero no a cero: esa gente deja su propio puesto para venir, y no hace esta tarea todos los días.`
+    : `Cubrís ${R} de las ${Pmin} personas de tu piso desde afuera (${(cobertura*100).toFixed(0)}%). El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
   $('out_P').textContent=Pfinal;
   // Pmin > P no es un error: significa que la empresa YA esta por debajo
   // del minimo para operar sin IA. Es un hallazgo, no un caso borde.
@@ -1663,6 +1710,8 @@ function calc(){
     frenoS.textContent=`El piso te obliga a retener ${Pmin-Pecon} persona${Pmin-Pecon>1?'s':''} que la cuenta económica ya no necesita: seguís pagando ${nf((Pmin-Pecon)*sueldo)}/mes de sueldos mientras la IA hace ese trabajo. Automatizar más desde acá te baja el ahorro, no te lo sube.`;
   } else { frenoS.style.display='none'; }
   $('out_IDA').textContent=IDA.toFixed(0);
+  $('out_IDA_sub').style.display = cobertura>0 ? 'block' : 'none';
+  if(cobertura>0) $('out_IDA_sub').innerHTML=`Sin respaldo externo sería <b>${IDAcrudo.toFixed(0)}</b>: ${R===1?'la persona':'las '+R+' personas'} de afuera cubren el ${(cobertura*100).toFixed(0)}% de tu piso.`;
   const badge=$('out_IDA_badge'), mini=$('out_IDA_mini');
   if(IDA<30){badge.className='ida-badge ida-verde'; badge.textContent='Resiliente';
     mini.textContent=`Un IDA de ${IDA.toFixed(0)} significa baja dependencia: automatizaste poco o con arquitectura robusta. Una caída de IA sería una molestia menor, no un paro operativo.`;}
@@ -1699,7 +1748,7 @@ $('ct-fijo-soltar').onclick=(ev)=>{ ev.preventDefault(); ctFijo=false; ctEditado
 $('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
 
 // ---- Botones de accion ----
-const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,
+const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,
   ctp_precio:0.21,ctp_mes:614,ctl_srv:5170,ctl_luz:250,ctl_sys:3000,ctl_otros:0,
   hm_puestos:2,hm_oper:176};
 
@@ -1821,6 +1870,7 @@ function buildInforme(){
     <tr><td>Equivale por hora automatizada</td><td class="num">${nfd(e.Ct)}</td></tr>
     <tr><td>Inversión inicial · mantenimiento mensual</td><td class="num">${nf(e.I)} · ${nf(e.M)}</td></tr>
     <tr><td>Horas mínimas para operar sin IA</td><td class="num">${Math.round(e.Hmin).toLocaleString('es-AR')} h</td></tr>
+    <tr><td>Respaldo externo declarado (R)</td><td class="num">${e.R} ${e.R===1?'persona':'personas'}</td></tr>
     <tr><td>Arquitectura</td><td class="num" style="font-weight:400">${arq||'sin definir'}</td></tr>
   </table>
 
@@ -1830,6 +1880,7 @@ function buildInforme(){
     <tr><td>Automatización efectiva (a_ef)</td><td class="num">${pc(e.aef)}</td></tr>
     <tr><td>Multiplicador de riesgo (λ)</td><td class="num">${e.lambda.toFixed(2).replace('.',',')}</td></tr>
     <tr><td>Piso de continuidad (P_min)</td><td class="num">${e.Pmin} personas</td></tr>
+    <tr><td>Cobertura del piso con respaldo externo</td><td class="num">${pc(e.cobertura)}</td></tr>
     <tr class="inf-destacado"><td><b>Personas a conservar (P')</b></td><td class="num">${e.Pfinal} personas</td></tr>
     <tr><td>Personas que se liberan</td><td class="num">${e.liberadas}</td></tr>
     <tr><td>Costo mensual de la IA ajustado por riesgo</td><td class="num">${nf(e.costoIA)}</td></tr>
@@ -1864,6 +1915,7 @@ function buildInforme(){
   ${freno}
   <p><b>Economía.</b> ${veredicto}</p>
   <p><b>Exposición.</b> IDA ${e.IDA.toFixed(0)} sobre 100 (zona ${zonaIDA(e.IDA).toLowerCase()}). ${lecturaIDA}</p>
+  ${e.cobertura>0?`<p class="inf-nota"><b>Atención con el respaldo externo.</b> Este IDA de ${e.IDA.toFixed(0)} ya está descontado por las ${e.R} personas de fuera del área declaradas como respaldo, que cubren el ${pc(e.cobertura)} del piso. <b>Sin ese respaldo el índice sería ${e.IDAcrudo.toFixed(0)}.</b> R es el único dato del modelo que baja el riesgo en lugar de subirlo, y el modelo no puede verificarlo: si esas personas no ejecutaron este proceso, no está documentado el modo manual, o nunca se ensayó el traspaso, el número válido es ${e.IDAcrudo.toFixed(0)}.</p>`:''}
   <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el costo esperado de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
 }
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };

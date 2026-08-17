@@ -47,10 +47,11 @@ Ojo con un atajo mental frecuente: no se salta directo del % de automatización 
 ```
 Lo que cargás          Los cuatro módulos            Los tres resultados
 ─────────────          ──────────────────            ───────────────────
-P, h_p, N        →     Humano        → C_h      ┐
-a, r, η          →     Automatización→ a_ef     ├→   P'   ¿con cuánta gente me quedo?
-ρ, C_mes         →     Riesgo        → λ        ├→   S, T ¿conviene y en cuánto se paga?
-H_min            →     Continuidad   → P_min    ┘→   IDA  ¿cuán expuesto quedo?
+P, h_p, N        →     Humano        → C_h          ┐
+a, r, η          →     Automatización→ a_ef         ├→   P'   ¿con cuánta gente me quedo?
+ρ, C_mes         →     Riesgo        → λ            ├→   S, T ¿conviene y en cuánto se paga?
+H_min, R         →     Continuidad   → P_min,       ┘→   IDA  ¿cuán expuesto quedo?
+                                       cobertura
 I, M             →     (entran directo en S y T)
 
                        ...y además:  P'  ──────────→  S
@@ -132,6 +133,20 @@ Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a ba
 >
 > Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas.
 
+**Y una pregunta más: ¿hay respaldo fuera del área? → produce R**
+
+```
+cobertura = MÍNIMO( R ÷ P_min , 1 )
+```
+
+El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea **no está tan expuesta** como un call center de 200 donde nadie más sabe. **R** es esa gente: las personas de **fuera del área** que podrían cubrir la operación crítica el día que la IA no esté.
+
+> **El error que hay que evitar: R no es la plantilla de la empresa.** Toyota tiene unos 200.000 empleados y eso **no significa que R sea 200.000**. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que **hoy, sin capacitación previa**, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.
+>
+> La regla es simple: **si primero tenés que enseñarle, no cuenta.** R es capacidad disponible el día de la caída, no capacidad potencial.
+>
+> **Y es el número más fácil de inflar de todo el modelo,** porque es el único que *baja* el índice. Por eso el modelo nunca deja que el respaldo lleve el IDA a cero, y por eso este número es el primero que hay que auditar cuando alguien muestra un IDA sospechosamente bajo (ver §9.2).
+
 
 ---
 
@@ -190,11 +205,22 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 
 ### Resultado 3 — Índice de Dependencia de IA (IDA)
 ```
-IDA = MÍNIMO( Automatización efectiva × λ × 100 , 100 )
+IDA = MÍNIMO( Automatización efectiva × λ × (1 − cobertura × 0,7) × 100 , 100 )
 ```
 Con el ahorro ya resuelto —$2.457 por mes, se paga en 20 meses— falta la otra pregunta: ¿qué tan expuesto quedaste?
 
-`0,384 × 1,50 × 100 = 58` → zona amarilla.
+`0,384 × 1,50 × (1 − 0 × 0,7) × 100 = 58` → zona amarilla. En el ejemplo no hay respaldo externo declarado (R = 0), así que el tercer factor vale 1 y no cambia nada.
+
+**Qué hace el tercer factor y por qué nunca llega a cero.** Sin este término el índice era **ciego al recorte**: una sola persona automatizada en una empresa donde otras veinte saben hacer la tarea daba *el mismo IDA* que un call center donde nadie más sabe. Son situaciones opuestas y el índice las leía igual. Todos estos casos corren sobre una sola nube sin plan de contingencia (λ = 1,50):
+
+| Situación | a_ef | P_min | R | Cobertura | IDA |
+|---|---|---|---|---|---|
+| Área de 1 persona automatizada al 100%, nadie más sabe | 100% | 1 | 0 | 0% | **100** |
+| La misma área, pero 20 personas afuera saben hacerlo | 100% | 1 | 20 | 100% | **45** |
+| Call center de 200, 60% automatizado, nadie más sabe | 60% | 80 | 0 | 0% | **90** |
+| El mismo call center, con 40 que pueden cubrir | 60% | 80 | 40 | 50% | **59** |
+
+**El descuento se topea en 0,7 a propósito.** Aunque tengas respaldo de sobra, la caída igual te cuesta: esa gente **abandona su propio puesto** para venir a cubrir —así que la interrupción se propaga a otra área— y hace tiempo que no hace esta tarea todos los días. El respaldo externo puede bajarte el IDA hasta un 70%, nunca hasta cero. **Nadie queda inmune por tener gente de reserva.**
 
 El `MÍNIMO` no es decorativo: con automatización alta y arquitectura frágil el producto se pasa de 100 (el techo teórico es 165: a_ef=1 con λ máximo de 1,65 — una sola nube, sin plan de contingencia y datos sensibles afuera). Todo lo que supere 100 ya es "máxima dependencia posible", así que el índice se topea para que la escala 0–100 signifique siempre lo mismo.
 
@@ -219,7 +245,7 @@ S   = [ P − MÁXIMO( ⌈P × (1 − a(1−r)η)⌉ , ⌈H_min ÷ h_p⌉ ) ] ×
       − (1+Σρ) × C_mes
       − M
 
-IDA = MÍNIMO( a(1−r)η × (1+Σρ) × 100 , 100 )
+IDA = MÍNIMO( a(1−r)η × (1+Σρ) × [1 − MÍN(R ÷ ⌈H_min÷h_p⌉ , 1) × 0,7] × 100 , 100 )
 ```
 
 S se lee en dos mitades: *los sueldos que dejás de pagar*, menos *lo que cuesta la IA ajustada por riesgo*, menos mantenimiento.
@@ -541,6 +567,15 @@ Ningún modelo es honesto si no dice qué *no* hace.
 **1 · Supone que la gente que conservás todavía sabe hacerlo.** El piso asume que pueden ejecutar el proceso manual el día que haga falta. Si hace ocho meses que la IA hace todo y ellos solo revisan, no van a poder: son **guardia pasiva**, y la guardia pasiva se oxida. Mantener la capacidad exige **simulacros periódicos de operación manual** —como un simulacro de incendio— y eso cuesta horas que no están en ninguna fórmula. Un P_min de papel no salva a nadie.
 
 **2 · Supone que el know-how sigue adentro.** No alcanza con tener gente disponible: tiene que quedar quién sepa **cómo se trabajaba antes**. Si en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. Documentar el proceso manual es parte del seguro.
+
+Y **acá es donde este límite muerde más fuerte: en R, el respaldo externo.** El piso `P_min` al menos habla de gente que está en el área todos los días. R habla de gente que *supuestamente* sabe hacer la tarea pero **hace tiempo que no la hace** —o que quizás nunca la hizo en esta versión del proceso—. El modelo **no tiene forma de verificarlo**: R es una declaración, y es el único número que **baja** el riesgo en lugar de subirlo. Todos los demás castigan; este premia.
+
+> **Cómo auditar un R antes de creerle.** Tres preguntas, y si alguna falla el número no vale:
+> 1. **¿Lo hicieron alguna vez, con este proceso?** No "algo parecido en otra sucursal hace cinco años". Este proceso, esta versión.
+> 2. **¿Está documentado el modo manual?** Si la única forma de aprenderlo era mirando a alguien que ya no está, R es cero por más gente que figure.
+> 3. **¿Se probó alguna vez que puedan venir?** Tienen su propio trabajo. Si nadie ensayó el traspaso, no sabés cuántas horas tardan en estar operativos — y las primeras horas de una caída son las que cuentan.
+>
+> **Si las tres respuestas no son un sí claro, poné R = 0 y quedate con el IDA crudo.** Un respaldo declarado y no probado es el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.
 
 **3 · Mide costo y continuidad, no ingresos.** Para operaciones críticas eso es lo correcto: en una guardia de gas o energía no hay ingreso que justificar, hay una obligación legal de tener gente 24/7 — y el modelo sirve justamente para calcular cuánta. Pero si tu caso es comercial y automatizar genera ventas nuevas (atención 24/7, más capacidad en pico), ese ingreso **no entra acá** y hay que sumarlo por afuera.
 

@@ -131,9 +131,9 @@ const RESULTADOS={
     detalle:'Es el único resultado que junta los tres módulos económicos: cuánto costaba la hora humana, cuánto trabajo reemplazás, y cuánto encarece tu gasto de IA la fragilidad de tu arquitectura. Si el ahorro da cero o negativo, automatizar cuesta más de lo que ahorra y el proyecto no va.',
     conecta:'Depende de la <b>Dotación</b>: es el resultado que recibe a otro resultado como insumo. Y a su vez manda al recupero, que es la inversión dividida por este ahorro.'},
   IDA:{nom:"IDA", sub:"cuán expuesto quedás",
-    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  100   (topeado en 100)',
+    formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  (1 − cobertura de respaldo × 0,7)  ×  100   (topeado en 100)',
     simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
-    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
     conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
 };
 
@@ -144,6 +144,7 @@ const DIAG={
     {id:'are',  t:'Automatizable',           s:'qué parte, cuánta firma, qué eficiencia'},
     {id:'rho',  t:'Arquitectura',            s:'dónde corre la IA y si hay plan B'},
     {id:'Hmin', t:'Horas mínimas sin IA',    s:'la operación que no puede parar'},
+    {id:'R',    t:'Respaldo externo',        s:'quiénes de afuera saben hacerlo'},
     {id:'Cmes', t:'Gasto de IA por mes',     s:'tu factura'},
     {id:'IM',   t:'Inversión y mantenimiento', s:'lo que ponés una vez y todos los meses'}
   ],
@@ -151,7 +152,7 @@ const DIAG={
     {id:'hum', t:'Humano',         s:'→ costo de la hora humana',   c:'--m-hum'},
     {id:'aut', t:'Automatización', s:'→ automatización efectiva',   c:'--m-aut'},
     {id:'rie', t:'Riesgo',         s:'→ multiplicador de riesgo',   c:'--m-rie'},
-    {id:'con', t:'Continuidad',    s:'→ piso de personas',          c:'--m-con'}
+    {id:'con', t:'Continuidad',    s:'→ piso y cobertura',          c:'--m-con'}
   ],
   res:[
     {id:'P',   t:'Dotación',  s:'con cuánta gente te quedás'},
@@ -163,11 +164,11 @@ const DIAG={
     ['Ph','hum','hum'], ['N','hum','hum'],
     ['are','aut','aut'],
     ['rho','rie','rie'],
-    ['Hmin','con','con'], ['Ph','con','con'],
+    ['Hmin','con','con'], ['Ph','con','con'], ['R','con','con'],
     ['hum','S','hum'],
     ['aut','P','aut'], ['aut','S','aut'], ['aut','IDA','aut'],
     ['rie','S','rie'], ['rie','IDA','rie'],
-    ['con','P','con'],
+    ['con','P','con'], ['con','IDA','con'],
     ['Cmes','S',null], ['IM','S',null],
     ['P','S',null]
   ]
