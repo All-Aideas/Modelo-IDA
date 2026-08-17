@@ -2,7 +2,7 @@
 
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible. Sirve igual para un call center, un banco, un retail o una transportadora de gas.
 
-**[Probá la calculadora interactiva](https://modelo-ida.web.app)** · [Leer el artículo en Medium](https://medium.com/@cesarriat/modelo-ida-cu%C3%A1nta-gente-necesita-tu-empresa-el-d%C3%ADa-que-la-ia-no-est%C3%A9-7d39bab79cfd) · Autor: [César Riat](https://cesarriat.com)
+**[Probá la calculadora interactiva](https://modelo-ida.web.app)** · Autor: [César Riat](https://cesarriat.com)
 
 ---
 
@@ -136,8 +136,10 @@ Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a ba
 **Y una pregunta más: ¿hay respaldo fuera del área? → produce R**
 
 ```
-cobertura = MÍNIMO( R ÷ P_min , 1 )
+cobertura = MÍNIMO( R ÷ P_min , 1 )      y 0 si P_min = 0
 ```
+
+La aclaración del `P_min = 0` no es un tecnicismo: si declarás que **no tenés operación crítica** —que si la IA se cae no pasa nada urgente—, no hay piso que cubrir y el respaldo externo no tiene nada que descontar. La cobertura vale 0 y el IDA queda sin tocar. Sin esa aclaración la fórmula dividiría por cero.
 
 El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea **no está tan expuesta** como un call center de 200 donde nadie más sabe. **R** es esa gente: las personas de **fuera del área** que podrían cubrir la operación crítica el día que la IA no esté.
 
@@ -247,6 +249,8 @@ S   = [ P − MÁXIMO( ⌈P × (1 − a(1−r)η)⌉ , ⌈H_min ÷ h_p⌉ ) ] ×
 
 IDA = MÍNIMO( a(1−r)η × (1+Σρ) × [1 − MÍN(R ÷ ⌈H_min÷h_p⌉ , 1) × 0,7] × 100 , 100 )
 ```
+
+Con `⌈H_min÷h_p⌉ = 0` —sin operación crítica que sostener— el término de cobertura vale 0 y el IDA queda `MÍNIMO(a_ef × λ × 100, 100)`.
 
 S se lee en dos mitades: *los sueldos que dejás de pagar*, menos *lo que cuesta la IA ajustada por riesgo*, menos mantenimiento.
 
@@ -583,7 +587,17 @@ Y **acá es donde este límite muerde más fuerte: en R, el respaldo externo.** 
 
 **4 · Modela la convivencia permanente, no la degradación temporal.** La convivencia humano-IA **sí está**, y vive en **r**: si de 1.000 horas hay 200 que necesitan la firma de un abogado, un ingeniero o un arquitecto, cargás `r = 20%` y el modelo entiende que esas 200 nunca se automatizan —la IA hace el trabajo, el profesional firma—. Lo que **no** sabe representar es que la IA no se caiga del todo pero funcione peor dos semanas: más lenta, con más errores, con límite de consultas. El modelo es binario, la realidad no.
 
-> **Cómo leer estos límites:** ninguno invalida el modelo, y los cuatro empujan en la misma dirección — **hacia arriba**. Un piso que no se entrena, un know-how que se fue y una degradación no contemplada hacen que necesites **más** gente, no menos. Si el modelo te da un número, tratalo como el **mínimo del mínimo**.
+**5 · El recupero es payback simple, no valor presente.** `T = I ÷ S` divide y listo: **no descuenta el dinero en el tiempo**. No hay tasa, no hay inflación, no hay costo de oportunidad — un dólar del mes 20 vale lo mismo que uno de hoy. Es distinto del VPN o la TIR que va a pedirte un CFO. Es deliberado (el payback simple se entiende sin explicación y sirve para *descartar* proyectos), pero tiene un sesgo: al no descontar, **el recupero se ve mejor de lo que es**. Tratá los 18 meses como filtro grueso, no como aprobación financiera.
+
+**6 · Los coeficientes de riesgo son criterio experto, no un dataset.** Los recargos de λ —+30% nube única, +20% sin plan de contingencia, +15% datos sensibles afuera— **salen de experiencia profesional, no de un estudio estadístico**. Lo que sí tienen es un orden defendible: depender de un solo proveedor es la fragilidad más grave porque es la única sin salida; no tener plan viene después (no te cae el servicio, te deja sin respuesta ensayada); y los datos sensibles afuera pesan menos en continuidad porque no interrumpen la operación, agregan exposición regulatoria. Calibrarlos de verdad exigiría una base de incidentes por sector con frecuencia, duración y costo — el próximo paso natural del modelo. Mientras tanto **el orden de magnitud sirve para comparar dos arquitecturas entre sí**, que es para lo que se usa λ.
+
+> **Dos preguntas incómodas sobre λ, contestadas de antemano.**
+>
+> *¿Por qué λ no toca el mantenimiento (M)?* Crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que M también debería subir con el riesgo. No lo hace, y el efecto es que **el modelo subestima el costo de una arquitectura mala**. Preferimos ese error al inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.
+>
+> *¿Por qué λ multiplica el gasto en IA y no el daño de la caída?* Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: comparando arquitecturas de costo muy distinto, la prima en dólares puede quedar al revés — correr local, que es más seguro, tiene una factura mucho mayor, así que su 2% de recargo puede superar en pesos al 50% de una API barata. **Dentro de una misma arquitectura la comparación es válida**, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante.
+
+> **Cómo leer estos límites:** ninguno invalida el modelo, y los primeros cuatro empujan en la misma dirección — **hacia arriba**. Un piso que no se entrena, un know-how que se fue y una degradación no contemplada hacen que necesites **más** gente, no menos. Si el modelo te da un número, tratalo como el **mínimo del mínimo**.
 
 ---
 
@@ -606,7 +620,9 @@ Qué trae:
 - **Costo de la IA por mes** como dato de entrada, que es el número que realmente conocés (tu factura), con un asistente que lo arma componente por componente si usás API o servidor propio.
 - **Diagrama de flujo interactivo** en la pestaña *Fórmulas*: hacés clic en un módulo y ves hacia dónde va, o clic en una respuesta y ves todo lo que la construye.
 - **Asistente de horas mínimas** que traduce "necesito 2 puestos cubiertos" a la cantidad real de personas según el horario de tu operación.
-- **Simulación de Montecarlo** con 10.000 escenarios, **comparador local vs nube** e **informe descargable en PDF** con resumen ejecutivo, análisis de ROI y gráficos.
+- **Simulación de Montecarlo** con 10.000 escenarios, que toma los datos firmes de la calculadora y te deja definir el rango solo de lo incierto.
+- **Comparador local vs nube** e **informe descargable en PDF** con resumen ejecutivo, análisis de ROI, Montecarlo y gráficos.
+- **Export a CSV** con todos los supuestos, los resultados y la corrida de Montecarlo, para auditar en planilla. Usa `;` y coma decimal: Excel en español lo abre sin asistente de importación.
 
 ## Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.

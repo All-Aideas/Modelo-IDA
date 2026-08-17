@@ -184,8 +184,20 @@ window.addEventListener('DOMContentLoaded',function(){
   .grafico-svg svg{display:block; width:100%; min-width:560px; height:auto;}
   img.grafico{width:100%; border-radius:10px; margin:14px 0; border:1px solid var(--borde);}
 
-  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start;}
   @media(max-width:760px){.calc-grid{grid-template-columns:1fr;}}
+  /* Explicaciones largas dentro de un campo: no se borran, se pliegan. La
+     calculadora tiene que verse rapida de usar; el que quiera el detalle, abre. */
+  .mas{margin-top:6px;}
+  .mas>summary{cursor:pointer; list-style:none; font-size:.72rem; color:var(--naranja);
+    font-weight:700; letter-spacing:.02em; display:inline-flex; align-items:center; gap:5px;}
+  .mas>summary::-webkit-details-marker{display:none;}
+  .mas>summary::before{content:'+'; display:inline-grid; place-items:center; width:14px; height:14px;
+    border:1.5px solid var(--naranja); border-radius:4px; font-size:.7rem; line-height:1;}
+  .mas[open]>summary::before{content:'−';}
+  .mas>summary:hover{text-decoration:underline;}
+  .mas .cuerpo{font-size:.78rem; color:var(--gris); line-height:1.5; margin-top:7px;
+    padding-left:10px; border-left:2px solid #e6eaf0;}
   .campo{margin-bottom:16px;}
   .campo label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:5px;}
   .campo .hint{font-weight:400; color:var(--gris); font-size:.76rem;}
@@ -377,6 +389,40 @@ window.addEventListener('DOMContentLoaded',function(){
         <label>Eficiencia real de la IA <span class="hint">η — rinde esto de una persona; nunca 100%</span></label>
         <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Eficiencia real de la IA"><span class="val" id="eta_v">80%</span></div>
       </div>
+      <h3>Continuidad</h3>
+      <div class="campo">
+        <label>Horas/mes mínimas para operar SIN IA <span class="hint">horas de trabajo, no cantidad de personas ni de puestos</span></label>
+        <input type="number" id="Hmin" value="640" min="0" step="40">
+      </div>
+      <details class="asistente">
+        <summary>¿Tenés que cubrir puestos al mismo tiempo? Calculá las horas acá</summary>
+        <div class="asist-body">
+          <p class="hint" style="margin-bottom:10px;">Este es el error más caro del modelo. Si por contrato o por normativa <b>tenés que tener 2 personas siempre presentes</b>, eso <b>no son 2 personas</b>: son 2 puestos que hay que cubrir durante todas las horas que abre la operación, y eso se paga con más gente.</p>
+          <div class="campo">
+            <label>Puestos que deben estar cubiertos al mismo tiempo <span class="hint">las 2 personas del contrato, las cajas que no pueden cerrar, las ventanillas mínimas</span></label>
+            <input type="number" id="hm_puestos" value="2" min="0" step="1">
+          </div>
+          <div class="campo">
+            <label>Horas que la operación está abierta al mes <span class="hint">oficina 8 h × 22 días = 176 · retail 12 h × 30 = 360 · guardia 24/7 = 720</span></label>
+            <input type="number" id="hm_oper" value="176" min="1" step="8">
+          </div>
+          <div class="asist-tot">Horas mínimas: <span id="hm_total">352</span> h/mes &nbsp;·&nbsp; equivale a <span id="hm_personas">3</span> personas con tu jornada actual</div>
+          <div class="asist-res">
+            <span>H_min calculado: <b id="hm_res">352 h</b></span>
+            <button type="button" class="btn-usar" id="hm-usar">Usar este valor ↑</button>
+          </div>
+          <p class="hint" id="hm_aviso" style="margin-top:8px;"></p>
+        </div>
+      </details>
+      <div class="campo">
+        <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
+        <input type="number" id="R" value="0" min="0" step="1">
+        <details class="mas">
+          <summary>Qué contar y qué no</summary>
+          <div class="cuerpo">Es el número más fácil de inflar. <b>No es la plantilla de la empresa.</b> Toyota tiene 200.000 empleados y eso no significa que 200.000 personas puedan atender reclamos de garantía: contá solo a las que <b>hoy</b> podrían sentarse a hacer esta tarea concreta en modo degradado. Si tenés que capacitar a alguien primero, no cuenta.</div>
+        </details>
+        <div class="alerta warn" id="aviso-R" style="display:none;"></div>
+      </div>
     </div>
     <div>
       <h3>Costos e inversión</h3>
@@ -442,16 +488,19 @@ window.addEventListener('DOMContentLoaded',function(){
         </div>
       </details>
       <div class="campo">
-        <label>Inversión inicial (USD) <span class="hint">todo lo que pagás UNA sola vez: proveedor o consultora, horas de tus programadores, integración, migración de datos, licencias iniciales, y las horas de tu propia gente definiendo reglas y revisando salidas. Hardware solo si lo comprás — si lo alquilás va en el costo por hora.</span></label>
+        <label>Inversión inicial (USD) <span class="hint">todo lo que pagás una sola vez</span></label>
         <input type="number" id="I" value="50000" min="0" step="1000">
-        <p class="hint" style="margin-top:5px;">Las horas internas <b>no son gratis por ser internas</b>: suelen ser el 20–30% del total. Contarlas en cero hace que el recupero sea ficción.</p>
+        <details class="mas">
+          <summary>Qué va acá adentro</summary>
+          <div class="cuerpo">Proveedor o consultora, horas de tus programadores, integración, migración de datos, licencias iniciales, y las horas de tu propia gente definiendo reglas y revisando salidas. Hardware solo si lo comprás — si lo alquilás va en el costo mensual.<br><br>Las horas internas <b>no son gratis por ser internas</b>: suelen ser el 20–30% del total. Contarlas en cero hace que el recupero sea ficción.</div>
+        </details>
       </div>
       <div class="campo">
         <label>Mantenimiento mensual (USD)</label>
         <input type="number" id="M" value="500" min="0" step="100">
       </div>
       <h3>Arquitectura</h3>
-      <p class="hint" style="margin:-4px 0 8px;">Estas decisiones definen tu <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA el hecho de que tu arquitectura sea frágil. Arranca en 1,00 (sin riesgo) y sube con cada casillero.</p>
+      <p class="hint" style="margin:-4px 0 8px;">Definen tu <b class="v-rie">multiplicador de riesgo</b>: arranca en 1,00 y sube con cada casillero.</p>
       <div class="arq-group" id="arq">
         <p class="hint" style="margin-bottom:6px;">Dónde corre la IA (elegí una):</p>
         <label class="check"><input type="radio" name="infra" data-rho="0.30" checked> Una sola nube <span class="hint">(+30%)</span></label>
@@ -475,43 +524,13 @@ window.addEventListener('DOMContentLoaded',function(){
           </div>
         </details>
       </div>
-      <h3>Continuidad</h3>
-      <div class="campo">
-        <label>Horas/mes mínimas para operar SIN IA <span class="hint">horas de trabajo, no cantidad de personas ni de puestos</span></label>
-        <input type="number" id="Hmin" value="640" min="0" step="40">
-      </div>
-      <details class="asistente">
-        <summary>¿Tenés que cubrir puestos al mismo tiempo? Calculá las horas acá</summary>
-        <div class="asist-body">
-          <p class="hint" style="margin-bottom:10px;">Este es el error más caro del modelo. Si por contrato o por normativa <b>tenés que tener 2 personas siempre presentes</b>, eso <b>no son 2 personas</b>: son 2 puestos que hay que cubrir durante todas las horas que abre la operación, y eso se paga con más gente.</p>
-          <div class="campo">
-            <label>Puestos que deben estar cubiertos al mismo tiempo <span class="hint">las 2 personas del contrato, las cajas que no pueden cerrar, las ventanillas mínimas</span></label>
-            <input type="number" id="hm_puestos" value="2" min="0" step="1">
-          </div>
-          <div class="campo">
-            <label>Horas que la operación está abierta al mes <span class="hint">oficina 8 h × 22 días = 176 · retail 12 h × 30 = 360 · guardia 24/7 = 720</span></label>
-            <input type="number" id="hm_oper" value="176" min="1" step="8">
-          </div>
-          <div class="asist-tot">Horas mínimas: <span id="hm_total">352</span> h/mes &nbsp;·&nbsp; equivale a <span id="hm_personas">3</span> personas con tu jornada actual</div>
-          <div class="asist-res">
-            <span>H_min calculado: <b id="hm_res">352 h</b></span>
-            <button type="button" class="btn-usar" id="hm-usar">Usar este valor ↑</button>
-          </div>
-          <p class="hint" id="hm_aviso" style="margin-top:8px;"></p>
-        </div>
-      </details>
-      <div class="campo">
-        <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
-        <input type="number" id="R" value="0" min="0" step="1">
-        <p class="hint" style="margin-top:6px;">Ojo con este número, es el más fácil de inflar. <b>No es la plantilla de la empresa.</b> Toyota tiene 200.000 empleados y eso no significa que 200.000 personas puedan atender reclamos de garantía: contá solo a las que <b>hoy</b> podrían sentarse a hacer esta tarea concreta en modo degradado. Si tenés que capacitar a alguien primero, no cuenta.</p>
-        <div class="alerta warn" id="aviso-R" style="display:none;"></div>
-      </div>
     </div>
   </div>
   <div class="acciones">
     <button type="button" class="btn-accion primario" id="btn-calcular"><svg class="ic"><use href="#i-calc"/></svg> Calcular</button>
     <button type="button" class="btn-accion" id="btn-reiniciar"><svg class="ic"><use href="#i-reset"/></svg> Reiniciar valores</button>
     <button type="button" class="btn-accion" id="btn-informe"><svg class="ic"><use href="#i-doc"/></svg> Descargar informe</button>
+    <button type="button" class="btn-accion" id="btn-csv"><svg class="ic"><use href="#i-doc"/></svg> Descargar CSV</button>
   </div>
   <p class="nota" style="margin-top:10px; margin-bottom:0;">Los resultados se actualizan solos mientras movés los valores. El botón <b>Calcular</b> te lleva al resultado, útil desde el celular.</p>
 </section>
@@ -693,7 +712,8 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>
   <p class="nota">El piso <b class="v-con">P_min</b> mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea <b>no está tan expuesta</b> como un call center de 200 donde nadie más sabe. <b class="v-con">R</b> es esa gente: las personas de <b>fuera del área</b> que podrían cubrir la operación crítica el día que la IA no esté.</p>
-  <div class="formula-color">cobertura &nbsp;=&nbsp; mín<b>(</b> <span class="t t-dato">R</span> ÷ <span class="t t-con">P_min</span> &nbsp;,&nbsp; 1 <b>)</b></div>
+  <div class="formula-color">cobertura &nbsp;=&nbsp; mín<b>(</b> <span class="t t-dato">R</span> ÷ <span class="t t-con">P_min</span> &nbsp;,&nbsp; 1 <b>)</b> &nbsp;&nbsp;<span style="font-size:.8em; opacity:.75;">y 0 si <span class="t t-con">P_min</span> = 0</span></div>
+  <p class="nota">La aclaración del <span class="cuenta">P_min = 0</span> no es un tecnicismo: si declarás que <b>no tenés operación crítica</b> —que si la IA se cae, no pasa nada urgente—, entonces no hay piso que cubrir y el respaldo externo no tiene nada que descontar. La cobertura vale 0 y el IDA queda sin tocar. Sin esa aclaración la fórmula dividiría por cero.</p>
   <div class="ejemplo e-con"><span class="tit">El error que hay que evitar: R no es la plantilla de la empresa</span>
   Toyota tiene unos 200.000 empleados y eso <b>no significa que R sea 200.000</b>. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que <b>hoy, sin capacitación previa</b>, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.<br><br>
   La regla es simple: <b>si primero tenés que enseñarle, no cuenta.</b> R es capacidad disponible el día de la caída, no capacidad potencial.<br><br>
@@ -847,6 +867,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <p class="nota" style="margin-bottom:4px;"><b>Índice de Dependencia</b></p>
   <div class="formula-color mega">IDA = min<b>(</b> <span class="t t-aut">a·(1−r)·η</span> · <span class="t t-rie">(1+Σρ)</span> · <b>[</b>1 − min(<span class="t t-dato">R</span> ÷ <span class="t t-con">⌈H_min ÷ h_p⌉</span>, 1)·0,7<b>]</b> · 100 , 100 <b>)</b></div>
+  <p class="nota" style="margin-top:-4px;">Con <span class="cuenta">⌈H_min ÷ h_p⌉ = 0</span> —sin operación crítica que sostener— el término de cobertura vale 0 y el IDA queda <span class="cuenta">min(a_ef · λ · 100, 100)</span>.</p>
 
   <p style="margin-top:18px;"><b>¿Y una sola mega fórmula que junte los tres resultados?</b> No, y no por falta de ganas: vienen en unidades distintas —<b>personas</b>, <b>dólares por mes</b> y un <b>índice de 0 a 100</b>—. Sumarlos daría un número sin significado. Pero sí hay un <b>orden obligatorio</b>: <span class="t t-res">P'</span> se calcula primero porque <b>S depende de él</b>. Esa dependencia es lo que hace honesto al modelo — es la que le cobra a la empresa el costo de su propio piso de continuidad.</p>
   <p class="nota">Las tres respuestas, juntas, son la decisión completa: <b class="v-res">P'</b> te dice con cuánta gente te quedás, <b>S y T</b> si el proyecto se paga, y el <b>IDA</b> cuán expuesto quedás después de hacerlo. Un proyecto puede aprobar las dos primeras y reprobar la tercera: ahí es donde el modelo gana su sueldo.</p>
@@ -939,7 +960,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="panel" id="montecarlo">
 <section>
   <h2><svg><use href="#i-dice"/></svg> Simulación de Montecarlo</h2>
-  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre <b>10.000 veces</b> el proyecto de ejemplo con combinaciones al azar. Ojo: esta pestaña no toma los datos que cargaste en la calculadora — usa la empresa de ejemplo, con los valores fijos que ves listados abajo. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
+  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre <b>10.000 veces</b> tu proyecto con combinaciones al azar. Los datos firmes los toma de la calculadora; acá solo definís lo que no sabés con certeza. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
   <div id="controles-mc" style="margin-top:18px;"></div>
   <button class="cta" id="run-mc" style="margin:8px 0 4px;"><svg class="ic"><use href="#i-dice"/></svg> Correr 10.000 simulaciones</button>
   <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasMC"></canvas></div></div>
@@ -1126,8 +1147,21 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>La convivencia entre humano e IA <b>sí está en el modelo</b>, y vive en la variable <b>r</b>. Si de 1.000 horas hay 200 que necesitan la firma de un abogado, un ingeniero o un arquitecto, cargás <span class="cuenta">r = 20%</span> y el modelo entiende que esas 200 horas <b>nunca</b> se automatizan: la IA hace el trabajo, el profesional firma. Es convivencia estructural y permanente, y está bien representada.</p>
   <p>Lo que el modelo <b>no</b> sabe representar es la degradación <i>temporal</i>: que la IA no se caiga del todo pero funcione peor durante dos semanas —más lenta, con más errores, con límite de consultas—. El modelo es binario: la IA está o no está. En la realidad, la falla más común es ese estado intermedio, donde tenés que poner gente a corregir sin haber perdido el servicio.</p>
 
+  <h3>5 · El recupero es payback simple, no valor presente</h3>
+  <p><span class="cuenta">T = I ÷ S</span> divide y listo: <b>no descuenta el dinero en el tiempo</b>. No hay tasa, no hay inflación, no hay costo de oportunidad. Un dólar del mes 20 vale lo mismo que uno de hoy. En finanzas esto se llama <b>payback simple</b>, y es distinto del VPN (valor presente neto) o la TIR que va a pedirte un CFO para aprobar la inversión.</p>
+  <p class="nota">Es deliberado: el payback simple se entiende sin explicación y sirve para <b>descartar</b> proyectos, que es lo que hace este modelo. Pero tiene un sesgo que conviene conocer — al no descontar, el recupero se ve <b>mejor</b> de lo que es. Si tu costo de capital es alto o operás en una economía con inflación en dólares, el recupero real es más largo que el que muestra la calculadora. Tratá los 18 meses como un filtro grueso, no como una aprobación financiera: para eso hay que llevar el ahorro mensual a una planilla de VPN con la tasa de tu empresa.</p>
+
+  <h3>6 · Los coeficientes de riesgo son criterio experto, no un dataset</h3>
+  <p>Los recargos de <b class="v-rie">λ</b> —+30% por nube única, +20% por no tener plan de contingencia, +15% por datos sensibles afuera— <b>salen de experiencia profesional, no de un estudio estadístico</b>. No hay detrás una base de incidentes con miles de casos: hay criterio, y conviene decirlo antes de que lo pregunte otro.</p>
+  <p>Lo que sí tienen es <b>un orden defendible</b>, que es lo que hace falta para decidir. Depender de un solo proveedor es la fragilidad más grave porque es la única que no tiene salida —si se cae, no hay a dónde ir—, y por eso pesa más que las otras dos. No tener plan de contingencia viene después: no te cae el servicio, pero te deja sin respuesta ensayada cuando cae. Y los datos sensibles afuera pesan menos en continuidad porque no interrumpen la operación: agregan exposición regulatoria y de reputación, que es un riesgo real pero de otra naturaleza.</p>
+  <p class="nota">Para calibrarlos de verdad haría falta lo mismo que usan las aseguradoras: una base de incidentes por sector con frecuencia, duración y costo de cada caída, y ajustar los coeficientes contra esos datos. Es el próximo paso natural del modelo y está pendiente. <b>Mientras tanto, lo importante es que el orden de magnitud sirva para comparar dos arquitecturas entre sí</b> — que es para lo que se usa λ en la práctica—, aunque el valor absoluto se pueda discutir.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span>
+  <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
+  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</div>
+
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
-  Ninguno de los cuatro invalida el modelo: los cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
+  Ninguno de los seis invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
 </section>
 
 <section>
@@ -1147,7 +1181,10 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Por <a href="https://cesarriat.com">César Riat</a> · Licencia MIT</p>
   <div class="footer-links">
     <a class="cta" href="https://github.com/All-Aideas/Modelo-IDA"><svg class="ic"><use href="#i-arrow"/></svg> Ver en GitHub</a>
-    <a class="discreto" href="https://medium.com/@cesarriat/modelo-ida-cu%C3%A1nta-gente-necesita-tu-empresa-el-d%C3%ADa-que-la-ia-no-est%C3%A9-7d39bab79cfd"><svg class="ic"><use href="#i-medium"/></svg> Leer el artículo en Medium</a>
+    <!-- Link a Medium: el articulo se dio de baja para reescribirlo. Cuando se
+         republique, Medium genera un slug nuevo: reponer el <a class="discreto">
+         con el icono #i-medium, aca y en la cabecera del README. -->
+
   </div>
 </footer>
 </div>
@@ -1689,6 +1726,7 @@ function calc(){
   const IDAcrudo=Math.min(aef*lambda*100,100);
   const IDA=Math.min(aef*lambda*factorR*100,100);
   estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo};
+  const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
   $('aviso-R').style.display = R>0 ? 'block' : 'none';
   if(R>0) $('aviso-R').innerHTML = cobertura>=1
     ? `Con ${R===1?'esa persona':'esas '+R+' personas'} cubrís entero tu piso de ${Pmin}. El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, pero no a cero: esa gente deja su propio puesto para venir, y no hace esta tarea todos los días.`
@@ -1904,6 +1942,17 @@ function buildInforme(){
   </table>
   <p>${veredictoROI}</p>
 
+  ${ultimoMC?`<h2>3.bis · Simulación de Montecarlo</h2>
+  <p>Los números de arriba usan un valor exacto por variable. Corriendo el mismo proyecto <b>${ultimoMC.sims.toLocaleString('es-AR')} veces</b> con rangos en lugar de valores fijos, el recupero deja de ser una promesa y pasa a ser una probabilidad.</p>
+  <table>
+    <tr><th>Resultado sobre ${ultimoMC.sims.toLocaleString('es-AR')} escenarios</th><th style="text-align:right">Valor</th></tr>
+    <tr class="inf-destacado"><td><b>Recupera en 18 meses o menos</b></td><td class="num">${ultimoMC.p18.toFixed(0)}%</td></tr>
+    <tr><td>No recupera nunca (ahorro negativo)</td><td class="num">${ultimoMC.pNeg.toFixed(0)}%</td></tr>
+    <tr><td>Recupera pero tarda más de 60 meses</td><td class="num">${ultimoMC.pTarde.toFixed(0)}%</td></tr>
+    <tr><td>Mediana de los que recuperan dentro de 60 meses</td><td class="num">${ultimoMC.mediana.toFixed(0)} meses</td></tr>
+  </table>
+  <p class="inf-nota"><b>Rangos usados:</b> automatizable ${ultimoMC.rangos.a[0]}–${ultimoMC.rangos.a[1]}% · eficiencia ${ultimoMC.rangos.eta[0]}–${ultimoMC.rangos.eta[1]}% · costo IA ${nfd(ultimoMC.rangos.ct[0])}–${nfd(ultimoMC.rangos.ct[1])} por hora · λ ${ultimoMC.rangos.lam[0]}–${ultimoMC.rangos.lam[1]}. Los tres porcentajes se calculan sobre el total de corridas, incluyendo los escenarios donde el proyecto no cierra.</p>`:''}
+
   <h2>4 · Gráficos</h2>
   <div class="inf-graf">
     <div><h3>Exposición (IDA)</h3>${svgIDA(e.IDA)}</div>
@@ -1920,6 +1969,96 @@ function buildInforme(){
   <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el costo esperado de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
 }
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
+
+// ---- Export CSV: los supuestos y los resultados, para auditar en planilla ----
+// Se separa con punto y coma y se usa coma decimal: es lo que Excel en espanol
+// abre sin pedir asistente de importacion. El BOM hace que respete los acentos.
+function buildCSV(){
+  const e=estado;
+  const n=v=>(Math.round(v*100)/100).toString().replace('.',',');
+  const arq=[...document.querySelectorAll('#arq input:checked')]
+    .map(c=>c.parentElement.textContent.replace(/\s+/g,' ').trim()).join(' + ');
+  const f=[];
+  const sec=t=>f.push('',''+t);
+  const fila=(k,v,u)=>f.push([k,v,u||''].map(x=>`"${String(x).replace(/"/g,'""')}"`).join(';'));
+
+  f.push('"Modelo IDA - export de supuestos y resultados"');
+  fila('Generado', new Date().toLocaleString('es-AR'));
+  fila('Fuente', 'modelo-ida.web.app');
+
+  sec('"DATOS QUE CARGASTE"');
+  fila('Personas actuales en el area (P)', e.P, 'personas');
+  fila('Nomina mensual total (N)', n(e.N), 'USD/mes');
+  fila('Horas por persona al mes (h_p)', e.hp, 'h');
+  fila('Horas totales del area (H)', n(e.H), 'h/mes');
+  fila('Costo de la hora humana (C_h)', n(e.N/e.H), 'USD/h');
+  fila('Automatizable (a)', n(e.a*100), '%');
+  fila('Con firma humana obligatoria (r)', n(e.r*100), '%');
+  fila('Eficiencia real de la IA (eta)', n(e.eta*100), '%');
+  fila('Gasto de IA por mes (C_mes)', n(e.CtMesEf), 'USD/mes');
+  fila('Equivale por hora automatizada', n(e.Ct), 'USD/h');
+  fila('Inversion inicial (I)', n(e.I), 'USD');
+  fila('Mantenimiento mensual (M)', n(e.M), 'USD/mes');
+  fila('Horas minimas para operar sin IA (H_min)', n(e.Hmin), 'h/mes');
+  fila('Respaldo externo (R)', e.R, 'personas');
+  fila('Arquitectura', arq||'sin definir');
+
+  sec('"RESULTADOS"');
+  fila('Automatizacion efectiva (a_ef)', n(e.aef*100), '%');
+  fila('Horas automatizadas', n(e.horasIA), 'h/mes');
+  fila('Multiplicador de riesgo (lambda)', n(e.lambda));
+  fila('Piso de continuidad (P_min)', e.Pmin, 'personas');
+  fila('Cobertura del piso con respaldo externo', n(e.cobertura*100), '%');
+  fila('Cuenta economica (P_econ)', e.Pecon, 'personas');
+  fila('Personas a conservar (P prima)', e.Pfinal, 'personas');
+  fila('Personas que se liberan', e.liberadas, 'personas');
+  fila('Costo de IA ajustado por riesgo', n(e.costoIA), 'USD/mes');
+  fila('Ahorro mensual (S)', n(e.S), 'USD/mes');
+  fila('Recupero (T)', e.S>0?n(e.pb):'no recupera', e.S>0?'meses':'');
+  fila('IDA', n(e.IDA), 'sobre 100');
+  fila('IDA sin descontar respaldo externo', n(e.IDAcrudo), 'sobre 100');
+  fila('Zona', zonaIDA(e.IDA));
+
+  sec('"ANALISIS DE LA INVERSION"');
+  fila('Techo de inversion que se justifica a 18 meses', e.S>0?n(e.S*18):'0', 'USD');
+  fila('Resultado acumulado a 12 meses', n(e.S*12-e.I), 'USD');
+  fila('Resultado acumulado a 24 meses', n(e.S*24-e.I), 'USD');
+  fila('Resultado acumulado a 36 meses', n(e.S*36-e.I), 'USD');
+  fila('ROI a 36 meses', e.I>0?n(((e.S*36-e.I)/e.I)*100):'', '%');
+
+  if(ultimoMC){
+    sec('"MONTECARLO"');
+    fila('Escenarios simulados', ultimoMC.sims);
+    fila('Recupera en 18 meses o menos', n(ultimoMC.p18), '%');
+    fila('No recupera nunca (ahorro negativo)', n(ultimoMC.pNeg), '%');
+    fila('Recupera pero tarda mas de 60 meses', n(ultimoMC.pTarde), '%');
+    fila('Mediana de los que recuperan dentro de 60 meses', n(ultimoMC.mediana), 'meses');
+    fila('Rango automatizable', ultimoMC.rangos.a[0]+' a '+ultimoMC.rangos.a[1], '%');
+    fila('Rango eficiencia', ultimoMC.rangos.eta[0]+' a '+ultimoMC.rangos.eta[1], '%');
+    fila('Rango costo IA por hora', n(ultimoMC.rangos.ct[0])+' a '+n(ultimoMC.rangos.ct[1]), 'USD/h');
+    fila('Rango lambda', n(ultimoMC.rangos.lam[0])+' a '+n(ultimoMC.rangos.lam[1]));
+  } else {
+    sec('"MONTECARLO"');
+    fila('Sin correr', 'abri la pestana Montecarlo y corre la simulacion para incluirla');
+  }
+
+  sec('"SUPUESTOS DEL MODELO"');
+  fila('El ahorro cuenta sueldos liberados', 'no horas automatizadas');
+  fila('lambda ajusta el gasto de IA', 'no es un pago real: es prima de riesgo');
+  fila('El recupero es payback simple', 'sin descuento por valor tiempo del dinero');
+  fila('Los coeficientes de riesgo', 'criterio experto, no dataset calibrado');
+  fila('El respaldo externo (R) es declarado', 'el modelo no puede verificarlo');
+  return f.join('\r\n');
+}
+$('btn-csv').onclick=()=>{
+  calc();
+  const blob=new Blob(['﻿'+buildCSV()],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='modelo-ida-'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},0);
+};
 
 calc();
 
@@ -2077,16 +2216,40 @@ function comp(){
 $('hcomp').addEventListener('input',comp); comp();
 
 // ---- MONTECARLO ----
-let chartMC=null;
+// Se guarda la ultima corrida para poder incluirla en el informe y en el CSV.
+let chartMC=null, ultimoMC=null;
 const mcDefs=[
   {id:'mcA',label:'% automatizable',min:0,max:100,lo:50,hi:70,fmt:v=>v+'%'},
   {id:'mcEta',label:'Eficiencia IA (η)',min:50,max:100,lo:65,hi:90,fmt:v=>v+'%'},
   {id:'mcCt',label:'Costo IA por hora automatizada (USD)',min:0.5,max:12,lo:1.5,hi:4,fmt:v=>'$'+v},
   {id:'mcLam',label:'Riesgo λ',min:1,max:5,lo:1.3,hi:1.7,step:0.1,fmt:v=>v},
 ];
-const mcFijos={r:0.20, P:10, hp:160, Nom:16000, Pmin:4, M:500, I:50000};
+// Lo que NO se sortea sale de la calculadora, no de constantes: antes estaba
+// hardcodeado y la pestaña simulaba siempre la empresa de ejemplo, aunque el
+// usuario hubiera cargado la suya. Los rangos de arriba son lo incierto; esto
+// es lo que el usuario ya declaro como dato firme.
+function mcBase(){
+  const e = estado && estado.P ? estado : {};
+  return {
+    r:   e.r    !== undefined ? e.r    : 0.20,
+    P:   e.P    || 10,
+    hp:  e.hp   || 160,
+    Nom: e.N    || 16000,
+    Pmin:e.Pmin !== undefined ? e.Pmin : 4,
+    M:   e.M    !== undefined ? e.M    : 500,
+    I:   e.I    || 50000
+  };
+}
+// El panel se arma una sola vez (mcInit), asi que este texto lo refresca calc()
+// en cada cambio: si no, mostraria los datos con los que se abrio la pestana.
+function textoBaseMC(){
+  const b=mcBase();
+  return `${b.P} personas × ${b.hp} h, nómina ${nf(b.Nom)}/mes (hora humana ${nf(b.Nom/(b.P*b.hp))}), <b>regulado ${(b.r*100).toFixed(0)}% (r)</b>, piso de continuidad ${b.Pmin} personas, inversión ${nf(b.I)}, mantenimiento ${nf(b.M)}/mes`;
+}
 function renderMC(){
-  const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Fijos: 10 personas × 160 h, nómina $16.000/mes (hora humana $10), <b>regulado 20% (r)</b>, piso de continuidad 4 personas, inversión $50.000, mantenimiento $500/mes.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es un dato duro de tu industria —lo que exige firma humana por normativa—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
+  const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Lo demás se toma <b>de lo que cargaste en la calculadora</b>: <span id="mc-base-txt">'+
+    textoBaseMC()+
+    '</span>.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es un dato duro de tu industria —lo que exige firma humana por normativa—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
   mcDefs.forEach(d=>{
     const div=document.createElement('div'); div.className='campo';
     div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>
@@ -2105,8 +2268,9 @@ function runMC(){
   const E=[+$('mcEta_lo').value/100,+$('mcEta_hi').value/100];
   const C=[+$('mcCt_lo').value,+$('mcCt_hi').value];
   const L=[+$('mcLam_lo').value,+$('mcLam_hi').value];
-  const {r,P,hp,Nom,Pmin,M,I}=mcFijos;
+  const {r,P,hp,Nom,Pmin,M,I}=mcBase();
   const H=P*hp, sueldo=Nom/P;
+  ultimoMC=null;
   const SIMS=10000, paybacks=[];
   let neg=0, tarde=0;
   for(let i=0;i<SIMS;i++){
@@ -2131,6 +2295,8 @@ function runMC(){
   const pNeg=neg/SIMS*100, pTarde=tarde/SIMS*100;
   const sorted=[...paybacks].sort((a,b)=>a-b);
   const mediana=sorted.length?sorted[Math.floor(sorted.length/2)]:0;
+  ultimoMC={sims:SIMS, p18, pNeg, pTarde, mediana, viables:paybacks.length,
+    rangos:{a:[A[0]*100,A[1]*100], eta:[E[0]*100,E[1]*100], ct:C, lam:L}};
 
   if(chartMC) chartMC.destroy();
   chartMC=new Chart($('canvasMC'),{type:'bar',data:{labels,datasets:[{label:'Escenarios',data:counts,backgroundColor:colors,borderWidth:0}]},
