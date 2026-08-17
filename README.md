@@ -1,6 +1,16 @@
-# Modelo IDA — ¿Cuánta gente necesita tu empresa el día que la IA no esté?
+# Modelo IDA — ¿Cuánta gente necesita tu organización el día que la IA no esté?
 
-> Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible. Sirve igual para un call center, un banco, un retail o una transportadora de gas.
+> Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible.
+
+**No hace falta que sea una empresa.** El modelo pregunta por un área, unas horas de trabajo y una operación que no puede parar — eso existe en cualquier organización. Sirve para un call center, un banco, un retail o una transportadora de gas, y sirve igual para las que no venden nada:
+
+| Organización | El área | Lo que no puede parar |
+|---|---|---|
+| **Una escuela** que automatiza corrección de exámenes, informes y comunicación con familias | El equipo docente y administrativo | Que las clases sigan y que las notas salgan aunque el sistema no esté |
+| **Un hospital público** que automatiza triaje o turnos | Admisión y guardia | La atención de urgencias, que es obligación legal |
+| **Un municipio** que automatiza atención al vecino | Mesa de entradas | Los trámites con plazo legal |
+
+En la escuela, `P` son los docentes del área, `H_min` son las horas de clase y de corrección que hay que sostener sí o sí, y `r` es lo que un docente tiene que firmar personalmente por reglamento — una nota final, por ejemplo. La cuenta es la misma.
 
 **Qué es y qué no es.** Se usa **antes de invertir**, para decidir. **No** es un tablero de monitoreo en tiempo real ni reemplaza la plataforma con la que operás: esas ejecutan la mitigación cuando algo falla, y este modelo es el que te dice cuánto vale la pena gastar en ellas.
 
@@ -82,6 +92,14 @@ Ejemplo: $16.000/mes, 10 personas, 1.600 h → **$10/hora**.
 ```
 Automatización efectiva = a × (1 − r) × η
 ```
+
+**Los tres, con un solo ejemplo: una distribuidora de gas que automatiza los reclamos por email.**
+
+- **`a` — ¿qué puede hacer la IA?** Mirás qué llega y ves que la mayoría son consultas repetidas: cuándo pasa el técnico, cómo se lee la factura, cómo se pide un cambio de titularidad. Eso lo redacta sin problema. Coordinar una cuadrilla o interpretar la foto de un medidor roto, no. Si son **6 de cada 10 horas**, `a = 60%`. La pregunta es *¿puede?*, no *¿conviene?*.
+- **`r` — ¿qué no tiene permitido hacer?** De esos mismos emails, algunos no se contestan con un robot aunque técnicamente se pudiera: "siento olor a gas", un aviso de acción legal, un corte de servicio con deuda. Tiene que intervenir una persona habilitada y queda registro de quién respondió. **1 de cada 5** → `r = 20%`. En banca o salud esto no se estima: se lee de la normativa.
+- **`η` — ¿cuánto sale listo sin retocar?** No es qué tan inteligente es la IA, es cuánto **trabajo terminado** entrega. Le pasás 10 reclamos, vuelve con 10 respuestas, pero **2 hay que rehacerlas** (una cita mal el número de cuenta, otra promete una visita que no corresponde). Rindió como 8 de cada 10 → `η = 80%`. Nunca es 100% porque siempre queda alguien revisando; si nadie revisa, η no subió — subió el riesgo de mandarle algo mal a un cliente.
+
+Los tres juntos: `0,60 × (1 − 0,20) × 0,80 = 38,4%`. La gasífera arrancó creyendo que automatizaba el 60% y el número real con el que hay que hacer las cuentas es **38,4%**.
 - **r** — lo regulado (firma de médico, escribano): queda afuera sí o sí
 - **a** — lo técnicamente automatizable del resto
 - **η** — eficiencia real de la IA (70%–90%, nunca 100%)
@@ -153,7 +171,7 @@ La aclaración del `P_min = 0` no es un tecnicismo: si declarás que **no tenés
 
 El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea **no está tan expuesta** como un call center de 200 donde nadie más sabe. **R** es esa gente: las personas de **fuera del área** que podrían cubrir la operación crítica el día que la IA no esté.
 
-> **El error que hay que evitar: R no es la plantilla de la empresa.** Toyota tiene unos 200.000 empleados y eso **no significa que R sea 200.000**. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que **hoy, sin capacitación previa**, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.
+> **El error que hay que evitar: R no es la plantilla de la organización.** Toyota tiene unos 200.000 empleados y eso **no significa que R sea 200.000**. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que **hoy, sin capacitación previa**, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.
 >
 > La regla es simple: **si primero tenés que enseñarle, no cuenta.** R es capacidad disponible el día de la caída, no capacidad potencial.
 >
@@ -509,7 +527,7 @@ Mismo servidor, mismo precio, y el umbral se movió **20 veces** — de 251 pers
 
 ### 7.4 · La cifra con la que se negocia: hasta cuánto podés invertir
 
-Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es **el techo de inversión**. La fórmula del recupero es `T = I ÷ S`; despejada al revés, contra el plazo con el que tu empresa aprueba inversiones:
+Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es **el techo de inversión**. La fórmula del recupero es `T = I ÷ S`; despejada al revés, contra el plazo con el que tu organización aprueba inversiones:
 
 ```
 inversión máxima = S × plazo de recupero
@@ -654,7 +672,7 @@ Las dos preguntas para llevarte:
 
 ## Calculadora
 
-[**Abrí la calculadora interactiva**](https://modelo-ida.web.app) para cargar los números de tu empresa y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
+[**Abrí la calculadora interactiva**](https://modelo-ida.web.app) para cargar los números de tu organización y obtener tu dotación mínima, tu IDA y tu payback en tiempo real. Todo corre en tu navegador: no se envía ningún dato.
 
 Qué trae:
 

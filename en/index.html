@@ -54,10 +54,6 @@ window.addEventListener('DOMContentLoaded',function(){
   header.hero p{color:#c9d2e0; font-weight:500; max-width:640px; margin:0 auto; font-size:1rem;}
   /* Alcance y preguntas: van en el hero porque el error mas comun de quien
      llega es no saber en que etapa se usa el modelo, y eso se decide arriba. */
-  .hero-alcance{max-width:760px; margin:18px auto 0; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
-  .hero-alcance span{font-size:.78rem; padding:6px 13px; border-radius:100px; font-weight:600; line-height:1.35;}
-  .hero-alcance .es{background:rgba(255,111,0,.18); color:#ffb870; border:1px solid rgba(255,111,0,.45);}
-  .hero-alcance .no{background:rgba(255,255,255,.07); color:#9fb0c6; border:1px solid rgba(255,255,255,.14);}
   .hero-preg{max-width:820px; margin:22px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
   @media(max-width:700px){.hero-preg{grid-template-columns:1fr;}}
   .hero-preg div{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
@@ -352,14 +348,9 @@ window.addEventListener('DOMContentLoaded',function(){
 
 <header class="hero">
   <h1>How many people do you need to keep operating the day the AI is gone?</h1>
-  <p>Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Enter your own numbers and get the result instantly.</p>
-  <div class="hero-alcance">
-    <span class="es">Use it BEFORE investing, to decide</span>
-    <span class="no">Not a real-time monitoring dashboard</span>
-    <span class="no">Does not replace your operations platform</span>
-  </div>
+  <p>Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Enter your organisation's numbers and get the result instantly.</p>
   <div class="hero-preg">
-    <div><b>How many people</b><span>How many people keep you running if the AI is gone. This is the floor you cannot go below.</span></div>
+    <div><b>How many people</b><span>How many people you still need to keep operating if the AI is gone. This is the floor you cannot go below.</span></div>
     <div><b>Whether it pays</b><span>What you actually save, and how many months until the investment pays for itself.</span></div>
     <div><b>How exposed</b><span>A 0-to-100 number summarising how hostage you are to your provider.</span></div>
   </div>
@@ -384,7 +375,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ========== CALCULADORA ========== -->
 <div class="panel active" id="calc">
 <section>
-  <h2><svg><use href="#i-calc"/></svg> Run your own numbers</h2>
+  <h2><svg><use href="#i-calc"/></svg> Calculá tu organización</h2>
   <p class="nota">Move the values and watch your results change. Everything is computed in your browser — nothing is sent anywhere.</p>
   <div class="calc-grid">
     <div>
@@ -394,26 +385,47 @@ window.addEventListener('DOMContentLoaded',function(){
         <input type="number" id="P" value="10" min="1">
       </div>
       <div class="campo">
-        <label>Total monthly payroll in USD <span class="hint">salaries including employer costs</span></label>
+        <label>Monthly payroll of <i>those</i> people, in USD <span class="hint">not the whole organisation's</span></label>
         <input type="number" id="N" value="16000" min="0" step="500">
+        <details class="mas">
+          <summary>Which salaries go here?</summary>
+          <div class="cuerpo">Only those of the people you entered above. If the area has <b>10 people</b>, va la suma de esos <b>10 sueldos</b> — no la nómina de toda la organización.<br><br>Including employer costs: what the person costs you, not what they take home. The model divides this figure by the number of people to know how much you save for each one released, so mixing areas breaks the saving.</div>
+        </details>
       </div>
       <div class="campo">
         <label>Hours worked per person per month</label>
         <input type="number" id="hp" value="160" min="1">
       </div>
       <h3>Automation</h3>
+      <p class="hint" style="margin:-4px 0 10px;">All three are explained with the <b>same example</b>: a gas utility that wants to automate its email complaint handling. Open each one to see it.</p>
       <div class="campo">
         <label>% of work hours that can be automated <span class="hint">a — what share of the area's hours the AI can handle</span></label>
         <div class="slider-row"><input type="range" id="a" min="0" max="100" value="60" aria-label="Porcentaje de horas automatizable"><span class="val" id="a_v">60%</span></div>
+        <details class="mas">
+          <summary>Example: the gas utility's emails</summary>
+          <div class="cuerpo">The team receives complaints by email all day. You look at what comes in and see most are repeat questions: when the technician is coming, how to read the bill, why it came in higher, how to request a change of account holder. The AI drafts those without trouble.<br><br>The rest it cannot do: dispatching a crew, interpreting a photo of a broken meter, approving a refund. If counting them gives you <b>6 out of every 10 hours</b> of the team going to the repetitive part, your <b>a = 60%</b>.<br><br><b>The question is "can it?", not "should we?"</b> This field is what is technically possible; what cannot be delegated by regulation goes in the next one.</div>
+        </details>
       </div>
       <div class="campo">
         <label>% of those hours requiring a human signature <span class="hint">r — médico, escribano, auditor</span></label>
         <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas con firma humana obligatoria"><span class="val" id="r_v">20%</span></div>
+        <details class="mas">
+          <summary>Example: the gas utility's emails</summary>
+          <div class="cuerpo">Among those same emails, there are some that <b>cannot be answered by a machine even if technically they could</b>: the one saying "I smell gas", the one announcing legal action, the one disputing a disconnection with debt involved. A qualified person has to step in, and there is a record of who answered.<br><br>Si eso es <b>1 de cada 5</b>, tu <b>r = 20%</b>.<br><br><b>Mind the difference:</b> <i>a</i> is what the AI <b>puede</b> do; <i>r</i> is what it <b>is not allowed to</b> do. In banking or healthcare, <i>r</i> is not estimated: you read it from the regulation.</div>
+        </details>
       </div>
       <div class="campo">
-        <label>Real AI efficiency <span class="hint">η — it performs this fraction of a person; never 100%</span></label>
+        <label>Real AI efficiency <span class="hint">η — of everything you hand it, how much comes back ready to send</span></label>
         <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Real AI efficiency"><span class="val" id="eta_v">80%</span></div>
+        <details class="mas">
+          <summary>Example: the gas utility's emails</summary>
+          <div class="cuerpo"><b>It is not how clever the AI is: it is how much finished work it delivers.</b><br><br>Still with the emails. You hand it 10 complaints it is allowed to answer. It comes back with all 10 replies written, but on review you see that <b>2 have to be redone</b>: one quotes the wrong account number, another promises a visit on the wrong day. Someone had to read them, spot it and fix it.<br><br>So it did not perform like a person: it performed like <b>8 de cada 10</b> → <b>η = 80%</b>.<br><br>That is why it is never 100%: someone is always reviewing. If nobody reviews, η did not go up — what went up is the risk of sending a customer something wrong.</div>
+        </details>
       </div>
+      <div class="ejemplo e-aut" style="margin-top:2px;"><span class="tit">All three together, same case</span>
+      The gas utility started out thinking it was automating 60% of the work. But of that 60%, 20% needs a human signature, and of what is left the AI delivers 8 out of 10:<br><br>
+      <span class="cuenta">0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
+      <b>That 38.4% is the real number to do the maths with</b>, not the 60% of the initial promise.</div>
       <h3>Continuity</h3>
       <div class="campo">
         <label>Minimum hours/month to operate WITHOUT AI <span class="hint">work hours — not headcount, not stations</span></label>
@@ -847,7 +859,7 @@ const RESULTADOS={
   IDA:{nom:"IDA", sub:"cuán expuesto quedás",
     formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  (1 − cobertura de respaldo × 0,7)  ×  100   (topeado en 100)',
     simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
-    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil is what it lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
     conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
 };
 const POS={};
@@ -1148,7 +1160,7 @@ function calc(){
   //    escala con las horas automatizadas. Es lo que preserva el hallazgo central
   //    del modelo (pasado el piso, automatizar de mas baja el ahorro).
   //  - FIJO (servidor propio, ctFijo=true): el monthly spend NO se mueve aunque
-  //    cambie la automatizacion -- es lo que de verdad pasa con un servidor
+  //    cambie la automatizacion -- is what it de verdad pasa con un servidor
   //    alquilado. Lo que sube o baja es el costo por hora, como consecuencia.
   // Antes esto no se distinguia: el modo "servidor propio" del asistente
   // calculaba bien el numero una vez, pero al mover el slider de automatizacion
@@ -1442,7 +1454,7 @@ function buildInforme(){
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
 
 // ---- Export CSV: los supuestos y los resultados, para auditar en planilla ----
-// Se separa con punto y coma y se usa coma decimal: es lo que Excel en espanol
+// Se separa con punto y coma y se usa coma decimal: is what it Excel en espanol
 // abre sin pedir asistente de importacion. El BOM hace que respete los acentos.
 function buildCSV(){
   const e=estado;
@@ -1608,7 +1620,7 @@ function updateJugar(){
     explica=`El costo real de la IA es $${cr.toFixed(1)}/h (λ×Ct) contra $${Ch}/h del humano. La línea gris es la cuenta ingenua: supone que cada hora automatizada es un sueldo menos. La naranja es la real: solo ahorrás sueldos de gente que efectivamente podés liberar. `+
       (Pmin<P
         ? `A partir del ${aFreno.toFixed(0)}% de automatización chocás con el piso de ${Pmin} personas y ya no podés liberar a nadie más — pero la factura de IA sigue subiendo, así que el ahorro empieza a CAER. Tu punto óptimo está cerca del ${aOpt.toFixed(0)}%: automatizar más allá de ahí te deja más pobre y más dependiente.`
-        : `Con un piso de ${Pmin} sobre ${P} personas no podés liberar a nadie: automatices lo que automatices, solo sumás costo de IA. El ahorro es negativo desde el arranque.`);
+        : `Con un piso de ${Pmin} sobre ${P} personas no podés liberar a nadie: automaticis what it automatices, solo sumás costo de IA. El ahorro es negativo desde el arranque.`);
   } else {
     // Techo de inversion: cuanto podes poner y todavia recuperarlo en Tmax meses.
     // Usa el mismo ahorro real que la calculadora (solo sueldos efectivamente liberados).
@@ -1699,7 +1711,7 @@ const mcDefs=[
 // Lo que NO se sortea sale de la calculadora, no de constantes: antes estaba
 // hardcodeado y la pestaña simulaba siempre la empresa de ejemplo, aunque el
 // usuario hubiera cargado la suya. Los rangos de arriba son lo incierto; esto
-// es lo que el usuario ya declaro como dato firme.
+// is what it el usuario ya declaro como dato firme.
 function mcBase(){
   const e = estado && estado.P ? estado : {};
   return {
