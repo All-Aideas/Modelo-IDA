@@ -768,9 +768,9 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3 class="mod h-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Módulo Automatización → produce a_ef</h3>
   <div class="formula f-aut">$$a_{ef} = a \cdot (1-r) \cdot \eta$$</div>
   <p class="nota"><b>a</b> = % de las horas del área que técnicamente puede hacer la IA. <b>r</b> = % de esas horas que exige firma humana obligatoria (médico, escribano, auditor): la IA no las reemplaza aunque técnicamente pudiera hacer la tarea. <b>η</b> (eta) = eficiencia real de la IA frente a una persona; nunca 100%, siempre hay reprocesos y supervisión. <b class="v-aut">a_ef</b> es la automatización <i>efectiva</i>: el % de horas que realmente sacás de la carga humana.</p>
-  <div class="ejemplo e-aut"><span class="tit">Un ejemplo concreto: los emails de un retail</span>
+  <div class="ejemplo e-aut"><span class="tit">Un ejemplo concreto: los emails de la farmacia</span>
   Técnicamente <b>se pueden contestar el 100%</b> con IA: leer, entender, redactar y responder. Ese es tu <b class="v-aut">a</b> = 100%.<br><br>
-  Pero por regla de negocio hay correos que <b>tienen que pasar por una persona sí o sí</b>: los que mencionan temas legales, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales. Si eso es 1 de cada 5, tu <b class="v-aut">r</b> = 20%.<br><br>
+  Pero hay correos que <b>tienen que pasar por una persona sí o sí</b>: los que preguntan por dosis o interacciones entre medicamentos, los que llegan con una receta que hay que validar, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales o de una obra social. Si eso es 1 de cada 5, tu <b class="v-aut">r</b> = 20%.<br><br>
   Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu <b class="v-aut">η</b> = 80%.<br><br>
   Resultado: <span class="cuenta">1,00 × (1 − 0,20) × 0,80 = 64%</span>. Arrancaste creyendo que automatizabas todo y en la práctica sacás <b>dos tercios</b> de la carga. Ese 64% es el número con el que hay que hacer las cuentas, no el 100%.</div>
   <p class="nota"></p>
@@ -1075,6 +1075,12 @@ window.addEventListener('DOMContentLoaded',function(){
   <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
   <p>Si te llevás cuatro cosas de todo este modelo, que sean las cuatro primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b>, los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro, y el <b>techo de inversión</b> — la única cifra del modelo que se lleva a una negociación.</p>
   <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
+
+  <div class="ejemplo e-hum"><span class="tit">Dónde terminó la farmacia</span>
+  Antes de las conclusiones, el cierre del caso que venimos siguiendo. El área arrancó con <b>10 personas</b> atendiendo email, teléfono y WhatsApp, y el proyecto automatiza el 38,4% efectivo del trabajo:<br><br>
+  <span class="cuenta">Se conservan 7 personas · el proyecto reemplaza a 3</span><br><br>
+  <b>Tres puestos, no 3,84.</b> La automatización cubre el equivalente a 3,84 personas de trabajo, pero solo se dejan de pagar <b>3 sueldos</b>: no existe el 0,84 de un empleado. Esa fracción sigue costando plata y ya no ahorra nada — es la primera pérdida silenciosa del proyecto.<br><br>
+  Y el piso de continuidad de la farmacia es de <b>4 personas</b>. Como la cuenta económica dejó 7, el piso todavía no se activó: hay margen. Pero <b>ese margen es de solo 3 personas</b>. Si el año que viene automatizan un poco más y bajan de 4, el modelo deja de ser una calculadora de ahorro y pasa a ser un aviso: por debajo de ahí, el día que la IA no esté, no hay quien atienda las recetas ni despache los pedidos que ya entraron.</div>
 </section>
 
 <section>
@@ -1169,7 +1175,13 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es <b>el techo de inversión</b>.</p>
   <p>La fórmula del recupero es <span class="cuenta">T = I ÷ S</span>. Despejada al revés, contra el plazo con el que tu organización aprueba inversiones, queda:</p>
   <div class="formula-color">inversión máxima &nbsp;=&nbsp; <span class="t t-res">S</span> &nbsp;×&nbsp; <span class="t t-dato">plazo de recupero</span></div>
-  <p class="nota">El plazo por defecto es <b>18 meses</b> —en IA, dos años es una eternidad— pero es un campo más de la calculadora, no una ley del modelo. Movelo al horizonte con el que <i>tu</i> empresa decide y el techo se recalcula: a 36 meses el mismo ahorro justifica el doble de inversión. Los números que siguen usan 18.</p>
+  <p class="nota">El plazo por defecto es <b>18 meses</b>, pero es un campo más de la calculadora, no una ley del modelo. Movelo al horizonte con el que <i>tu</i> organización decide y el techo se recalcula: a 36 meses el mismo ahorro justifica el doble de inversión. Los números que siguen usan 18.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Por qué el autor no recomienda aprobar arriba de los 18 meses</span>
+  Es una postura, no un teorema, y conviene decir de dónde sale: <b>no es un criterio financiero, es tecnológico</b>.<br><br>
+  Un recupero a 30 o 36 meses es perfectamente normal en una inversión industrial: comprás una máquina, la máquina sigue siendo la misma máquina tres años después y el ahorro que prometía lo sigue dando. <b>Con IA eso no pasa.</b> En un plazo de dos años cambia el precio del token, cambia el modelo que estabas usando —a veces lo discontinúan—, aparece uno que hace lo mismo por una fracción, cambian las condiciones de uso, y a veces cambia hasta quién puede usarlo.<br><br>
+  Es decir: <b>estás calculando el recupero de algo que probablemente no exista igual cuando termine de pagarse.</b> Si tu proyecto necesita 36 meses para devolver la inversión, en el mes 20 vas a estar sosteniendo una integración vieja, con un modelo viejo, mientras alguien te muestra que hoy eso se hace por la mitad. El ahorro que justificaba el proyecto se evapora antes de completarse.<br><br>
+  <b>Por eso 18 meses.</b> No porque el dinero valga distinto, sino porque es el plazo dentro del cual los supuestos tecnológicos todavía se parecen a los de hoy. Si tu número solo cierra estirando el horizonte, no estás mejorando el proyecto: estás apostando a que nada cambie en un rubro donde todo cambia.</div>
   <p>En el ejemplo del sitio, con un ahorro de $2.457 por mes, el techo es <b>$44.222</b>. Y la inversión que se estaba evaluando era de $50.000. <b>Ahí está la razón exacta por la que el proyecto no cierra</b>, y expresada de la forma más accionable posible: no "el payback da 20 meses", sino <b>"este proyecto vale $44.222, no $50.000"</b>.</p>
 
   <div class="ejemplo e-con"><span class="tit">Por qué esta vuelta importa tanto</span>

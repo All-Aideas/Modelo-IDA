@@ -110,7 +110,7 @@ Los tres juntos: `0,60 × (1 − 0,20) × 0,80 = 38,4%`. La gasífera arrancó c
 
 Ejemplo: 0,60 × (1 − 0,20) × 0,80 = **38,4%**, no 60%. Primer baño de realidad.
 
-**Un caso concreto: los emails de un retail.** Técnicamente se pueden contestar **el 100%** con IA: leer, entender, redactar, responder. Ese es tu `a` = 100%. Pero por regla de negocio hay correos que **tienen que pasar por una persona sí o sí**: los que mencionan temas legales, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales. Si eso es 1 de cada 5, tu `r` = 20%. Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu `η` = 80%.
+**Un caso concreto: los emails de la farmacia.** Técnicamente se pueden contestar **el 100%** con IA: leer, entender, redactar, responder. Ese es tu `a` = 100%. Pero hay correos que **tienen que pasar por una persona sí o sí**: los que preguntan por dosis o interacciones entre medicamentos, los que llegan con una receta que hay que validar, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales o de una obra social. Si eso es 1 de cada 5, tu `r` = 20%. Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu `η` = 80%.
 
 `1,00 × (1 − 0,20) × 0,80` = **64%**. Arrancaste creyendo que automatizabas todo y en la práctica sacás dos tercios de la carga. Ese 64% es el número con el que hay que hacer las cuentas.
 
@@ -488,6 +488,10 @@ Ese 26% es incómodo y por eso vale la pena: dice que con estos rangos el proyec
 
 ## 7. Conclusiones
 
+**Dónde terminó la farmacia.** El área arrancó con **10 personas** atendiendo email, teléfono y WhatsApp, y el proyecto automatiza el 38,4% efectivo del trabajo: **se conservan 7 personas y el proyecto reemplaza a 3**.
+
+Tres puestos, no 3,84: la automatización cubre el equivalente a 3,84 personas de trabajo, pero solo se dejan de pagar **3 sueldos**, porque no existe el 0,84 de un empleado. Esa fracción sigue costando plata y ya no ahorra nada. Y el piso de continuidad es de **4 personas**: como la cuenta económica dejó 7, el piso todavía no se activó, pero **el margen es de solo 3**. Si el año que viene automatizan un poco más y bajan de 4, el modelo deja de ser una calculadora de ahorro y pasa a ser un aviso.
+
 Cuatro son las que importan (7.1 a 7.4): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La quinta (7.5) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
 
 ### 7.1 · El máximo de automatización no es el óptimo
@@ -569,6 +573,14 @@ inversión máxima = S × plazo de recupero
 ```
 
 El plazo por defecto es **18 meses** —en IA, dos años es una eternidad— pero **es un campo de la calculadora, no una ley del modelo**. Un banco evaluando infraestructura crítica trabaja con 36 meses; una startup quemando caja no aguanta 12. Movelo y se recalculan tres cosas a la vez: el techo de inversión, el semáforo del recupero y el porcentaje de éxito del Montecarlo. Los números que siguen usan 18.
+
+> **Por qué el autor no recomienda aprobar arriba de los 18 meses.** Es una postura, no un teorema, y conviene decir de dónde sale: **no es un criterio financiero, es tecnológico**.
+>
+> Un recupero a 30 o 36 meses es normal en una inversión industrial: comprás una máquina, sigue siendo la misma máquina tres años después y el ahorro que prometía lo sigue dando. **Con IA eso no pasa.** En dos años cambia el precio del token, cambia el modelo que usabas —a veces lo discontinúan—, aparece uno que hace lo mismo por una fracción, cambian las condiciones de uso, y a veces cambia hasta quién puede usarlo.
+>
+> Es decir: **estás calculando el recupero de algo que probablemente no exista igual cuando termine de pagarse.** Si tu proyecto necesita 36 meses, en el mes 20 vas a estar sosteniendo una integración vieja con un modelo viejo mientras alguien te muestra que eso hoy se hace por la mitad. El ahorro que justificaba el proyecto se evapora antes de completarse.
+>
+> Por eso 18: no porque el dinero valga distinto, sino porque es el plazo dentro del cual los supuestos tecnológicos todavía se parecen a los de hoy. Si tu número solo cierra estirando el horizonte, no estás mejorando el proyecto — estás apostando a que nada cambie en un rubro donde todo cambia.
 
 En el ejemplo, con un ahorro de $2.457/mes, el techo es **$44.222** — y la inversión evaluada era $50.000. Ahí está la razón exacta por la que el proyecto no cierra, dicha de la forma más accionable: no *"el payback da 20 meses"*, sino **"este proyecto vale $44.222, no $50.000"**.
 
