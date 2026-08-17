@@ -665,10 +665,10 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es el costo esperado del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
   <div class="ejemplo e-rie"><span class="tit">Cuánto da y qué pasa si lo movés</span>
   Una sola nube (+0,30) y sin plan de contingencia (+0,20) suman 0,50 de prima: <span class="cuenta">1 + 0,50 = 1,50</span><br><br>
-  <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.844</span> en la evaluación del proyecto.<br><br>
+  <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.843</span> en la evaluación del proyecto.<br><br>
   ¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que esa nube única se cae y no tenés plan B, perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara <i>cuando todavía estás a tiempo de cambiarla</i>.<br><br>
   Es la misma lógica del seguro del auto: manejar sin seguro no te sale más barato, te sale igual hasta que chocás.<br><br>
-  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo real cae de $1.844 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
+  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo real cae de $1.843 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
 
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Módulo Continuidad → produce P_min</h3>
   <div class="formula f-con">$$P_{min} = \Big\lceil \frac{H_{min}}{h_{persona}} \Big\rceil$$</div>
@@ -715,13 +715,13 @@ window.addEventListener('DOMContentLoaded',function(){
   <p><b>S es el ahorro mensual en dólares.</b> Fijate que arranca con <span class="t t-res">P'</span>, el resultado anterior: <b>solo ahorrás el sueldo de la gente que efectivamente podés liberar</b>. Paso a paso:</p>
   <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>Cuánta gente liberás de verdad:</b> <span class="cuenta">P − P' = 10 − 7 = 3 personas</span>. Ojo que no son 3,84 (el 38,4% de 10): no podés despedir fracciones de persona, y si el piso se activa liberás todavía menos.</div></div>
   <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>Cuánto ahorrás en sueldos:</b> cada persona cuesta <span class="cuenta">N ÷ P = 16.000 ÷ 10 = $1.600/mes</span>, así que <span class="cuenta">3 × $1.600 = $4.800/mes</span>.</div></div>
-  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>Cuánto te cuesta la IA:</b> tu gasto mensual, ajustado por riesgo: <span class="cuenta">1,5 × $1.229 = $1.844/mes</span>. Acá entra el multiplicador de riesgo: tu proveedor te factura $1.229, pero con una arquitectura frágil el costo real que el modelo te cobra es $1.844.</div></div>
+  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>Cuánto te cuesta la IA:</b> tu gasto mensual, ajustado por riesgo: <span class="cuenta">1,5 × $1.229 ≈ $1.843/mes</span>. Acá entra el multiplicador de riesgo: tu proveedor te factura $1.229, pero con una arquitectura frágil el costo real que el modelo te cobra es $1.843 (el modelo trabaja con el valor exacto, $1.228,80, antes de redondear para mostrarlo).</div></div>
   <div class="paso"><div class="paso-n">4</div><div class="paso-tx"><b>Restás todo:</b> <span class="cuenta">$4.800 − $1.843 − $500 = S = $2.457/mes</span>.</div></div>
   <div class="paso"><div class="paso-n">5</div><div class="paso-tx"><b>Para qué sirve S:</b> para dos decisiones. Primera, el semáforo — si S sale <b>cero o negativo</b>, automatizar cuesta más de lo que ahorra y el proyecto no va, por lindo que suene. Segunda, el recupero: <span class="cuenta">T = $50.000 ÷ $2.457 = 20 meses</span>. Regla del modelo: <b>arriba de 18 meses, no avances</b> — en IA, 18 meses es una eternidad tecnológica.</div></div>
 
   <div class="ejemplo e-rie" style="margin-top:18px;"><span class="tit">La trampa que esta fórmula evita</span>
-  La cuenta intuitiva —y la que hace casi todo el mundo— es <span class="cuenta">horas automatizadas × costo de la hora humana</span>: 614,4 h × $10 = $6.144 de ahorro. <b>Es falso.</b> Vos no pagás horas, pagás sueldos. Automatizar 3,84 personas-equivalente cuando solo podés echar 3 no ahorra 3,84 sueldos: ahorra 3.<br><br>
-  Y cuando el piso de continuidad se activa la brecha se vuelve enorme. Con automatización al 100% y piso de 4, la cuenta ingenua promete <b>$10.700/mes</b>; el ahorro real es <b>$4.300/mes</b>. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace su trabajo. <b>Esa es tu prima de seguro operativo, y ahora el modelo te la cobra.</b></div>
+  La cuenta intuitiva —y la que hace casi todo el mundo— es <span class="cuenta">horas automatizadas × costo de la hora humana</span>: 614,4 h × $10 = $6.144 de ahorro en sueldos. <b>Es falso.</b> Vos no pagás horas, pagás sueldos: automatizar 3,84 personas-equivalente cuando solo podés echar 3 no ahorra 3,84 sueldos, ahorra 3 — o sea <b>$4.800</b>, no $6.144. Esas dos cifras son ahorro <i>bruto</i>: todavía no restamos la IA ni el mantenimiento.<br><br>
+  Y cuando el piso de continuidad se activa la brecha se vuelve enorme. Con automatización al 100% y piso de 4, esa misma cuenta ingenua —ahora ya neta de IA y mantenimiento, para poder compararla con el resultado final— promete <b>$10.700/mes</b>; el ahorro real es <b>$4.300/mes</b>. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace su trabajo. <b>Esa es tu prima de seguro operativo, y ahora el modelo te la cobra.</b></div>
 
   <div class="ejemplo e-aut" style="margin-top:14px;"><span class="tit">El corolario incómodo: existe un óptimo</span>
   Una vez que chocaste el piso, cada punto extra de automatización <b>suma factura de IA pero no libera a nadie más</b>. Desde ahí, automatizar más te <b>baja</b> el ahorro y te <b>sube</b> el IDA: quedás más pobre y más dependiente al mismo tiempo. En el ejemplo, el óptimo está en el 60% de automatización efectiva ($6.220/mes); al 100% caés a $4.300. Mirá la curva en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</div>
@@ -808,7 +808,7 @@ window.addEventListener('DOMContentLoaded',function(){
   • Contando <b>servidor + luz + sysadmin</b>: recién arriba de <b>251 personas-equivalente</b>.<br><br>
   Si no tenés esa escala, la alternativa honesta no es "no automatizar": es <b>API</b>, o un <b>servicio gestionado tercerizado</b> donde el sysadmin es problema del proveedor y entra como una cuota mensual previsible.</div>
 
-  <p class="nota">Para el proyecto de 10 personas del ejemplo, la diferencia es terminante: con API DeepSeek el ahorro es <b>$4.168/mes</b> y recupera en 12 meses; con servidor propio contando todo, el ahorro es <b>−$4.288/mes</b> y no recupera nunca. Misma tarea, misma automatización, misma gente.</p>
+  <p class="nota">Para el proyecto de 10 personas del ejemplo, la diferencia es terminante: con API DeepSeek el ahorro es <b>$4.168/mes</b> y recupera en 12 meses; con servidor propio contando todo, el ahorro es <b>−$4.288/mes</b> y no recupera nunca. Misma tarea, misma automatización, misma gente. Las dos cifras están calculadas con el <b>mismo λ (1,02)</b> a propósito: así la comparación aísla el costo y no mezcla el riesgo. Si a la API le cargaras su λ real de nube única (1,50), su ahorro sería $4.106 — la conclusión no se mueve.</p>
 </section>
 
 <section>
@@ -860,7 +860,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo real de la IA alcanza al humano, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
   <img class="grafico" src="assets/g4_riesgo_animado.gif" alt="Riesgo animado">
   <h3>Extremo C — DeepSeek local para los mails → la inversión I</h3>
-  <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$13/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
+  <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$12,60/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Y el fierro no es el costo completo</span>
   Esos $5.170 son solo el alquiler. Correr IA propia necesita además <b>electricidad</b> (~$250/mes con 2,1 kW constantes) y sobre todo <b>alguien que la mantenga</b>: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real: <b>$8.420/mes</b>, y la brecha contra la API salta de 410× a <b>668×</b>.<br><br>
@@ -915,7 +915,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="panel" id="montecarlo">
 <section>
   <h2><svg><use href="#i-dice"/></svg> Simulación de Montecarlo</h2>
-  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre tu proyecto <b>10.000 veces</b> con combinaciones al azar. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
+  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre <b>10.000 veces</b> el proyecto de ejemplo con combinaciones al azar. Ojo: esta pestaña no toma los datos que cargaste en la calculadora — usa la empresa de ejemplo, con los valores fijos que ves listados abajo. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
   <div id="controles-mc" style="margin-top:18px;"></div>
   <button class="cta" id="run-mc" style="margin:8px 0 4px;"><svg class="ic"><use href="#i-dice"/></svg> Correr 10.000 simulaciones</button>
   <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasMC"></canvas></div></div>
@@ -964,12 +964,16 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><th>Arquitectura</th><th>λ</th><th>IDA</th><th>Ahorro</th><th>Recupero</th></tr>
     <tr class="fila-mal"><td>Una sola nube, sin plan de contingencia</td><td>1,50</td><td>58</td><td>$2.457</td><td>20 meses <span class="mk no">✕</span></td></tr>
     <tr><td>Una sola nube, con plan de contingencia</td><td>1,30</td><td>50</td><td>$2.703</td><td>19 meses <span class="mk no">✕</span></td></tr>
-    <tr><td>Multi-cloud, con plan de contingencia</td><td>1,10</td><td>42</td><td>$2.948</td><td>17 meses <span class="mk ok">✓</span></td></tr>
-    <tr class="fila-ok"><td>IA local, con plan de contingencia</td><td>1,02</td><td>39</td><td><b>$3.047</b></td><td><b>16 meses</b> <span class="mk ok">✓</span></td></tr>
+    <tr class="fila-ok"><td>Multi-cloud, con plan de contingencia</td><td>1,10</td><td>42</td><td><b>$2.948</b></td><td><b>17 meses</b> <span class="mk ok">✓</span></td></tr>
+    <tr><td>IA local, con plan de contingencia</td><td>1,02</td><td>39</td><td>$3.047</td><td>16 meses <span class="mk ok">✓</span></td></tr>
   </table>
   </div>
 
-  <p>No cambió <b>nada</b> del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció un mejor precio de tokens. Lo único que cambió es <b>dónde vive la IA y si hay plan B</b>. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar (16 meses), y el IDA cae de 58 a 39.</p>
+  <p>No cambió <b>nada</b> del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció un mejor precio de tokens. Lo único que cambió es <b>dónde vive la IA y si hay plan B</b>. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar, y el IDA cae de 58 a 39.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Leé la última fila con cuidado: es el piso teórico de λ, no una recomendación</span>
+  Esta tabla <b>aísla el efecto del riesgo</b>: mantiene fija la factura de IA ($1.229/mes) y mueve solo λ. Eso es exactamente lo que pasa cuando sumás un segundo proveedor o escribís el plan de contingencia — el riesgo baja y la factura casi no se mueve. Por eso la fila realista para esta empresa es <b>multi-cloud con plan</b>.<br><br>
+  Pero <b>mudarte a IA local no cambia solo λ: te cambia la factura entera</b>, de $1.229 a $8.420 por mes de costo fijo. Si esta misma empresa de 10 personas hiciera esa mudanza, su ahorro sería <b>−$4.288/mes</b> y no recuperaría nunca — lo ves con los números completos en <b>Casos extremos</b> (C y D). La fila de IA local muestra hasta dónde <i>puede</i> bajar λ, no que convenga a este volumen: <b>local recién conviene cuando tu volumen supera el break-even</b>. Bajar λ es la palanca correcta; cuál de las tres opciones te sirve depende de tu escala.</div>
 
   <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
   Cuando el business case de automatización no cierra, <b>la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura</b>. Es la única decisión que mejora las tres cosas a la vez — te sube el ahorro, te acorta el recupero y te baja la dependencia.</div>

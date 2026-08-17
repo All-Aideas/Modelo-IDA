@@ -170,9 +170,9 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 
 > #### La trampa que esta fórmula evita
 >
-> La cuenta intuitiva es `horas automatizadas × costo hora humana`: 614,4 h × $10 = **$6.144**. Es falso: vos no pagás horas, pagás sueldos. Automatizar 3,84 personas-equivalente cuando solo podés echar 3 **no ahorra 3,84 sueldos, ahorra 3**.
+> La cuenta intuitiva es `horas automatizadas × costo hora humana`: 614,4 h × $10 = **$6.144** de ahorro en sueldos. Es falso: vos no pagás horas, pagás sueldos. Automatizar 3,84 personas-equivalente cuando solo podés echar 3 **no ahorra 3,84 sueldos, ahorra 3** — o sea **$4.800**, no $6.144. Esas dos cifras son ahorro *bruto*: todavía no restamos la IA ni el mantenimiento.
 >
-> Cuando el piso de continuidad se activa la brecha explota. Con automatización al 100% y piso de 4, la cuenta ingenua promete **$10.700/mes**; el ahorro real es **$4.300/mes**. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace ese trabajo. **Esa es la prima de seguro operativo, y el modelo ahora te la cobra.**
+> Cuando el piso de continuidad se activa la brecha explota. Con automatización al 100% y piso de 4, esa misma cuenta ingenua —ahora ya neta de IA y mantenimiento, para poder compararla con el resultado final— promete **$10.700/mes**; el ahorro real es **$4.300/mes**. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace ese trabajo. **Esa es la prima de seguro operativo, y el modelo ahora te la cobra.**
 
 > #### ↓ El corolario incómodo: existe un óptimo de automatización
 >
@@ -291,7 +291,7 @@ Y mueve el break-even de forma dramática:
 
 Si no tenés esa escala, la alternativa honesta no es "no automatizar": es **API**, o un **servicio gestionado tercerizado** donde el sysadmin es problema del proveedor y entra como cuota mensual previsible.
 
-Para el proyecto de 10 personas del ejemplo: con API DeepSeek el ahorro es **$4.168/mes** (12 meses); con servidor propio contando todo es **−$4.288/mes** y no recupera nunca.
+Para el proyecto de 10 personas del ejemplo: con API DeepSeek el ahorro es **$4.168/mes** (12 meses); con servidor propio contando todo es **−$4.288/mes** y no recupera nunca. Las dos cifras usan el **mismo λ (1,02)** a propósito, para que la comparación aísle el costo y no mezcle el riesgo; si a la API le cargaras su λ real de nube única (1,50), su ahorro sería $4.106 y la conclusión no se mueve.
 
 ### Ejemplo completo
 Pyme: 10 personas, $16.000 nómina, 160 h c/u (1.600 h/mes), a=60%, r=20%, η=80%, nube única sin contingencia (λ=1,5), IA $2/h, H_min 640 h, inversión $50.000, mant. $500/mes.
@@ -339,11 +339,11 @@ Comparemos las tres opciones para automatizar emails que consumen **15 horas por
 
 | Opción | Costo mensual para la tarea de emails | Riesgo (λ) |
 |---|---|---|
-| **API DeepSeek V4-Flash** ($0,14 / $0,28 por millón) | **~$13/mes** | Alto (nube única) |
+| **API DeepSeek V4-Flash** ($0,14 / $0,28 por millón) | **~$12,60/mes** | Alto (nube única) |
 | **API Gemini 3.6 Flash** ($1,50 / $7,50 por millón) | **~$270/mes** | Alto (nube única) |
 | **DeepSeek local** (2× H200) | **~$5.170/mes** | Casi nulo |
 
-Montar el servidor local para los emails cuesta **410 veces más** que usar la API de DeepSeek. Pagás $5.170 para reemplazar $13 de API. Absurdo, por más que el riesgo local sea casi cero: la tarea es demasiado chica para justificar el fierro.
+Esos ~$12,60 salen de 60 M de tokens al mes (60 h × 1 M) repartidos mitad entrada, mitad salida. Montar el servidor local para los emails cuesta **410 veces más** que usar la API de DeepSeek. Pagás $5.170 para reemplazar $12,60 de API. Absurdo, por más que el riesgo local sea casi cero: la tarea es demasiado chica para justificar el fierro.
 
 > **Y el fierro no es el costo completo.** Esos $5.170 son solo el alquiler. Correr IA propia necesita además **electricidad** (~$250/mes con 2,1 kW constantes) y sobre todo **alguien que la mantenga**: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real **$8.420/mes**, y la brecha contra la API salta de 410× a **668×**.
 >
@@ -421,10 +421,14 @@ Cuando el número no cierra, el reflejo de cualquier gerente es **recortar más 
 |---|---|---|---|---|
 | Una sola nube, sin plan de contingencia | 1,50 | 58 | $2.457 | 20 meses ✗ |
 | Una sola nube, con plan de contingencia | 1,30 | 50 | $2.703 | 19 meses ✗ |
-| Multi-cloud, con plan de contingencia | 1,10 | 42 | $2.948 | 17 meses ✓ |
-| **IA local, con plan de contingencia** | **1,02** | **39** | **$3.047** | **16 meses** ✓ |
+| **Multi-cloud, con plan de contingencia** | **1,10** | **42** | **$2.948** | **17 meses** ✓ |
+| IA local, con plan de contingencia | 1,02 | 39 | $3.047 | 16 meses ✓ |
 
-No cambió **nada** del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció mejor precio de tokens. Lo único que cambió es **dónde vive la IA y si hay plan B**. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar (16), y el IDA cae de 58 a 39.
+No cambió **nada** del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció mejor precio de tokens. Lo único que cambió es **dónde vive la IA y si hay plan B**. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar, y el IDA cae de 58 a 39.
+
+> **Leé la última fila con cuidado: es el piso teórico de λ, no una recomendación.** Esta tabla **aísla el efecto del riesgo**: mantiene fija la factura de IA ($1.229/mes) y mueve solo λ. Eso es exactamente lo que pasa cuando sumás un segundo proveedor o escribís el plan de contingencia — el riesgo baja y la factura casi no se mueve. Por eso la fila realista para esta empresa es **multi-cloud con plan**.
+>
+> Pero **mudarte a IA local no cambia solo λ: te cambia la factura entera**, de $1.229 a $8.420 por mes de costo fijo. Si esta misma empresa de 10 personas hiciera esa mudanza, su ahorro sería **−$4.288/mes** y no recuperaría nunca (§5, extremos C y D). La fila de IA local muestra hasta dónde *puede* bajar λ, no que convenga a este volumen: **local recién conviene cuando tu volumen supera el break-even**. Bajar λ es la palanca correcta; cuál de las tres opciones te sirve depende de tu escala.
 
 > **Cuando el business case de automatización no cierra, la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura.** Es la única decisión que mejora las tres cosas a la vez — sube el ahorro, acorta el recupero y baja la dependencia.
 
@@ -539,5 +543,3 @@ MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me enc
 
 ## Autor
 **César Riat** — Consultor en IA · [cesarriat.com](https://cesarriat.com)
-
-*Cuando publiques el artículo en Medium, reemplazá el `#` del link de arriba por la URL real.*
