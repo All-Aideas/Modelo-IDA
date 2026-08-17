@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modelo IDA — ¿Cuánta gente necesitás el día que la IA no esté?</title>
-<meta name="description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA. Por César Riat.">
+<title>IDA Model — How many people do you need the day the AI is gone?</title>
+<meta name="description" content="Calculate your minimum continuity headcount and your AI Dependency Index. Por César Riat.">
 <meta name="author" content="César Riat">
 
 <!-- EDITAR: si cambiás el dominio, actualizá estas 3 líneas (deben ser URLs absolutas) -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Modelo IDA">
+<meta property="og:site_name" content="IDA Model">
 <meta property="og:locale" content="es_AR">
-<meta property="og:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
-<meta property="og:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Calculadora interactiva, gratis y sin registro.">
+<meta property="og:title" content="How many people do you need to keep operating the day the AI is gone?">
+<meta property="og:description" content="Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Calculator interactiva, gratis y sin registro.">
 <meta property="og:url" content="https://modelo-ida.web.app/">
 <meta property="og:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
 <meta property="og:image:alt" content="Gráfico del piso de continuidad: la dotación cae con la automatización hasta chocar con un mínimo.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
-<meta name="twitter:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA).">
+<meta name="twitter:title" content="How many people do you need to keep operating the day the AI is gone?">
+<meta name="twitter:description" content="Calculate your minimum continuity headcount and your AI Dependency Index (IDA).">
 <meta name="twitter:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
@@ -338,125 +338,127 @@ window.addEventListener('DOMContentLoaded',function(){
 </svg>
 
 <header class="hero">
-  <h1>¿Cuánta gente necesitás para operar el día que la IA no esté?</h1>
-  <p>Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Cargá los números de tu empresa y obtené el resultado al instante.</p>
+  <h1>How many people do you need to keep operating the day the AI is gone?</h1>
+  <p>Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Enter your own numbers and get the result instantly.</p>
 </header>
 
 <nav class="tabs">
-  <button class="active" data-tab="calc"><svg><use href="#i-calc"/></svg> Calculadora</button>
-  <button data-tab="benchmark"><svg><use href="#i-radar"/></svg> Benchmark</button>
-  <button data-tab="explica"><svg><use href="#i-book"/></svg> Cómo funciona</button>
-  <button data-tab="formula"><svg><use href="#i-flask"/></svg> Fórmulas</button>
-  <button data-tab="jugar"><svg><use href="#i-sliders"/></svg> Explorar gráficos</button>
-  <button data-tab="extremos"><svg><use href="#i-chart"/></svg> Casos extremos</button>
-  <button data-tab="compara"><svg><use href="#i-scale"/></svg> Local vs Nube</button>
-  <button data-tab="montecarlo"><svg><use href="#i-dice"/></svg> Montecarlo</button>
-  <button data-tab="conclusiones"><svg><use href="#i-bulb"/></svg> Conclusiones</button>
+  <button class="active" data-tab="calc"><svg><use href="#i-calc"/></svg> Calculator</button>
 </nav>
 
+<div class="wrap"><section style="border-left:4px solid var(--naranja);">
+  <h2 style="margin-bottom:10px;">This is the essentials edition</h2>
+  <p>The calculator below is the complete model: same engine, same formulas, same numbers as the Spanish site. What is not here is the long-form material — the four modules explained one by one, the extreme cases, the on-premise versus cloud comparison, the Monte Carlo simulation and the conclusions.</p>
+  <p class="nota">Those sections exist only in Spanish for now, and they are worth reading: <a href="../">go to the full Spanish site</a>. Translating them half-way would be worse than leaving them out — you would not know what you were missing.</p>
+  <h3 style="margin-top:16px;">The model in four lines</h3>
+  <p><b>Effective automation</b> = what AI can technically do, minus what legally needs a human signature, times how well the AI actually performs. Always less than the brochure promises.</p>
+  <p><b>Continuity floor (P′)</b> = the number of people you must keep to run the critical operation the day the AI is unavailable. You never go below it, no matter how much you automate — and that is the point most business cases miss.</p>
+  <p><b>Monthly saving (S)</b> = the salaries you genuinely stop paying, minus the AI bill adjusted by architecture risk (λ), minus maintenance. It counts released salaries, not automated hours: automating 3.84 people-equivalents when you can only release 3 saves you 3 salaries, not 3.84.</p>
+  <p><b>IDA</b> = how much you delegated, times how fragile the thing holding it up is, discounted by whoever outside the area could actually cover for you. Zero to 100. It deliberately contains no money: if savings entered the index, a big saving would mask the risk exactly when you are most exposed.</p>
+</section></div>
 <div class="wrap">
 
 <!-- ========== CALCULADORA ========== -->
 <div class="panel active" id="calc">
 <section>
-  <h2><svg><use href="#i-calc"/></svg> Calculá tu empresa</h2>
-  <p class="nota">Mové los valores y mirá cómo cambian tus resultados. Todo se calcula en tu navegador; nada se envía a ningún lado.</p>
+  <h2><svg><use href="#i-calc"/></svg> Run your own numbers</h2>
+  <p class="nota">Move the values and watch your results change. Everything is computed in your browser — nothing is sent anywhere.</p>
   <div class="calc-grid">
     <div>
-      <h3>Tu operación</h3>
+      <h3>Your operation</h3>
       <div class="campo">
-        <label>Personas actuales en el área <span class="hint">las que hoy hacen el trabajo</span></label>
+        <label>People currently in the area <span class="hint">the ones doing the work today</span></label>
         <input type="number" id="P" value="10" min="1">
       </div>
       <div class="campo">
-        <label>Nómina mensual total en USD <span class="hint">sueldos con cargas incluidas</span></label>
+        <label>Total monthly payroll in USD <span class="hint">salaries including employer costs</span></label>
         <input type="number" id="N" value="16000" min="0" step="500">
       </div>
       <div class="campo">
-        <label>Horas trabajadas por persona al mes</label>
+        <label>Hours worked per person per month</label>
         <input type="number" id="hp" value="160" min="1">
       </div>
-      <h3>Automatización</h3>
+      <h3>Automation</h3>
       <div class="campo">
-        <label>% de las horas de trabajo automatizable <span class="hint">a — qué fracción de las horas del área puede hacer la IA</span></label>
+        <label>% of work hours that can be automated <span class="hint">a — what share of the area's hours the AI can handle</span></label>
         <div class="slider-row"><input type="range" id="a" min="0" max="100" value="60" aria-label="Porcentaje de horas automatizable"><span class="val" id="a_v">60%</span></div>
       </div>
       <div class="campo">
-        <label>% de esas horas con firma humana obligatoria <span class="hint">r — médico, escribano, auditor</span></label>
+        <label>% of those hours requiring a human signature <span class="hint">r — médico, escribano, auditor</span></label>
         <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas con firma humana obligatoria"><span class="val" id="r_v">20%</span></div>
       </div>
       <div class="campo">
-        <label>Eficiencia real de la IA <span class="hint">η — rinde esto de una persona; nunca 100%</span></label>
-        <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Eficiencia real de la IA"><span class="val" id="eta_v">80%</span></div>
+        <label>Real AI efficiency <span class="hint">η — it performs this fraction of a person; never 100%</span></label>
+        <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Real AI efficiency"><span class="val" id="eta_v">80%</span></div>
       </div>
-      <h3>Continuidad</h3>
+      <h3>Continuity</h3>
       <div class="campo">
-        <label>Horas/mes mínimas para operar SIN IA <span class="hint">horas de trabajo, no cantidad de personas ni de puestos</span></label>
+        <label>Minimum hours/month to operate WITHOUT AI <span class="hint">work hours — not headcount, not stations</span></label>
         <input type="number" id="Hmin" value="640" min="0" step="40">
       </div>
       <details class="asistente">
-        <summary>¿Tenés que cubrir puestos al mismo tiempo? Calculá las horas acá</summary>
+        <summary>Do you have stations to cover simultaneously? Work out the hours here</summary>
         <div class="asist-body">
-          <p class="hint" style="margin-bottom:10px;">Este es el error más caro del modelo. Si por contrato o por normativa <b>tenés que tener 2 personas siempre presentes</b>, eso <b>no son 2 personas</b>: son 2 puestos que hay que cubrir durante todas las horas que abre la operación, y eso se paga con más gente.</p>
+          <p class="hint" style="margin-bottom:10px;">This is the costliest mistake in the model. If by contract or regulation <b>you must have 2 people present at all times</b>, eso <b>that is not 2 people</b>: it is 2 stations to be covered for every hour the operation is open, and that is paid for with more people.</p>
           <div class="campo">
-            <label>Puestos que deben estar cubiertos al mismo tiempo <span class="hint">las 2 personas del contrato, las cajas que no pueden cerrar, las ventanillas mínimas</span></label>
+            <label>Stations that must be covered simultaneously <span class="hint">the 2 people in the contract, the tills that cannot close, the minimum counters</span></label>
             <input type="number" id="hm_puestos" value="2" min="0" step="1">
           </div>
           <div class="campo">
-            <label>Horas que la operación está abierta al mes <span class="hint">oficina 8 h × 22 días = 176 · retail 12 h × 30 = 360 · guardia 24/7 = 720</span></label>
+            <label>Hours the operation is open per month <span class="hint">office 8 h × 22 days = 176 · retail 12 h × 30 = 360 · 24/7 cover = 720</span></label>
             <input type="number" id="hm_oper" value="176" min="1" step="8">
           </div>
-          <div class="asist-tot">Horas mínimas: <span id="hm_total">352</span> h/mes &nbsp;·&nbsp; equivale a <span id="hm_personas">3</span> personas con tu jornada actual</div>
+          <div class="asist-tot">Minimum hours: <span id="hm_total">352</span> h/mes &nbsp;·&nbsp; equivale a <span id="hm_personas">3</span> people at your current working hours</div>
           <div class="asist-res">
-            <span>H_min calculado: <b id="hm_res">352 h</b></span>
-            <button type="button" class="btn-usar" id="hm-usar">Usar este valor ↑</button>
+            <span>Calculated H_min: <b id="hm_res">352 h</b></span>
+            <button type="button" class="btn-usar" id="hm-usar">Use this value ↑</button>
           </div>
           <p class="hint" id="hm_aviso" style="margin-top:8px;"></p>
         </div>
       </details>
       <div class="campo">
-        <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
+        <label>People outside the area who <i>know how to do</i> this task <span class="hint">external backup — leave at 0 if there is nobody</span></label>
         <input type="number" id="R" value="0" min="0" step="1">
         <details class="mas">
-          <summary>Qué contar y qué no</summary>
-          <div class="cuerpo">Es el número más fácil de inflar. <b>No es la plantilla de la empresa.</b> Toyota tiene 200.000 empleados y eso no significa que 200.000 personas puedan atender reclamos de garantía: contá solo a las que <b>hoy</b> podrían sentarse a hacer esta tarea concreta en modo degradado. Si tenés que capacitar a alguien primero, no cuenta.</div>
+          <summary>What counts and what does not</summary>
+          <div class="cuerpo">This is the easiest number to inflate. <b>It is not the company headcount.</b> Toyota has 200,000 employees, and that does not mean 200,000 people can handle warranty claims: count only those who <b>today</b> could sit down and do this specific task in degraded mode. If you have to train someone first, they do not count.</div>
         </details>
         <div class="alerta warn" id="aviso-R" style="display:none;"></div>
       </div>
     </div>
     <div>
-      <h3>Costos e inversión</h3>
+      <h3>Costs and investment</h3>
       <div class="campo">
-        <label>Costo de la IA por mes (USD)</label>
+        <label>Monthly AI cost (USD)</label>
         <input type="number" id="CtMes" value="1229" min="0" step="50">
         <p class="hint" id="ct-fijo-aviso" style="display:none; background:var(--m-con-claro); border-left:3px solid var(--m-con); padding:8px 10px; border-radius:6px; margin-top:6px;">
-          Este monto quedó <b>fijo</b> (servidor propio): no se mueve aunque cambies la automatización — el costo por hora se ajusta solo, como pasa de verdad con un servidor alquilado.
+          Este monto quedó <b>fijo</b> (own server): it does not move when you change automation — the hourly cost adjusts instead, which is what really happens with a rented server.
           <a href="#" id="ct-fijo-soltar" style="color:var(--m-con); font-weight:700;">Volver a variable</a>
         </p>
       </div>
       <details class="asistente">
-        <summary>¿Qué número pongo acá? Abrí el asistente de costo real</summary>
+        <summary>Not sure what to enter? Open the real-cost assistant</summary>
         <div class="asist-body">
-          <p class="hint" style="margin-bottom:10px;">La idea no es acertar el número exacto: es <b>no olvidarte de ningún costo</b>. Varios pueden dar cero —si ya los tenés cubiertos— pero conviene mirarlos uno por uno antes de descartarlos.</p>
+          <p class="hint" style="margin-bottom:10px;">The goal is not to nail the exact number: it is to <b>no olvidarte de ningún costo</b>. Several may legitimately be zero — if you already cover them — but look at each one before dismissing it.</p>
           <div style="display:flex; gap:8px; margin-bottom:12px;">
-            <button type="button" class="ct-btn on" id="ct-modo-api">Pago por uso (API)</button>
-            <button type="button" class="ct-btn" id="ct-modo-local">Servidor propio</button>
+            <button type="button" class="ct-btn on" id="ct-modo-api">Pay per use (API)</button>
+            <button type="button" class="ct-btn" id="ct-modo-local">Own server</button>
           </div>
 
           <div id="ct-panel-api">
-            <p class="hint" style="margin-bottom:10px;">Cargá lo que <b>sí sabés o podés cotizar</b>: el precio de tu modelo y cuánto pensás gastar al mes. Las horas automatizadas ya las tiene el modelo, así que el costo por hora sale solo.</p>
+            <p class="hint" style="margin-bottom:10px;">Enter what <b>you do know or can quote</b>: your model's price and what you expect to spend per month. The model already knows your automated hours, so the hourly cost follows.</p>
             <div class="campo">
-              <label>1 · Precio por millón de tokens (USD) <span class="hint">depende del modelo que elijas: DeepSeek V4-Flash ≈ $0,21 · Gemini 3.6 Flash ≈ $4,50 · Gemini 3.1 Pro ≈ $7</span></label>
+              <label>1 · Price per million tokens (USD) <span class="hint">depends on the model: DeepSeek V4-Flash ≈ $0.21 · Gemini 3.6 Flash ≈ $4.50 · Gemini 3.1 Pro ≈ $7</span></label>
               <input type="number" id="ctp_precio" value="0.21" min="0" step="0.01">
             </div>
             <div class="campo">
-              <label>2 · Millones de tokens que vas a consumir por MES <span class="hint">del tablero de tu proveedor, o proyectado desde un mes de prueba. Es tu OPEX de IA, el mismo dato que le pedirías a finanzas.</span></label>
+              <label>2 · Millions of tokens you will consume per MONTH <span class="hint">from your provider's dashboard, or projected from a trial month. This is your AI OPEX — the same figure you would ask finance for.</span></label>
               <input type="number" id="ctp_mes" value="614" min="0" step="10">
             </div>
-            <div class="asist-tot">Gasto mensual en IA: <b id="ctp_opex">$129</b> &nbsp;·&nbsp; tus horas automatizadas: <b id="ctp_horas">614</b> h/mes</div>
+            <div class="asist-tot">Gasto mensual en IA: <b id="ctp_opex">$129</b> &nbsp;·&nbsp; your automated hours: <b id="ctp_horas">614</b> h/mes</div>
             <p class="hint" id="ctp_diag" style="background:var(--m-aut-claro); border-left:3px solid var(--m-aut); padding:9px 11px; border-radius:6px;"></p>
             <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin-top:8px;">
-            <b>Por qué se pregunta por mes y no por hora.</b> Un modelo caro suele necesitar menos tokens para la misma tarea, y uno barato más. Preguntarte "cuántos tokens por hora" te obligaría a adivinar esa compensación; preguntarte el <b>gasto mensual</b> la incluye sola. Además, "una hora de trabajo" no es una hora de la persona completa —esa tiene reuniones, llamados y mil cosas que la IA no hace—: son las horas que ya contaste como automatizables arriba.</p>
+            <b>Why we ask per month and not per hour.</b> An expensive model usually needs fewer tokens for the same task, and a cheap one more. Asking "how many tokens per hour" would force you to guess that trade-off; asking for your <b>monthly spend</b> includes it automatically. Also, "an hour of work" is not a full hour of a person — that includes meetings, calls and a hundred things the AI does not do: these are the hours you already counted as automatable above.</p>
           </div>
 
           <div id="ct-panel-local" style="display:none;">
@@ -465,722 +467,133 @@ window.addEventListener('DOMContentLoaded',function(){
               <input type="number" id="ctl_srv" value="5170" min="0" step="100">
             </div>
             <div class="campo">
-              <label>Electricidad y conectividad (USD/mes) <span class="hint">0 si ya viene incluida en el alquiler</span></label>
+              <label>Electricidad y conectividad (USD/mes) <span class="hint">0 if already included in the rental</span></label>
               <input type="number" id="ctl_luz" value="250" min="0" step="50">
             </div>
             <div class="campo">
-              <label>SysAdmin / soporte técnico (USD/mes) <span class="hint">contratado, por hora, tercerizado — o <b>0 si ya tenés a alguien que lo absorbe</b></span></label>
+              <label>SysAdmin / soporte técnico (USD/mes) <span class="hint">hired, hourly, outsourced — or <b>0 if someone already absorbs it</b></span></label>
               <input type="number" id="ctl_sys" value="3000" min="0" step="250">
             </div>
             <div class="campo">
               <label>Otros: monitoreo, backup, licencias (USD/mes) <span class="hint">0 si no aplica</span></label>
               <input type="number" id="ctl_otros" value="0" min="0" step="50">
             </div>
-            <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:8px 10px; border-radius:6px;">Poner <b>0</b> en el sysadmin es una respuesta válida si un líder técnico ya absorbe la tarea. Lo que no es válido es <b>no haberlo pensado</b>: es el costo oculto que más proyectos de IA local hunde.</p>
-            <div class="asist-tot">Costo fijo total: <span id="ctl_total">$8.420</span>/mes &nbsp;·&nbsp; tus horas de IA: <span id="ctl_horas">614</span> h/mes</div>
+            <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:8px 10px; border-radius:6px;">Poner <b>0</b> for the sysadmin is a valid answer if a tech lead already absorbs the task. What is not valid is <b>not having thought about it</b>: it is the hidden cost that sinks the most on-premise AI projects.</p>
+            <div class="asist-tot">Total fixed cost: <span id="ctl_total">$8.420</span>/month &nbsp;·&nbsp; your AI hours: <span id="ctl_horas">614</span> h/mes</div>
           </div>
 
           <div class="asist-res">
-            <span>Costo mensual de IA: <b id="ct-res">$129</b></span>
-            <button type="button" class="btn-usar" id="ct-usar">Usar este valor ↑</button>
+            <span>Monthly AI cost: <b id="ct-res">$129</b></span>
+            <button type="button" class="btn-usar" id="ct-usar">Use this value ↑</button>
           </div>
           <p class="hint" id="ct-aviso" style="margin-top:8px;"></p>
         </div>
       </details>
       <div class="campo">
-        <label>Inversión inicial (USD) <span class="hint">todo lo que pagás una sola vez</span></label>
+        <label>Upfront investment (USD) <span class="hint">everything you pay only once</span></label>
         <input type="number" id="I" value="50000" min="0" step="1000">
         <details class="mas">
-          <summary>Qué va acá adentro</summary>
-          <div class="cuerpo">Proveedor o consultora, horas de tus programadores, integración, migración de datos, licencias iniciales, y las horas de tu propia gente definiendo reglas y revisando salidas. Hardware solo si lo comprás — si lo alquilás va en el costo mensual.<br><br>Las horas internas <b>no son gratis por ser internas</b>: suelen ser el 20–30% del total. Contarlas en cero hace que el recupero sea ficción.</div>
+          <summary>What belongs here</summary>
+          <div class="cuerpo">Vendor or consultancy fees, your own developers' hours, integration, data migration, initial licences, and your staff's hours defining rules and reviewing output. Hardware only if you buy it — if you rent it, it belongs in the monthly cost.<br><br>Internal hours <b>are not free just because they are internal</b>: they are usually 20–30% of the total. Counting them as zero turns your payback into fiction.</div>
         </details>
       </div>
       <div class="campo">
-        <label>Mantenimiento mensual (USD)</label>
+        <label>Monthly maintenance (USD)</label>
         <input type="number" id="M" value="500" min="0" step="100">
       </div>
-      <h3>Arquitectura</h3>
-      <p class="hint" style="margin:-4px 0 8px;">Definen tu <b class="v-rie">multiplicador de riesgo</b>: arranca en 1,00 y sube con cada casillero.</p>
+      <h3>Architecture</h3>
+      <p class="hint" style="margin:-4px 0 8px;">These set your <b class="v-rie">risk multiplier</b>: it starts at 1.00 and rises with each box you tick.</p>
       <div class="arq-group" id="arq">
-        <p class="hint" style="margin-bottom:6px;">Dónde corre la IA (elegí una):</p>
-        <label class="check"><input type="radio" name="infra" data-rho="0.30" checked> Una sola nube <span class="hint">(+30%)</span></label>
-        <label class="check"><input type="radio" name="infra" data-rho="0.10"> Multi-cloud, 2+ proveedores <span class="hint">(+10%)</span></label>
-        <label class="check"><input type="radio" name="infra" data-rho="0.02"> IA local (tus servidores) <span class="hint">(+2%)</span></label>
-        <p class="hint" id="aviso-local" style="display:none; background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin:-2px 0 8px;">Bajar el riesgo es solo la mitad de la historia: local también <b>sube tu costo por hora</b>. Sumá servidor + electricidad + sysadmin y dividí por tus horas de IA — suele dar bastante más que una API. Cargá ese total arriba en "Costo de la IA por mes" — o usá el asistente, que ya lo suma por vos.</p>
-        <p class="hint" style="margin:10px 0 6px;">Agravantes (marcá los que apliquen):</p>
-        <label class="check"><input type="checkbox" data-rho="0.20" checked> Sin plan de contingencia <span class="hint">(+20%)</span></label>
-        <label class="check"><input type="checkbox" data-rho="0.15"> Datos sensibles en nube externa <span class="hint">(+15%)</span></label>
+        <p class="hint" style="margin-bottom:6px;">Where the AI runs (pick one):</p>
+        <label class="check"><input type="radio" name="infra" data-rho="0.30" checked> A single cloud <span class="hint">(+30%)</span></label>
+        <label class="check"><input type="radio" name="infra" data-rho="0.10"> Multi-cloud, 2+ providers <span class="hint">(+10%)</span></label>
+        <label class="check"><input type="radio" name="infra" data-rho="0.02"> On-premise AI (your own servers) <span class="hint">(+2%)</span></label>
+        <p class="hint" id="aviso-local" style="display:none; background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin:-2px 0 8px;">Lowering risk is only half the story: on-premise also <b>raises your hourly cost</b>. Add server + electricity + sysadmin and divide by your AI hours — it usually lands well above an API. Enter that total above in "Monthly AI cost", or use the assistant, which adds it up for you.</p>
+        <p class="hint" style="margin:10px 0 6px;">Aggravating factors (tick all that apply):</p>
+        <label class="check"><input type="checkbox" data-rho="0.20" checked> No contingency plan <span class="hint">(+20%)</span></label>
+        <label class="check"><input type="checkbox" data-rho="0.15"> Sensitive data in an external cloud <span class="hint">(+15%)</span></label>
 
         <details class="asistente" style="margin-top:10px;">
-          <summary>¿Qué cuenta como "plan de contingencia"? Ver ejemplos</summary>
+          <summary>What counts as a "contingency plan"? See examples</summary>
           <div class="asist-body">
-            <p class="hint" style="margin-bottom:9px;">No es un documento en un cajón. Un plan de contingencia real tiene <b>cuatro cosas</b>, y si te falta alguna, marcá la casilla:</p>
-            <p class="hint"><b>1 · El procedimiento manual escrito.</b> Paso a paso de cómo se hacía el trabajo antes de la IA: qué sistema se abre, qué se controla, a quién se le avisa. Si el único que sabe es "el que estuvo desde el principio", no hay plan.</p>
-            <p class="hint"><b>2 · Gente entrenada de verdad, no en la lista.</b> Acá está lo importante: no alcanza con <i>tener</i> las personas. Si hace ocho meses que la IA hace todo y ellos solo revisan salidas, <b>perdieron la práctica</b>. El día que la IA no esté no van a poder arrancar, y encima van a tener que rehacer la curva de aprendizaje bajo presión, con el negocio parado.</p>
-            <p class="hint"><b>3 · Simulacros periódicos.</b> La forma de resolver lo anterior: una vez por trimestre, apagás la IA a propósito unas horas y operás a mano. Igual que un simulacro de incendio. Es la única manera de saber si tu piso de continuidad existe o es un número en una planilla. Cuesta horas, y esas horas son parte del seguro.</p>
-            <p class="hint"><b>4 · Un segundo camino técnico probado.</b> Otro proveedor con las credenciales ya cargadas y testeadas, o un modelo más chico corriendo local que aguante lo crítico. Probado: si nunca lo encendiste, no cuenta.</p>
+            <p class="hint" style="margin-bottom:9px;">It is not a document in a drawer. A real contingency plan has <b>four things</b>, and if you are missing any, tick the box:</p>
+            <p class="hint"><b>1 · The written manual procedure.</b> Step by step of how the work was done before the AI: which system to open, what to check, who to notify. If the only person who knows is "the one who has been here since the start", there is no plan.</p>
+            <p class="hint"><b>2 · People genuinely trained, not just listed.</b> This is the key part: it is not enough to <i>tener</i> the people. If the AI has been doing everything for eight months and they only review output, <b>they have lost the practice</b>. The day the AI is gone they will not be able to start, and they will have to relearn under pressure, with the business at a standstill.</p>
+            <p class="hint"><b>3 · Regular drills.</b> The way to solve the above: once a quarter, switch the AI off on purpose for a few hours and operate by hand. Same idea as a fire drill. It is the only way to know whether your continuity floor is real or just a number in a spreadsheet. It costs hours, and those hours are part of the insurance.</p>
+            <p class="hint"><b>4 · Un segundo camino técnico probado.</b> Another provider with credentials already loaded and tested, or a smaller model running locally that can carry the critical load. Tested: if you never switched it on, it does not count.</p>
             <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin-top:9px;">
-            El error más común es tener el punto 1 y creer que alcanza. <b>Un procedimiento que nadie ejecutó en un año no es un plan: es un papel.</b> Si estás en esa situación, dejá la casilla marcada — tu riesgo es real.</p>
+            The most common mistake is having point 1 and believing that is enough. <b>A procedure nobody has executed in a year is not a plan: it is a piece of paper.</b> If that is your situation, leave the box ticked — your risk is real.</p>
           </div>
         </details>
       </div>
     </div>
   </div>
   <div class="acciones">
-    <button type="button" class="btn-accion primario" id="btn-calcular"><svg class="ic"><use href="#i-calc"/></svg> Calcular</button>
-    <button type="button" class="btn-accion" id="btn-reiniciar"><svg class="ic"><use href="#i-reset"/></svg> Reiniciar valores</button>
-    <button type="button" class="btn-accion" id="btn-informe"><svg class="ic"><use href="#i-doc"/></svg> Descargar informe</button>
-    <button type="button" class="btn-accion" id="btn-csv"><svg class="ic"><use href="#i-doc"/></svg> Descargar CSV</button>
+    <button type="button" class="btn-accion primario" id="btn-calcular"><svg class="ic"><use href="#i-calc"/></svg> Calculate</button>
+    <button type="button" class="btn-accion" id="btn-reiniciar"><svg class="ic"><use href="#i-reset"/></svg> Reset values</button>
+    <button type="button" class="btn-accion" id="btn-informe"><svg class="ic"><use href="#i-doc"/></svg> Download report</button>
+    <button type="button" class="btn-accion" id="btn-csv"><svg class="ic"><use href="#i-doc"/></svg> Download CSV</button>
   </div>
-  <p class="nota" style="margin-top:10px; margin-bottom:0;">Los resultados se actualizan solos mientras movés los valores. El botón <b>Calcular</b> te lleva al resultado, útil desde el celular.</p>
+  <p class="nota" style="margin-top:10px; margin-bottom:0;">Results update as you move the values. The <b>Calculate</b> button jumps to the result — handy on a phone.</p>
 </section>
 <section style="padding:0; background:none; box-shadow:none;">
   <div class="resultado-box">
     <div class="res-item">
-      <div class="res-label">Personas que necesitás conservar</div>
+      <div class="res-label">People you need to keep</div>
       <div class="res-num naranja" id="out_P">7</div>
-      <div class="res-sub" id="out_P_sub">La cuenta económica manda. Tu piso de continuidad es 4.</div>
+      <div class="res-sub" id="out_P_sub">Economics decide here. Your continuity floor is 4.</div>
     </div>
     <div class="res-item">
-      <div class="res-label">Índice de Dependencia de IA (IDA)</div>
+      <div class="res-label">AI Dependency Index (IDA)</div>
       <div class="res-num" id="out_IDA">58</div>
-      <span class="ida-badge ida-amarillo" id="out_IDA_badge">Vigilancia</span>
+      <span class="ida-badge ida-amarillo" id="out_IDA_badge">Watch</span>
       <div class="ida-mini" id="out_IDA_mini"></div>
       <div class="res-sub" id="out_IDA_sub" style="display:none;"></div>
     </div>
     <div class="res-item">
-      <div class="res-label">Ahorro mensual ajustado por riesgo</div>
+      <div class="res-label">Monthly saving, risk-adjusted</div>
       <div class="res-num" id="out_S" style="font-size:1.8rem;">$2.457</div>
-      <div class="res-sub">Automatización efectiva: <b id="out_aef">38%</b> · riesgo ×<b id="out_lambda">1,50</b> · <b id="out_lib">3 personas liberadas</b></div>
+      <div class="res-sub">Automation efectiva: <b id="out_aef">38%</b> · risk ×<b id="out_lambda">1,50</b> · <b id="out_lib">3 people released</b></div>
       <div class="alerta warn" id="out_S_freno" style="display:none;"></div>
     </div>
     <div class="res-item">
-      <div class="res-label">Recupero de la inversión</div>
+      <div class="res-label">Investment payback</div>
       <div class="res-num" id="out_pb" style="font-size:1.8rem;">20 meses</div>
-      <div class="alerta warn" id="out_alerta">Más de 18 meses: la inversión no se recupera en un plazo razonable.</div>
+      <div class="alerta warn" id="out_alerta">Over 18 months: the investment does not pay back within a reasonable horizon.</div>
     </div>
   </div>
 </section>
 </div>
 
 <!-- ========== BENCHMARK ========== -->
-<div class="panel" id="benchmark">
-<section>
-  <h2><svg><use href="#i-radar"/></svg> Qué existe afuera — y qué hueco llena esto</h2>
-  <p>Antes de confiar en una calculadora nueva, la pregunta correcta es: <b>¿por qué no existía?</b> Alrededor de la IA hay muchísimo software de retorno, de riesgo y de cumplimiento. Lo honesto es mostrar qué hace cada categoría, qué pregunta no contesta, y dónde queda el hueco que este modelo intenta llenar.</p>
 
-  <h3>Las cuatro categorías que ya existen</h3>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Qué hay hoy</th><th>Qué resuelve bien</th><th>La pregunta que no contesta</th></tr>
-    <tr><td><b>Calculadoras de ROI de IA</b></td><td>Cuánto ahorrás automatizando: horas por costo, payback simple.</td><td>Asumen riesgo cero y continuidad gratis. Te dicen a cuánta gente podés <i>bajar</i>; nunca cuánta tenés que <i>conservar</i>.</td></tr>
-    <tr><td><b>Índices académicos de dependencia de IA</b></td><td>Miden cuánto depende de la IA una economía o un sector, a nivel macro.</td><td>No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde.</td></tr>
-    <tr><td><b>Normas de gestión (ISO/IEC 42001, ISO 22301)</b></td><td>Te exigen plan de contingencia y evaluación de riesgos: definen el <i>qué</i>.</td><td>Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión.</td></tr>
-    <tr><td><b>Plataformas de riesgo y seguridad de IA</b></td><td>Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento.</td><td>Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse <i>sin</i> IA.</td></tr>
-  </table>
-  </div>
-  <p class="nota">Cada pieza existe por separado. Lo que no existía es la <b>unión</b>: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.</p>
-
-  <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
-  <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas empresas resultó no tener gente suficiente que supiera ejecutarlo.</p>
-  <p><b>El plan de contingencia se escribe sin número.</b> La norma exige "volver a operación manual", y el documento lo promete — con una dotación que ya no alcanza para operar manualmente. El papel cumple; la operación no.</p>
-  <p><b>El directorio no tiene métrica de exposición.</b> Se discute cuánto ahorra la IA — nunca cuán rehén queda la empresa del proveedor. Sin un número comparable entre áreas y entre empresas, la dependencia no entra en la agenda hasta que se corta.</p>
-  <p><b>La inversión se aprueba con el escenario promedio.</b> "Recuperás en 20 meses" suena a plan. Corrido 10.000 veces con rangos realistas, solo el 26% de los futuros recupera en menos de 18 — eso es una apuesta, y conviene saberlo antes de firmar.</p>
-
-  <h3>Qué hace distinto este modelo</h3>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Diferencia</th><th>Por qué importa</th></tr>
-    <tr><td><b>Cuantifica la dotación mínima de continuidad (P')</b></td><td>Ningún software de RRHH ni de ROI te calcula el piso humano. Este modelo te dice "automatizá, pero tu piso de supervivencia son 4 personas; abajo de eso, el día que falle el proveedor no operás".</td></tr>
-    <tr><td><b>Traduce la fragilidad de arquitectura a plata (λ)</b></td><td>Una sola nube sin plan B deja de ser una observación técnica y pasa a ser un costo económico directo que castiga el ahorro y sube el IDA.</td></tr>
-    <tr><td><b>Es preventivo y probabilístico</b></td><td>Avisa <i>antes</i> de la caída, no después. Y el Montecarlo reporta los porcentajes sobre las 10.000 corridas completas — incluyendo los escenarios donde el proyecto no cierra, que serían fáciles de esconder.</td></tr>
-  </table>
-  </div>
-
-  <h3>Lo que este modelo todavía no tiene</h3>
-  <p>El benchmark honesto incluye los huecos propios. Los coeficientes de λ (+30% una sola nube, +20% sin plan de contingencia, +15% datos sensibles afuera) salen de criterio experto e incidentes públicos, no de un dataset calibrado por sector: son un punto de partida razonable, no una verdad revelada. Y el modelo todavía no publica casos reales con métricas de antes y después. Las dos cosas están en la hoja de ruta; mientras tanto, todas las fórmulas están a la vista y la cuenta corre entera en tu navegador — podés desafiarla con tus propios números.</p>
-  <p class="nota">Volvé a la <b>Calculadora</b> para correr tu caso, o seguí en <b>Cómo funciona</b> para ver la lógica desde cero.</p>
-</section>
-</div>
 
 <!-- ========== CÓMO FUNCIONA ========== -->
-<div class="panel" id="explica">
-<section>
-  <h2><svg><use href="#i-book"/></svg> El problema, desde cero</h2>
-  <p>Hoy un call center se puede automatizar al 100% con IA. Técnicamente no queda ninguna tarea que un agente no pueda hacer —leer un email, responder por voz, por WhatsApp, contestar mensajes en redes sociales—: atender, resolver, escalar, registrar. La pregunta ya no es "¿se puede?".</p>
-  <p>La pregunta es otra: <b>¿qué pasa si de un día para otro no podés usar IA?</b></p>
-  <p>Puede pasar por muchos caminos: se cae el proveedor de nube, el modelo que usás se discontinúa, el precio cambia 10 veces, una regulación nueva te prohíbe procesar datos afuera del país, o te cortan el servicio por una disputa comercial.</p>
-  <p>Y acá está el punto ciego: cuando una empresa automatiza, calcula cuánta gente puede <b>reducir</b>. Nadie calcula cuánta gente tiene que <b>conservar</b>. Son dos números distintos, y el segundo es el que te salva.</p>
-  <p>Los marcos que existen hoy —las normas de continuidad de negocio como ISO 22301, la nueva ISO/IEC 42001 de gestión de IA, los análisis de impacto y los mapas de dependencia— te ayudan a <i>identificar</i> el problema. Lo que no te dan es el número: cuántas personas, cuánta inversión tiene sentido, cuán expuesto estás. Este modelo propone esa cuenta.</p>
-  <p>Aplica a cualquier industria, aunque pega distinto según la criticidad. Para un call center, si la IA se cae perdés ventas. Para un retail, góndolas vacías en fecha pico. Para un banco, es un evento regulatorio. Para una transportadora de gas, es un problema de seguridad pública. Mismo modelo, distinta severidad.</p>
-  <h3>Qué es el IDA</h3>
-  <p>El <b>Índice de Dependencia de IA</b> es un número de <b>0 a 100</b> que resume cuán expuesta está tu operación si la IA deja de estar disponible. Combina dos cosas: cuánto automatizaste y cuán frágil es la arquitectura que lo sostiene.</p>
-  <div class="ida-escala">
-    <div class="z1">0–30 · Resiliente</div>
-    <div class="z2">30–60 · Vigilancia</div>
-    <div class="z3">60–100 · Crítico</div>
-  </div>
-  <div class="escala-labels"><span>0 = no dependés de la IA</span><span>100 = tu operación es rehén de ella</span></div>
-  <p style="margin-top:14px;"><b>IDA cerca de 0:</b> casi no automatizaste, o lo hiciste con arquitectura robusta (IA local, multi-cloud, contingencia). Si la IA se cae, es una molestia menor.<br>
-  <b>IDA cerca de 100:</b> automatizaste mucho sobre una arquitectura frágil (una sola nube, sin plan B). Si la IA se cae, tu operación se cae con ella.</p>
-  <h3>Cuatro preguntas</h3>
-  <table>
-    <tr><th>Pregunta</th><th>Módulo</th></tr>
-    <tr><td>¿Cuánto cuesta la hora humana?</td><td>Humano</td></tr>
-    <tr><td>¿Cuánto puedo automatizar <i>de verdad</i>?</td><td>Automatización</td></tr>
-    <tr><td>¿Cuánto me cuesta el riesgo de mi arquitectura?</td><td>Riesgo</td></tr>
-    <tr><td>¿Cuál es mi piso para sobrevivir sin IA?</td><td>Continuidad</td></tr>
-  </table>
-  <p class="nota">Seguí en <b>Fórmulas</b> para ver la cuenta completa paso a paso, o pasá a <b>Casos extremos</b> para entenderla con ejemplos.</p>
-</section>
-</div>
+
 
 <!-- ========== FÓRMULAS ========== -->
-<div class="panel" id="formula">
-<section>
-  <h2><svg><use href="#i-flask"/></svg> Cómo se arma la cuenta</h2>
-  <p>Los datos que cargás en la calculadora pasan por <b>cuatro módulos</b>, y de ahí salen las <b>tres respuestas</b> del modelo. <b>Hacé clic en cada módulo</b> para ver qué datos usa, qué produce y a qué resultado alimenta.</p>
 
-  <div class="diag-wrap">
-    <svg id="diagrama" viewBox="0 0 1075 560" role="img" aria-label="Diagrama de flujo del modelo: los datos alimentan cuatro modulos y estos producen las tres respuestas"></svg>
-  </div>
-  <div class="diag-cap">
-    <span><b>Hacé clic en un módulo</b> para ver hacia dónde va</span>
-    <span>·</span>
-    <span><b>o en una respuesta</b> para ver de qué se alimenta</span>
-  </div>
-
-  <div class="flow-detalle" id="flow-detalle"></div>
-
-  <p class="nota" style="margin-top:14px;">Los ejemplos numéricos que siguen usan los valores que trae la calculadora por defecto: 10 personas, 160 h cada una, nómina $16.000, 60% automatizable, 20% con firma humana, 80% de eficiencia, una sola nube sin plan de contingencia, 640 h mínimas, inversión $50.000 y mantenimiento $500 por mes.</p>
-</section>
-
-<section>
-  <h2><svg><use href="#i-flask"/></svg> Paso a paso: los cuatro módulos</h2>
-
-  <h3 class="mod h-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Módulo Humano → produce C_h</h3>
-  <div class="formula f-hum">$$C_h = \frac{N}{H} \qquad H = P \cdot h_{persona}$$</div>
-  <p class="nota"><b>N</b> = nómina mensual total en USD del área (sueldos con cargas). <b>H</b> = horas humanas totales del área al mes, que sale de multiplicar personas por horas de cada una. <b class="v-hum">C_h</b> es lo que te cuesta una hora de trabajo humano: la vara contra la que se compara la IA.</p>
-  <div class="ejemplo e-hum"><span class="tit">Cuánto da y qué pasa si lo movés</span>
-  <span class="cuenta">H = 10 × 160 = 1.600 h</span> → <span class="cuenta">C_h = 16.000 ÷ 1.600 = $10/h</span><br><br>
-  Si <b>N</b> sube y H queda igual (aumento de sueldos), C_h sube: cada hora sale más cara y la IA se justifica más fácil. Si <b>H</b> sube sin que N suba proporcional, C_h baja: con hora humana a $5 en vez de $10, la misma IA a $2 deja de ser tan buen negocio.</div>
-
-  <h3 class="mod h-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Módulo Automatización → produce a_ef</h3>
-  <div class="formula f-aut">$$a_{ef} = a \cdot (1-r) \cdot \eta$$</div>
-  <p class="nota"><b>a</b> = % de las horas del área que técnicamente puede hacer la IA. <b>r</b> = % de esas horas que exige firma humana obligatoria (médico, escribano, auditor): la IA no las reemplaza aunque técnicamente pudiera hacer la tarea. <b>η</b> (eta) = eficiencia real de la IA frente a una persona; nunca 100%, siempre hay reprocesos y supervisión. <b class="v-aut">a_ef</b> es la automatización <i>efectiva</i>: el % de horas que realmente sacás de la carga humana.</p>
-  <div class="ejemplo e-aut"><span class="tit">Un ejemplo concreto: los emails de un retail</span>
-  Técnicamente <b>se pueden contestar el 100%</b> con IA: leer, entender, redactar y responder. Ese es tu <b class="v-aut">a</b> = 100%.<br><br>
-  Pero por regla de negocio hay correos que <b>tienen que pasar por una persona sí o sí</b>: los que mencionan temas legales, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales. Si eso es 1 de cada 5, tu <b class="v-aut">r</b> = 20%.<br><br>
-  Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu <b class="v-aut">η</b> = 80%.<br><br>
-  Resultado: <span class="cuenta">1,00 × (1 − 0,20) × 0,80 = 64%</span>. Arrancaste creyendo que automatizabas todo y en la práctica sacás <b>dos tercios</b> de la carga. Ese 64% es el número con el que hay que hacer las cuentas, no el 100%.</div>
-  <p class="nota"></p>
-  <div class="ejemplo e-aut"><span class="tit">Cuánto da y qué pasa si lo movés</span>
-  <span class="cuenta">a_ef = 0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
-  Arrancaste con 60% de promesa y terminaste en 38,4% real. Subir <b>a</b> o <b>η</b> sube a_ef en línea recta; subir <b>r</b> lo baja. Si una regulación nueva lleva r a 50%, a_ef cae a 24% sin que cambie nada de la tecnología.</div>
-
-  <h3 class="mod h-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Módulo Riesgo → produce λ</h3>
-  <div class="formula f-rie">$$\lambda = 1 + \sum_i \rho_i \qquad C_{mes}^{real} = \lambda \cdot C_{mes}$$</div>
-  <table>
-    <tr><th>Decisión de arquitectura</th><th>ρ</th></tr>
-    <tr><td>Una sola nube</td><td>+0,30</td></tr>
-    <tr><td>Multi-cloud (2+ proveedores)</td><td>+0,10</td></tr>
-    <tr><td>IA local (en tus servidores)</td><td>+0,02</td></tr>
-    <tr><td>Sin plan de contingencia</td><td>+0,20</td></tr>
-    <tr><td>Datos sensibles en nube externa</td><td>+0,15</td></tr>
-  </table>
-  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es el costo esperado del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
-  <div class="ejemplo e-rie"><span class="tit">Cuánto da y qué pasa si lo movés</span>
-  Una sola nube (+0,30) y sin plan de contingencia (+0,20) suman 0,50 de prima: <span class="cuenta">1 + 0,50 = 1,50</span><br><br>
-  <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.843</span> en la evaluación del proyecto.<br><br>
-  ¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que esa nube única se cae y no tenés plan B, perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara <i>cuando todavía estás a tiempo de cambiarla</i>.<br><br>
-  Es la misma lógica del seguro del auto: manejar sin seguro no te sale más barato, te sale igual hasta que chocás.<br><br>
-  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo real cae de $1.843 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
-
-  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Módulo Continuidad → produce P_min</h3>
-  <div class="formula f-con">$$P_{min} = \Big\lceil \frac{H_{min}}{h_{persona}} \Big\rceil$$</div>
-  <p class="nota"><b class="v-con">H_min</b> = horas de trabajo que necesitás al mes para sostener <i>solo lo crítico</i> si la IA no está: no toda tu operación, la parte que no puede parar. <b>h_persona</b> = horas que trabaja una persona al mes. El símbolo ⌈ ⌉ es "redondeo hacia arriba": si da 3,2 personas, son 4, porque no existe media persona.</p>
-  <div class="ejemplo e-con"><span class="tit">Cuánto da y qué pasa si lo movés</span>
-  <span class="cuenta">P_min = ⌈640 ÷ 160⌉ = ⌈4⌉ = 4 personas</span><br><br>
-  Esas 4 personas son tu piso: con menos que eso, el día que la IA no está no podés sostener la operación crítica. Si H_min sube (más operación que no puede parar), el piso sube. Si h_persona sube (doble turno, 320 h), el piso baja a 2: mismas horas cubiertas con menos gente.</div>
-
-  <div class="ejemplo e-con"><span class="tit">Ojo: esto NO es lo mismo que la firma del médico o del escribano</span>
-  Son dos preguntas distintas, y es donde más se confunde la gente:<br><br>
-  <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto no puede por norma?</i> Es la firma del médico, del escribano, del auditor. Eso pasa <b>aunque la IA funcione perfecto</b>: hay tareas que legalmente no se delegan.<br><br>
-  <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
-  <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo: <i>"si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que revisar pedidos 4 horas por día"</i> → 88 horas más. Total ≈ 290 horas al mes: ese es tu <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona te da el piso.<br><br>
-  Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</div>
-
-  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>
-  <p class="nota">El piso <b class="v-con">P_min</b> mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea <b>no está tan expuesta</b> como un call center de 200 donde nadie más sabe. <b class="v-con">R</b> es esa gente: las personas de <b>fuera del área</b> que podrían cubrir la operación crítica el día que la IA no esté.</p>
-  <div class="formula-color">cobertura &nbsp;=&nbsp; mín<b>(</b> <span class="t t-dato">R</span> ÷ <span class="t t-con">P_min</span> &nbsp;,&nbsp; 1 <b>)</b> &nbsp;&nbsp;<span style="font-size:.8em; opacity:.75;">y 0 si <span class="t t-con">P_min</span> = 0</span></div>
-  <p class="nota">La aclaración del <span class="cuenta">P_min = 0</span> no es un tecnicismo: si declarás que <b>no tenés operación crítica</b> —que si la IA se cae, no pasa nada urgente—, entonces no hay piso que cubrir y el respaldo externo no tiene nada que descontar. La cobertura vale 0 y el IDA queda sin tocar. Sin esa aclaración la fórmula dividiría por cero.</p>
-  <div class="ejemplo e-con"><span class="tit">El error que hay que evitar: R no es la plantilla de la empresa</span>
-  Toyota tiene unos 200.000 empleados y eso <b>no significa que R sea 200.000</b>. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que <b>hoy, sin capacitación previa</b>, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.<br><br>
-  La regla es simple: <b>si primero tenés que enseñarle, no cuenta.</b> R es capacidad disponible el día de la caída, no capacidad potencial.<br><br>
-  <b>Y es el número más fácil de inflar de todo el modelo.</b> Es tentador poner un R generoso porque baja el IDA y el tablero queda lindo. Por eso el modelo nunca deja que el respaldo te lleve el índice a cero — ver la fórmula del IDA más abajo— y por eso este número es el primero que hay que auditar cuando alguien te muestra un IDA sospechosamente bajo.</div>
-</section>
-
-<section>
-  <h2><svg><use href="#i-flask"/></svg> Cómo se unen: los tres resultados</h2>
-  <p>Acá no aparece ninguna variable nueva. Los tres resultados son los cuatro números de arriba, combinados. Cada término va pintado con el color del módulo del que viene:</p>
-  <div class="leyenda-mod">
-    <span class="t t-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Humano · C_h</span>
-    <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización · a_ef</span>
-    <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo · λ</span>
-    <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad · P_min</span>
-    <span class="t t-dato">dato que cargás</span>
-  </div>
-
-  <h3 class="res-h">Resultado 1 — Cuánta gente conservar (P')</h3>
-  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad</span></p>
-  <div class="formula-color">P' &nbsp;=&nbsp; max<b>(</b> &nbsp;⌈ <span class="t t-dato">P</span> · (1 − <span class="t t-aut">a_ef</span>) ⌉ &nbsp;,&nbsp; <span class="t t-con">P_min</span> &nbsp;<b>)</b></div>
-  <p>Esta fórmula hace <b>dos cuentas distintas y se queda con la más grande</b>. Paso a paso:</p>
-
-  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>La cuenta económica:</b> si automatizás el 38,4% de las horas, te "sobra" ese 38,4% de la gente. Queda el resto: <span class="cuenta">10 × (1 − 0,384) = 6,16 → ⌈6,16⌉ = 7 personas</span>. Redondeás para arriba porque no podés tener 6,16 empleados.</div></div>
-  <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>La cuenta de supervivencia:</b> es el <span class="t t-con">P_min</span> que ya calculaste en el módulo Continuidad: <span class="cuenta">4 personas</span>. No sale de automatizar nada — sale de preguntarte cuánta gente necesitás el día que la IA no está.</div></div>
-  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>El <span class="cuenta">max( )</span> elige la más grande:</b> <span class="cuenta">max(7 , 4) = 7 personas</span>. Ese es tu P': la respuesta final del modelo.</div></div>
-
-  <p><b>¿Por qué la más grande y no la más chica?</b> Porque las dos son condiciones que tenés que cumplir <i>al mismo tiempo</i>: necesitás al menos 7 para hacer el trabajo del día a día, y al menos 4 para sobrevivir sin IA. El número que las cumple a las dos es el mayor. Quedarte con el menor te dejaría incumpliendo una.</p>
-  <p>En este ejemplo manda la economía y el piso ni se activa. <b>Pero mirá qué pasa si automatizás más:</b> con a_ef del 90%, la cuenta económica da <span class="cuenta">⌈10 × 0,10⌉ = 1 persona</span>, y entonces <span class="cuenta">max(1 , 4) = 4</span>. <b>Ahí el piso toma el control</b> y te frena: por más que automatices el 100%, nunca vas a bajar de 4. Esas 3 personas de diferencia entre lo que dice el Excel y lo que dice el piso son tu prima de seguro operativo.</p>
-
-  <h3 class="res-h">Resultado 2 — Si conviene o no (S y T)</h3>
-  <p class="res-usa">Se alimenta de: <span class="t t-hum"><svg class="ic-mod"><use href="#i-mod-hum"/></svg> Humano</span> <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span class="t t-res">y del Resultado 1</span></p>
-  <div class="formula-color">S &nbsp;=&nbsp; <b>(</b> <span class="t t-dato">P</span> − <span class="t t-res">P'</span> <b>)</b> · <span class="t t-hum">sueldo</span> &nbsp;−&nbsp; <span class="t t-rie">λ</span> · <span class="t t-dato">C_mes</span> &nbsp;−&nbsp; <span class="t t-dato">M</span></div>
-  <div class="formula-color">T<sub>payback</sub> &nbsp;=&nbsp; <span class="t t-dato">I</span> &nbsp;÷&nbsp; S</div>
-  <p><b>S es el ahorro mensual en dólares.</b> Fijate que arranca con <span class="t t-res">P'</span>, el resultado anterior: <b>solo ahorrás el sueldo de la gente que efectivamente podés liberar</b>. Paso a paso:</p>
-  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>Cuánta gente liberás de verdad:</b> <span class="cuenta">P − P' = 10 − 7 = 3 personas</span>. Ojo que no son 3,84 (el 38,4% de 10): no podés despedir fracciones de persona, y si el piso se activa liberás todavía menos.</div></div>
-  <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>Cuánto ahorrás en sueldos:</b> cada persona cuesta <span class="cuenta">N ÷ P = 16.000 ÷ 10 = $1.600/mes</span>, así que <span class="cuenta">3 × $1.600 = $4.800/mes</span>.</div></div>
-  <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>Cuánto te cuesta la IA:</b> tu gasto mensual, ajustado por riesgo: <span class="cuenta">1,5 × $1.229 ≈ $1.843/mes</span>. Acá entra el multiplicador de riesgo: tu proveedor te factura $1.229, pero con una arquitectura frágil el costo real que el modelo te cobra es $1.843 (el modelo trabaja con el valor exacto, $1.228,80, antes de redondear para mostrarlo).</div></div>
-  <div class="paso"><div class="paso-n">4</div><div class="paso-tx"><b>Restás todo:</b> <span class="cuenta">$4.800 − $1.843 − $500 = S = $2.457/mes</span>.</div></div>
-  <div class="paso"><div class="paso-n">5</div><div class="paso-tx"><b>Para qué sirve S:</b> para dos decisiones. Primera, el semáforo — si S sale <b>cero o negativo</b>, automatizar cuesta más de lo que ahorra y el proyecto no va, por lindo que suene. Segunda, el recupero: <span class="cuenta">T = $50.000 ÷ $2.457 = 20 meses</span>. Regla del modelo: <b>arriba de 18 meses, no avances</b> — en IA, 18 meses es una eternidad tecnológica.</div></div>
-
-  <div class="ejemplo e-rie" style="margin-top:18px;"><span class="tit">La trampa que esta fórmula evita</span>
-  La cuenta intuitiva —y la que hace casi todo el mundo— es <span class="cuenta">horas automatizadas × costo de la hora humana</span>: 614,4 h × $10 = $6.144 de ahorro en sueldos. <b>Es falso.</b> Vos no pagás horas, pagás sueldos: automatizar 3,84 personas-equivalente cuando solo podés echar 3 no ahorra 3,84 sueldos, ahorra 3 — o sea <b>$4.800</b>, no $6.144. Esas dos cifras son ahorro <i>bruto</i>: todavía no restamos la IA ni el mantenimiento.<br><br>
-  Y cuando el piso de continuidad se activa la brecha se vuelve enorme. Con automatización al 100% y piso de 4, esa misma cuenta ingenua —ahora ya neta de IA y mantenimiento, para poder compararla con el resultado final— promete <b>$10.700/mes</b>; el ahorro real es <b>$4.300/mes</b>. Los $6.400 de diferencia son los cuatro sueldos que seguís pagando por continuidad mientras la IA hace su trabajo. <b>Esa es tu prima de seguro operativo, y ahora el modelo te la cobra.</b></div>
-
-  <div class="ejemplo e-aut" style="margin-top:14px;"><span class="tit">El corolario incómodo: existe un óptimo</span>
-  Una vez que chocaste el piso, cada punto extra de automatización <b>suma factura de IA pero no libera a nadie más</b>. Desde ahí, automatizar más te <b>baja</b> el ahorro y te <b>sube</b> el IDA: quedás más pobre y más dependiente al mismo tiempo. En el ejemplo, el óptimo está en el 60% de automatización efectiva ($6.220/mes); al 100% caés a $4.300. Mirá la curva en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</div>
-
-  <p class="nota" style="margin-top:14px;"><b>Una aclaración honesta sobre λ:</b> S es el <i>ahorro ajustado por riesgo</i>, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor todos los meses: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al momento de decidir. Tu contador va a ver un ahorro mayor —el mismo número con λ=1—; tu director de riesgo va a querer ver este.</p>
-
-  <h3 class="res-h">Resultado 3 — Cuán expuesto quedás (IDA)</h3>
-  <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad</span> <span style="color:var(--gris)">— nunca dinero</span></p>
-  <div class="formula-color">IDA &nbsp;=&nbsp; min<b>(</b> <span class="t t-aut">a_ef</span> · <span class="t t-rie">λ</span> · <b>(</b>1 − <span class="t t-con">cobertura</span> · 0,7<b>)</b> · 100 &nbsp;,&nbsp; 100 <b>)</b></div>
-  <p><span class="cuenta">IDA = 0,384 × 1,50 × (1 − 0 × 0,7) × 100 = 58</span> → zona amarilla, vigilancia. En el ejemplo no hay respaldo externo declarado (R = 0), así que el tercer factor vale 1 y no cambia nada.</p>
-  <div class="ejemplo e-con"><span class="tit">Qué hace el tercer factor y por qué nunca llega a cero</span>
-  Sin este término el índice era <b>ciego al recorte</b>: una sola persona automatizada en una empresa donde otras veinte saben hacer la tarea daba <b>el mismo IDA</b> que un call center donde nadie más sabe. Son situaciones opuestas y el índice las leía igual.<br><br>
-  Con <b class="v-con">R</b>, esa diferencia aparece. Todos estos casos corren sobre una sola nube sin plan de contingencia (λ = 1,50):<br><br>
-  <span class="cuenta">Área de 1 persona automatizada al 100%, nadie más sabe → IDA 100</span><br>
-  <span class="cuenta">La misma área, con 20 personas afuera que saben → IDA 45</span><br>
-  <span class="cuenta">Call center de 200, 60% automatizado, nadie más sabe → IDA 90</span><br>
-  <span class="cuenta">El mismo call center, con 40 que pueden cubrir → IDA 59</span><br><br>
-  <b>El descuento se topea en 0,7 a propósito.</b> Aunque tengas respaldo de sobra, la caída igual te cuesta: esa gente <b>abandona su propio puesto</b> para venir a cubrir —así que la interrupción se propaga a otra área— y hace tiempo que no hace esta tarea todos los días. Por eso el respaldo externo puede bajarte el IDA hasta un 70%, nunca hasta cero. <b>Nadie queda inmune por tener gente de reserva.</b></div>
-  <p class="nota">El <span class="cuenta">min( , 100)</span> no es decorativo: con automatización alta y arquitectura muy frágil el producto se pasa de 100 (el techo teórico es 165: a_ef=1 con λ máximo de 1,65 — una sola nube, sin plan de contingencia y datos sensibles afuera). Cualquier valor por encima de 100 ya es "máxima dependencia posible", así que el índice se topea ahí para que la escala 0–100 signifique siempre lo mismo.</p>
-  <p><b>Por qué el IDA no incluye la plata.</b> Es la pregunta más común y es deliberado: <b>ahorrar y estar expuesto son cosas distintas</b>. Podés tener un proyecto que ahorra bien y recupera rápido —excelente negocio— y al mismo tiempo estar en zona amarilla de dependencia. Si metieras el dinero adentro del IDA, un ahorro grande te "taparía" el riesgo y el índice te diría que estás bien justo cuando más frágil estás. Por eso el IDA mide solo dos cosas: <b>cuánto delegaste</b> (a_ef) por <b>cuán frágil es lo que lo sostiene</b> (λ). El dinero ya tiene su propia fórmula, que es S.</p>
-  <p class="nota">Comprobalo: dos empresas con la misma automatización del 38,4% pero distinta arquitectura → con una sola nube (λ=1,50) da IDA 58; con IA local (λ=1,02) da IDA 39. Mismo trabajo automatizado, mitad de exposición.</p>
-</section>
-
-<section>
-  <h2><svg><use href="#i-scale"/></svg> La plata: inversión vs costo operativo</h2>
-  <p>Todo proyecto de automatización tiene <b>dos bolsillos distintos</b>, y confundirlos es el error más caro que se puede cometer con este modelo. Uno se paga una sola vez; el otro, todos los meses de tu vida.</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Inversión (I) — una sola vez</th><th>Costo operativo — todos los meses</th></tr>
-    <tr>
-      <td>Honorarios de proveedor o consultora<br>
-      <b>Horas de tus propios programadores</b><br>
-      Integración con tus sistemas actuales<br>
-      Migración y limpieza de datos<br>
-      Licencias iniciales<br>
-      <b>Horas de tu propia gente</b> definiendo reglas y revisando salidas<br>
-      Hardware, <i>solo si lo comprás</i></td>
-      <td>Tokens / API, o alquiler del servidor (<b>C_mes</b>)<br>
-      Electricidad y conectividad<br>
-      <b>Sysadmin o servicio gestionado</b><br>
-      Mantenimiento y ajustes del software (<b>M</b>)<br>
-      Reentrenamiento cuando cambia el modelo<br>
-      Monitoreo y auditoría de salidas</td>
-    </tr>
-  </table>
-  </div>
-
-  <p class="nota">Las dos líneas en negrita de la izquierda son las que todo presupuesto olvida: <b>las horas internas no son gratis por ser internas</b>. Entre definir reglas, revisar salidas y capacitar, tu propio equipo suele representar entre el 20% y el 30% de la inversión real. Si las contás en cero, el payback que te da el modelo es ficción.</p>
-  <p class="nota"><b>Y una aclaración que evita doble conteo:</b> si el servidor lo <i>alquilás</i>, es costo operativo y va dentro de C_mes. Si lo <i>comprás</i>, es inversión y va en I. Nunca en los dos lados.</p>
-
-  <h3>Dónde vive la inversión dentro del modelo: en un solo lugar</h3>
-  <p>Esto sorprende a casi todos. La inversión <b>no aparece en ninguna fórmula de los cuatro módulos</b>. Solo aparece al final, en una división: <span class="cuenta">T = I ÷ S</span>. Mirá qué pasa si la cambio y dejo absolutamente todo lo demás igual:</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Inversión</th><th>Ahorro mensual</th><th>IDA</th><th>Recupero</th></tr>
-    <tr class="fila-ok"><td>$25.000</td><td>$2.457</td><td>58</td><td>10 meses <span class="mk ok">✓</span></td></tr>
-    <tr><td>$50.000</td><td>$2.457</td><td>58</td><td>20 meses <span class="mk no">✕</span></td></tr>
-    <tr><td>$100.000</td><td>$2.457</td><td>58</td><td>41 meses <span class="mk no">✕</span></td></tr>
-    <tr class="fila-mal"><td>$200.000</td><td>$2.457</td><td>58</td><td>81 meses <span class="mk no">✕</span></td></tr>
-  </table>
-  </div>
-
-  <p>El ahorro no se mueve. El IDA no se mueve. <b>Lo único que se mueve es el recupero.</b> Y está bien que sea así: los $50.000 son un gasto de una sola vez, no cambian cuánta plata te entra por mes ni cuán dependiente quedás de tu proveedor. Cambian solamente <i>cuánto tardás en devolver lo que pusiste</i>.</p>
-
-  <div class="ejemplo e-hum"><span class="tit">La asimetría que conviene tener en la cabeza</span>
-  Un error en la <b>inversión</b> lo pagás una vez: si te equivocaste $20.000, tu payback se corre unos meses y listo.<br><br>
-  Un error en el <b>costo operativo</b> te acompaña <b>todos los meses para siempre</b>: si subestimaste C_mes, cada mes ahorrás menos de lo que creías, y eso no se termina nunca. Por eso, si tenés poco tiempo para revisar supuestos, <b>revisá C_mes antes que I</b>.</div>
-
-  <h3>El punto ciego: la fórmula asume que la IA se paga por hora</h3>
-  <p>El modelo te pide el <b>gasto mensual</b> de IA porque es el número que realmente conocés: sale de tu factura o de una proyección. Con eso calcula solo el costo por hora automatizada, que es lo que necesitan los gráficos.</p><p>Pero ojo con lo que ese número esconde: con <b>API</b> el gasto <b>sube y baja con el uso</b> —si automatizás menos, pagás menos—; con <b>servidor propio</b> el gasto es <b>fijo</b> y no baja aunque no lo uses.</p>
-  <p class="nota">Dicho en criollo: con API el costo es una <b>diagonal</b> que sube con el uso; con local es una <b>recta horizontal</b> que no baja nunca. Por eso, si corrés local y después automatizás menos de lo previsto, tu costo por hora se dispara sin que hayas cambiado nada del contrato.</p>
-
-  <h3>Cuánto cuesta de verdad correr local</h3>
-  <p>Y acá está la parte que casi nadie presupuesta. Correr IA en tus servidores <b>no es solo el fierro</b>:</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Concepto</th><th>Costo mensual</th></tr>
-    <tr><td>Alquiler 2× H200, 24/7</td><td>$5.170</td></tr>
-    <tr><td>Electricidad (~2,1 kW constantes)</td><td>$250</td></tr>
-    <tr class="fila-mal"><td><b>SysAdmin / MLOps que lo mantenga</b></td><td><b>$3.000</b></td></tr>
-    <tr><td><b>Total real</b></td><td><b>$8.420</b></td></tr>
-  </table>
-  </div>
-
-  <div class="ejemplo e-rie"><span class="tit">La ironía que hay que decir en voz alta</span>
-  Ese sysadmin cuesta <b>1,88 veces el sueldo de la persona que estabas reemplazando</b> ($3.000 contra $1.600). Automatizaste para no pagar un puesto administrativo y terminaste contratando un puesto técnico que sale casi el doble. No es un argumento contra la IA local — es un argumento contra <b>olvidarse de contarla</b>.<br><br>
-  Y mueve el punto de equilibrio de manera dramática:<br>
-  • Contando <b>solo el servidor</b>: local conviene arriba de <b>154 personas-equivalente</b>.<br>
-  • Contando <b>servidor + luz + sysadmin</b>: recién arriba de <b>251 personas-equivalente</b>.<br><br>
-  Si no tenés esa escala, la alternativa honesta no es "no automatizar": es <b>API</b>, o un <b>servicio gestionado tercerizado</b> donde el sysadmin es problema del proveedor y entra como una cuota mensual previsible.</div>
-
-  <p class="nota">Para el proyecto de 10 personas del ejemplo, la diferencia es terminante: con API DeepSeek el ahorro es <b>$4.168/mes</b> y recupera en 12 meses; con servidor propio contando todo, el ahorro es <b>−$4.288/mes</b> y no recupera nunca. Misma tarea, misma automatización, misma gente. Las dos cifras están calculadas con el <b>mismo λ (1,02)</b> a propósito: así la comparación aísla el costo y no mezcla el riesgo. Si a la API le cargaras su λ real de nube única (1,50), su ahorro sería $4.106 — la conclusión no se mueve.</p>
-</section>
-
-<section>
-  <h2><svg><use href="#i-flask"/></svg> Las fórmulas en una sola línea</h2>
-  <p>Si reemplazás cada módulo por su definición, cada resultado queda expresado directamente en función de los datos que cargás, sin pasos intermedios. Son las mismas cuentas de arriba, escritas de corrido:</p>
-
-  <p class="nota" style="margin-bottom:4px;"><b>Personas a conservar</b></p>
-  <div class="formula-color mega">P' = max<b>(</b> ⌈ <span class="t t-dato">P</span> · (1 − <span class="t t-aut">a·(1−r)·η</span>) ⌉ , ⌈ <span class="t t-con">H_min ÷ h_p</span> ⌉ <b>)</b></div>
-
-  <p class="nota" style="margin-bottom:4px;"><b>Ahorro mensual</b> — el <span class="t t-res">P'</span> de arriba entra entero adentro, por eso es la más larga:</p>
-  <div class="formula-color mega">S = <b>[</b> <span class="t t-dato">P</span> − max( ⌈<span class="t t-dato">P</span>·(1−<span class="t t-aut">a(1−r)η</span>)⌉ , ⌈<span class="t t-con">H_min ÷ h_p</span>⌉ ) <b>]</b> · <span class="t t-hum">N/P</span> &nbsp;−&nbsp; <span class="t t-rie">(1+Σρ)</span> · <span class="t t-dato">C_mes</span> &nbsp;−&nbsp; <span class="t t-dato">M</span></div>
-  <p class="nota">Se lee en dos mitades: <i>los sueldos que dejás de pagar</i>, menos <i>lo que te cuesta la IA ajustada por riesgo</i>, menos mantenimiento. Con los números del ejemplo: [10 − max(7, 4)] × 1.600 − 1.600 × 0,384 × 1,5 × 2 − 500 = 4.800 − 1.843 − 500 = <b>$2.457</b>.</p>
-
-  <p class="nota" style="margin-bottom:4px;"><b>Índice de Dependencia</b></p>
-  <div class="formula-color mega">IDA = min<b>(</b> <span class="t t-aut">a·(1−r)·η</span> · <span class="t t-rie">(1+Σρ)</span> · <b>[</b>1 − min(<span class="t t-dato">R</span> ÷ <span class="t t-con">⌈H_min ÷ h_p⌉</span>, 1)·0,7<b>]</b> · 100 , 100 <b>)</b></div>
-  <p class="nota" style="margin-top:-4px;">Con <span class="cuenta">⌈H_min ÷ h_p⌉ = 0</span> —sin operación crítica que sostener— el término de cobertura vale 0 y el IDA queda <span class="cuenta">min(a_ef · λ · 100, 100)</span>.</p>
-
-  <p style="margin-top:18px;"><b>¿Y una sola mega fórmula que junte los tres resultados?</b> No, y no por falta de ganas: vienen en unidades distintas —<b>personas</b>, <b>dólares por mes</b> y un <b>índice de 0 a 100</b>—. Sumarlos daría un número sin significado. Pero sí hay un <b>orden obligatorio</b>: <span class="t t-res">P'</span> se calcula primero porque <b>S depende de él</b>. Esa dependencia es lo que hace honesto al modelo — es la que le cobra a la empresa el costo de su propio piso de continuidad.</p>
-  <p class="nota">Las tres respuestas, juntas, son la decisión completa: <b class="v-res">P'</b> te dice con cuánta gente te quedás, <b>S y T</b> si el proyecto se paga, y el <b>IDA</b> cuán expuesto quedás después de hacerlo. Un proyecto puede aprobar las dos primeras y reprobar la tercera: ahí es donde el modelo gana su sueldo.</p>
-</section>
-</div>
 
 <!-- ========== JUGAR ========== -->
-<div class="panel" id="jugar">
-<section>
-  <h2><svg><use href="#i-sliders"/></svg> Explorá el modelo moviendo valores</h2>
-  <p class="nota">Elegí qué querés ver y mové los controles. La curva se recalcula en vivo para que entiendas cómo cada variable cambia el resultado.</p>
-  <div class="campo" style="margin-top:16px;">
-    <label>¿Qué querés explorar?</label>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;" id="modo-btns">
-      <button class="modo-btn active" data-modo="piso">Piso de continuidad</button>
-      <button class="modo-btn" data-modo="ahorro">Ahorro vs Riesgo (λ)</button>
-      <button class="modo-btn" data-modo="inversion">Umbral de inversión</button>
-    </div>
-  </div>
-  <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasJugar"></canvas></div></div>
-  <div id="controles-jugar" style="margin-top:20px;"></div>
-  <p class="nota" id="jugar-explica" style="margin-top:16px; padding:14px; background:var(--naranja-claro); border-radius:8px; color:var(--navy); font-weight:600;"></p>
-</section>
-</div>
+
 
 <!-- ========== CASOS EXTREMOS ========== -->
-<div class="panel" id="extremos">
-<section>
-  <h2><svg><use href="#i-chart"/></svg> Aprendé los parámetros con casos extremos</h2>
-  <h3>Extremo A — Automatizo el call center al 100% → el piso P_min</h3>
-  <p>La cuenta ingenua dice cero personas. El modelo dice no: la dotación cae hasta chocar con un piso —el mínimo para operar sin IA— y ahí se planta. La diferencia es tu <b>prima de seguro operativo</b>.</p>
-  <div class="grafico-svg" id="graf-A"></div>
-  <h3>Extremo B — Una sola nube sin plan B → el riesgo λ</h3>
-  <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo real de la IA alcanza al humano, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
-  <img class="grafico" src="assets/g4_riesgo_lambda.svg" alt="Ahorro mensual según cuánto automatices, para cuatro niveles de riesgo λ: todas las curvas alcanzan su máximo en el piso de continuidad y después bajan; con la hora de IA al precio de la hora humana, automatizar pasa a costar plata">
-  <p class="nota">Fijate que <b>las cuatro curvas tienen su máximo en el mismo lugar</b>: el 60%, donde el piso toma el control. λ no mueve el óptimo, mueve <i>cuánto ganás</i> en ese óptimo — y con la hora de IA al precio de la hora humana, la curva se hunde y automatizar te cuesta plata.</p>
-  <h3>Extremo C — DeepSeek local para los mails → la inversión I</h3>
-  <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$12,60/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
 
-  <div class="ejemplo e-rie"><span class="tit">Y el fierro no es el costo completo</span>
-  Esos $5.170 son solo el alquiler. Correr IA propia necesita además <b>electricidad</b> (~$250/mes con 2,1 kW constantes) y sobre todo <b>alguien que la mantenga</b>: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real: <b>$8.420/mes</b>, y la brecha contra la API salta de 410× a <b>668×</b>.<br><br>
-  La ironía vale la pena decirla: ese sysadmin cuesta <b>casi el doble</b> que la persona administrativa que estabas reemplazando. Automatizaste para no pagar un puesto y contrataste uno más caro.<br><br>
-  <b>Puede ser cero</b>, ojo: si ya tenés a alguien que lo absorbe, o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado. En la <b>Calculadora</b> hay un asistente que te va pidiendo cada componente por separado para que ninguno quede afuera por olvido.</div>
-
-  <div class="grafico-svg" id="graf-C"></div>
-
-  <h3>Extremo D — El mismo servidor, pero a escala → el volumen H</h3>
-  <p>El break-even del servidor propio está cerca de <b>24.600 millones de tokens/mes</b>: unas <b>154 personas-equivalente</b> operando full time sobre IA. Por debajo, la API gana. Por encima, el local gana y encima te baja λ al mínimo — decisivo para un banco o una empresa de salud donde la soberanía del dato vuelve irrelevante el cálculo de tokens.</p>
-  <p>Pero si contás el costo completo —fierro, luz y sysadmin— el punto de equilibrio se corre bastante más lejos:</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Qué contás</th><th>Costo fijo/mes</th><th>Break-even</th><th>Equivale a</th></tr>
-    <tr><td>Solo el servidor</td><td>$5.170</td><td>24.600 millones de tokens</td><td>154 personas</td></tr>
-    <tr class="fila-mal"><td><b>Servidor + luz + sysadmin</b></td><td><b>$8.420</b></td><td><b>40.100 millones de tokens</b></td><td><b>251 personas</b></td></tr>
-  </table>
-  </div>
-
-  <p class="nota">Dicho de otro modo: el servidor propio no se justifica por moda ni por miedo. Se justifica cuando tu volumen supera ese piso <b>o</b> cuando la criticidad del dato hace que λ importe más que el costo. Si no llegás a esa escala pero necesitás soberanía del dato, la salida intermedia es un <b>servicio gestionado tercerizado</b>: el sysadmin es problema del proveedor y entra como cuota mensual previsible.</p>
-</section>
-</div>
 
 <!-- ========== COMPARADOR ========== -->
-<div class="panel" id="compara">
-<section>
-  <h2><svg><use href="#i-scale"/></svg> Local vs Nube: ¿te conviene el servidor propio?</h2>
-  <p class="nota">Precios reales verificados en agosto 2026. Decí cuántas horas de trabajo al mes vas a automatizar y mirá qué opción conviene. Se asume ~1 millón de tokens por hora de trabajo equivalente.</p>
-  <div class="campo" style="max-width:460px; margin:18px 0;">
-    <label>Horas de trabajo/mes que vas a automatizar <span class="hint">15h/semana ≈ 60h/mes</span></label>
-    <div class="slider-row"><input type="range" id="hcomp" min="10" max="50000" value="60" step="10" aria-label="Horas de trabajo por mes que vas a automatizar"><span class="val" id="hcomp_v" style="min-width:90px;">60 h</span></div>
-    <p class="nota" id="hcomp_ctx" style="margin-top:4px;"></p>
-  </div>
-  <table id="tabla_comp"></table>
-  <p class="nota" id="comp_conclusion" style="margin-top:16px; font-weight:600; color:var(--navy); padding:12px; background:var(--naranja-claro); border-radius:8px;"></p>
-  <h3 style="margin-top:26px;">Precios de referencia (agosto 2026)</h3>
-  <table>
-    <tr><th>Modelo</th><th>Input /1M</th><th>Output /1M</th><th>≈ Costo/hora*</th></tr>
-    <tr><td>DeepSeek V4-Flash (API)</td><td>$0,14</td><td>$0,28</td><td>$0,21</td></tr>
-    <tr><td>DeepSeek V4-Pro (API)</td><td>$0,435</td><td>$0,87</td><td>$0,65</td></tr>
-    <tr><td>Gemini 3.6 Flash (API)</td><td>$1,50</td><td>$7,50</td><td>$4,50</td></tr>
-    <tr><td>Gemini 3.1 Pro (API)</td><td>$2,00</td><td>$12,00</td><td>$7,00</td></tr>
-    <tr><td>DeepSeek V4-Flash local (2× H200)</td><td colspan="2">~$5.170/mes fijo solo el alquiler 24/7 · <b>~$8.420 con luz y sysadmin</b></td><td>—</td></tr>
-  </table>
-  <p class="nota">*Costo/hora asumiendo 0,5M input + 0,5M output. Los modelos abiertos (DeepSeek, MIT) se pueden autohospedar; los de Google no. Verificá los precios vigentes antes de comprometer presupuesto — cambian seguido.</p>
-  <p class="nota"><b>Por qué el local aparece con dos precios:</b> el alquiler del servidor no es el costo completo. Sumale electricidad (~$250/mes) y sobre todo <b>un sysadmin o servicio gestionado</b> (~$3.000/mes), que es el costo que más proyectos de IA local hunde. Puede ser cero si ya tenés a alguien que lo absorbe — pero conviene evaluarlo, no asumirlo. El detalle está en <b>Fórmulas → La plata</b>, y en la <b>Calculadora</b> hay un asistente que te lo va pidiendo componente por componente.</p>
-</section>
-</div>
+
 
 <!-- ========== MONTECARLO ========== -->
-<div class="panel" id="montecarlo">
-<section>
-  <h2><svg><use href="#i-dice"/></svg> Simulación de Montecarlo</h2>
-  <p class="nota">Los números fijos mienten: el token cambió 10× en dos años y tu eficiencia real no la conocés hasta el tercer mes. Acá definís un <b>rango</b> para cada variable incierta y la simulación corre <b>10.000 veces</b> tu proyecto con combinaciones al azar. Los datos firmes los toma de la calculadora; acá solo definís lo que no sabés con certeza. Corre en tu navegador — no gasta nada aunque lo usen miles de personas.</p>
-  <div id="controles-mc" style="margin-top:18px;"></div>
-  <button class="cta" id="run-mc" style="margin:8px 0 4px;"><svg class="ic"><use href="#i-dice"/></svg> Correr 10.000 simulaciones</button>
-  <div class="grafico-box"><div class="canvas-holder"><canvas id="canvasMC"></canvas></div></div>
-  <p class="nota" id="mc-resumen" style="margin-top:16px; padding:14px; background:var(--naranja-claro); border-radius:8px; color:var(--navy); font-weight:600;"></p>
-</section>
-</div>
+
 
 <!-- ========== CONCLUSIONES ========== -->
-<div class="panel" id="conclusiones">
-<section>
-  <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
-  <p>Si te llevás tres cosas de todo este modelo, que sean las tres primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b> y los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro.</p>
-  <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
-</section>
 
-<section>
-  <h3 class="mod h-aut" style="font-size:1.15rem;">1 · El máximo de automatización no es el óptimo</h3>
-  <p>La intuición dice que cuanto más automatices, más ahorrás. Es falso, y el modelo muestra exactamente dónde deja de ser cierto.</p>
-  <p>Acordate del piso de continuidad: hay una cantidad de gente que <b>no podés soltar</b>, por más que la IA haga su trabajo. Una vez que llegás a ese piso, cada punto adicional de automatización <b>suma factura de IA pero ya no libera a nadie más</b>. Seguís pagando los mismos sueldos y encima pagás más IA.</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Automatización efectiva</th><th>Lo que promete la cuenta ingenua</th><th>Ahorro real</th><th>Recupero</th><th>IDA</th></tr>
-    <tr class="fila-ok"><td><b>60%</b> — el óptimo</td><td>$6.220</td><td><b>$6.220</b></td><td><b>8 meses</b></td><td>90</td></tr>
-    <tr><td>80%</td><td>$8.460</td><td>$5.260</td><td>10 meses</td><td>100</td></tr>
-    <tr class="fila-mal"><td>100%</td><td>$10.700</td><td>$4.300</td><td>12 meses</td><td>100</td></tr>
-  </table>
-  </div>
-
-  <p>Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua te promete <b>$10.700 por mes</b> y la realidad te da <b>$4.300</b>. Los $6.400 que faltan son los cuatro sueldos del piso de continuidad, que seguís pagando mientras la IA hace ese trabajo.</p>
-
-  <div class="ejemplo e-rie"><span class="tit">La frase para llevarse</span>
-  Pasado el piso, <b>automatizar de más te deja más pobre y más dependiente al mismo tiempo</b>: el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.</div>
-
-  <p class="nota">Podés ver esta curva en vivo en <b>Explorar gráficos → Ahorro vs Riesgo (λ)</b>: la línea gris es la promesa ingenua, la naranja es lo que pasa de verdad, y se separan justo en el punto donde el piso empieza a morder. El punto verde marca tu óptimo.</p>
-</section>
-
-<section>
-  <h3 class="mod h-rie" style="font-size:1.15rem;">2 · Lo que salva un proyecto es la arquitectura, no despedir más gente</h3>
-  <p>Acá está la consecuencia práctica, y es la que puede cambiar una decisión de directorio.</p>
-  <p>Cuando el número no cierra, el reflejo de cualquier gerente es <b>recortar más gente</b>. La conclusión anterior ya nos dijo que eso no funciona: no podés bajar del piso, y automatizar más te empeora las dos cosas. Entonces, ¿qué queda?</p>
-  <p><b>Queda bajar λ</b>, es decir, hacer más robusta la arquitectura. Mirá el mismo proyecto —misma gente, misma automatización, misma inversión— cambiando <i>solamente</i> dónde corre la IA y si tenés plan B:</p>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Arquitectura</th><th>λ</th><th>IDA</th><th>Ahorro</th><th>Recupero</th></tr>
-    <tr class="fila-mal"><td>Una sola nube, sin plan de contingencia</td><td>1,50</td><td>58</td><td>$2.457</td><td>20 meses <span class="mk no">✕</span></td></tr>
-    <tr><td>Una sola nube, con plan de contingencia</td><td>1,30</td><td>50</td><td>$2.703</td><td>19 meses <span class="mk no">✕</span></td></tr>
-    <tr class="fila-ok"><td>Multi-cloud, con plan de contingencia</td><td>1,10</td><td>42</td><td><b>$2.948</b></td><td><b>17 meses</b> <span class="mk ok">✓</span></td></tr>
-    <tr><td>IA local, con plan de contingencia</td><td>1,02</td><td>39</td><td>$3.047</td><td>16 meses <span class="mk ok">✓</span></td></tr>
-  </table>
-  </div>
-
-  <p>No cambió <b>nada</b> del negocio entre la primera fila y la última. No se automatizó más, no se despidió a nadie extra, no se negoció un mejor precio de tokens. Lo único que cambió es <b>dónde vive la IA y si hay plan B</b>. Con eso solo, el proyecto pasa de reprobar (20 meses) a aprobar, y el IDA cae de 58 a 39.</p>
-
-  <div class="ejemplo e-rie"><span class="tit">Leé la última fila con cuidado: es el piso teórico de λ, no una recomendación</span>
-  Esta tabla <b>aísla el efecto del riesgo</b>: mantiene fija la factura de IA ($1.229/mes) y mueve solo λ. Eso es exactamente lo que pasa cuando sumás un segundo proveedor o escribís el plan de contingencia — el riesgo baja y la factura casi no se mueve. Por eso la fila realista para esta empresa es <b>multi-cloud con plan</b>.<br><br>
-  Pero <b>mudarte a IA local no cambia solo λ: te cambia la factura entera</b>, de $1.229 a $8.420 por mes de costo fijo. Si esta misma empresa de 10 personas hiciera esa mudanza, su ahorro sería <b>−$4.288/mes</b> y no recuperaría nunca — lo ves con los números completos en <b>Casos extremos</b> (C y D). La fila de IA local muestra hasta dónde <i>puede</i> bajar λ, no que convenga a este volumen: <b>local recién conviene cuando tu volumen supera el break-even</b>. Bajar λ es la palanca correcta; cuál de las tres opciones te sirve depende de tu escala.</div>
-
-  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
-  Cuando el business case de automatización no cierra, <b>la palanca correcta casi nunca es recortar más gente: es bajar el riesgo de la arquitectura</b>. Es la única decisión que mejora las tres cosas a la vez — te sube el ahorro, te acorta el recupero y te baja la dependencia.</div>
-</section>
-
-<section>
-  <h3 class="mod h-con" style="font-size:1.15rem;">3 · Cuándo conviene comprar el fierro: hay dos umbrales, no uno</h3>
-  <p>La conclusión anterior dice que bajes λ, y la IA local es la que más lo baja. Pero recién vimos que para una empresa de 10 personas el servidor propio da <b>−$4.288 por mes</b>. ¿Entonces IA local nunca sirve? No: <b>sirve a partir de cierta escala</b>, y el modelo permite calcular exactamente cuál. Lo interesante es que <b>no hay un umbral, hay dos</b>, y contestan preguntas distintas.</p>
-
-  <h4 style="font-size:.95rem; margin:16px 0 6px;">Umbral 1 — Viabilidad: ¿el fierro se paga con los sueldos que liberás?</h4>
-  <p>El servidor cuesta <b>$8.420 por mes fijo</b> (con luz y sysadmin), uses 2 horas o 2.000. Ese costo no se mueve, así que la única pregunta es cuántos sueldos liberás contra él:</p>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Personas que liberás</th><th>Ahorro mensual con servidor propio</th><th></th></tr>
-    <tr class="fila-mal"><td>3 <span class="hint">(el ejemplo de 10 personas)</span></td><td>−$4.288</td><td><span class="mk no">✕</span> pérdida</td></tr>
-    <tr><td>5</td><td>−$1.088</td><td><span class="mk no">✕</span> pérdida</td></tr>
-    <tr class="fila-ok"><td><b>6</b></td><td><b>+$512</b></td><td><span class="mk ok">✓</span> punto de quiebre</td></tr>
-    <tr><td>10</td><td>+$6.912</td><td><span class="mk ok">✓</span></td></tr>
-    <tr><td>20</td><td>+$22.912</td><td><span class="mk ok">✓</span></td></tr>
-  </table>
-  </div>
-  <p><b>Por debajo de ~6 personas liberadas, comprar el fierro es pérdida segura</b>, no importa lo que hagas con el resto de las variables: el costo fijo se come todo el ahorro. Por eso automatizar 2 horas de trabajo con servidor propio es un disparate, y automatizar el trabajo de 20 personas es un buen negocio. La misma máquina, el mismo precio.</p>
-
-  <h4 style="font-size:.95rem; margin:16px 0 6px;">Umbral 2 — Conveniencia: ¿el fierro le gana a alquilar la API?</h4>
-  <p>Acá está lo que sorprende. Que el servidor deje de dar pérdida no significa que convenga: primero tiene que ganarle a la alternativa de alquilar. Y ese umbral <b>depende por completo de qué API estarías usando si no comprases</b>:</p>
-  <div class="formula-color" style="font-size:.95rem;">horas de IA para empatar &nbsp;=&nbsp; costo fijo mensual del fierro &nbsp;÷&nbsp; costo por hora de la API</div>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Si tu alternativa fuera…</th><th>Costo por hora automatizada</th><th>Local conviene a partir de</th></tr>
-    <tr><td><b>API DeepSeek V4-Flash</b> <span class="hint">(el más barato)</span></td><td>$0,21</td><td>40.100 h/mes = <b>251 personas-equivalente</b></td></tr>
-    <tr><td><b>API Gemini 3.6 Flash</b> <span class="hint">(20× más caro)</span></td><td>$4,50</td><td>1.871 h/mes = <b>12 personas-equivalente</b></td></tr>
-  </table>
-  </div>
-  <p>Mismo servidor, mismo precio, y el umbral se movió <b>20 veces</b> — de 251 personas a 12. Lo único que cambió es contra qué lo comparás. Por eso la pregunta "¿me conviene IA local?" está mal formulada si no decís <i>contra qué</i> y <i>a qué escala</i>.</p>
-
-  <div class="ejemplo e-rie"><span class="tit">Las tres zonas, para decidir en dos minutos</span>
-  <b>Menos de ~6 personas liberadas:</b> el fierro es pérdida segura. Alquilá.<br>
-  <b>Entre eso y el break-even de tu API:</b> el servidor propio funciona, pero la API funciona mejor. Alquilá igual, salvo que la soberanía del dato pese más que la plata.<br>
-  <b>Arriba del break-even:</b> local gana en costo <i>y</i> en λ al mismo tiempo. Es el único punto del modelo donde no hay que elegir entre ahorro y riesgo.</div>
-
-  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
-  No preguntes si conviene la IA local. Preguntá <b>contra qué la comparás y a qué escala</b>: el mismo servidor es un disparate para tres personas y la mejor decisión posible para trescientas. <b>El costo fijo no se discute, se supera con volumen</b> — y el modelo te dice desde qué volumen exacto.</div>
-</section>
-
-<section>
-  <h3 class="mod h-hum" style="font-size:1.15rem;">4 · Y una advertencia sobre los números lindos</h3>
-  <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
-  <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan (y un 7% que directamente no recupera nunca o tarda más de 60 meses).</p>
-  <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
-
-</section>
-
-<section>
-  <h2><svg><use href="#i-scale"/></svg> Cómo se aplica fuera de una oficina: banco y retail</h2>
-  <p>El modelo se explica con horas de oficina, pero donde más falta hace es donde hay <b>puestos físicos de atención</b>: una caja de supermercado, una ventanilla de banco, una guardia de gas. La buena noticia es que las cuatro variables se traducen casi solas.</p>
-
-  <h3 class="mod h-aut">Retail — cajas automáticas vs cajas con persona</h3>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Variable</th><th>Qué es en una caja de supermercado</th></tr>
-    <tr><td><b>a</b></td><td>% de transacciones que la caja automática puede procesar sola</td></tr>
-    <tr><td><b>r</b></td><td>Las que exigen humano sí o sí: verificación de edad (alcohol, tabaco), devoluciones, productos sin código, asistencia por accesibilidad</td></tr>
-    <tr><td><b>η</b></td><td>Eficiencia real — el autoservicio es más lento que un cajero entrenado y genera más merma por errores y hurto</td></tr>
-    <tr><td><b class="v-rie">λ</b></td><td>Si se cae el software de punto de venta o el proveedor, ¿podés seguir vendiendo?</td></tr>
-    <tr class="fila-ok"><td><b class="v-con">P_min</b></td><td><b>Cuántas cajas con persona necesitás para sostener la venta en hora pico si el autoservicio no funciona</b></td></tr>
-  </table>
-  </div>
-
-  <h3 class="mod h-hum">Banco — cajeros automáticos y app vs ventanilla</h3>
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Variable</th><th>Qué es en una sucursal</th></tr>
-    <tr><td><b>a</b></td><td>% de operaciones que se resuelven por cajero automático o app</td></tr>
-    <tr><td><b>r</b></td><td>Apertura de cuenta con verificación presencial, reclamos, efectivo sobre umbrales, y atención obligatoria por accesibilidad a personas mayores o con discapacidad</td></tr>
-    <tr><td><b class="v-rie">λ</b></td><td>Si se cae el core bancario o el proveedor de la app, ¿tenés ventanilla operativa? Para un banco esto no es comercial: es un evento regulatorio</td></tr>
-    <tr class="fila-ok"><td><b class="v-con">P_min</b></td><td><b>Cuántas ventanillas humanas necesitás para no incumplir la normativa y sostener la operación crítica</b></td></tr>
-  </table>
-  </div>
-  <p class="nota">En banca el modelo funciona incluso mejor que en oficina, porque <b>r deja de ser una estimación</b>: no lo adivinás, lo leés de la normativa del regulador. Ese es el único parámetro del modelo que puede tener respaldo legal en lugar de criterio.</p>
-
-  <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> La trampa al aplicarlo: el factor de cobertura</h3>
-  <p>Acá casi todo el mundo se equivoca, y el error es grande. <b>H_min se mide en horas de trabajo, no en puestos simultáneos.</b></p>
-  <p>Si alguien dice <i>"necesito 3 cajas siempre abiertas"</i> y carga <span class="cuenta">H_min = 3 × 160 = 480 h</span>, el modelo le devuelve <b>3 personas</b>. Está mal por más del doble. ¿Por qué? Porque el local abre <b>360 horas al mes</b> (12 h × 30 días) pero <b>una persona trabaja 160</b>. Tres puestos cubiertos durante 360 horas son 1.080 horas de trabajo, no 480.</p>
-
-  <div class="formula-color">factor de cobertura &nbsp;=&nbsp; horas de operación del canal &nbsp;÷&nbsp; horas que trabaja una persona</div>
-  <div class="formula-color"><span class="t t-con">P_min</span> &nbsp;=&nbsp; puestos simultáneos &nbsp;×&nbsp; factor de cobertura</div>
-
-  <div class="tabla-scroll">
-  <table>
-    <tr><th>Canal</th><th>Horas de operación/mes</th><th>Factor</th><th>3 puestos simultáneos =</th></tr>
-    <tr><td>Retail, 12 h × 30 días</td><td>360</td><td>2,25</td><td><b>7 personas</b></td></tr>
-    <tr><td>Sucursal de banco, 8 h × 22 días</td><td>176</td><td>1,10</td><td><b>4 personas</b></td></tr>
-    <tr class="fila-mal"><td>Guardia 24/7 (gas, energía, salud)</td><td>720</td><td>4,50</td><td><b>14 personas</b></td></tr>
-  </table>
-  </div>
-
-  <div class="ejemplo e-con"><span class="tit">La frase para llevarse</span>
-  <b>Tres puestos no son tres personas.</b> En un canal 24/7 son catorce. Ese factor de 4,5 es la razón por la que las guardias de servicios críticos parecen sobredimensionadas y no lo están: cubrir un puesto las 24 horas requiere cuatro turnos y medio de gente distinta —mañana, tarde, noche y dos francos rotativos— cubiertos por personas diferentes. Cualquier plan de automatización que ignore esto va a prometer un ahorro que no existe.</div>
-
-  <p class="nota">Si tu demanda no es pareja —un pico de 3 horas y el resto tranquilo— calculá H_min sumando franja por franja: <span class="cuenta">(puestos en pico × horas de pico + puestos fuera de pico × horas fuera de pico) × días</span>. Y agregale un margen: nadie puede contratar a alguien para trabajar exactamente las tres horas del pico todos los días.</p>
-</section>
-
-<section>
-  <h2><svg><use href="#i-book"/></svg> Los límites del modelo</h2>
-  <p>Ningún modelo es honesto si no dice qué <i>no</i> hace. Estos son los cuatro supuestos que este modelo da por ciertos y que en tu empresa pueden no serlo.</p>
-
-  <h3>1 · Supone que la gente que conservás todavía sabe hacerlo</h3>
-  <p>El piso de continuidad asume que esas personas pueden <b>ejecutar el proceso manual el día que haga falta</b>. Pero si hace ocho meses que la IA hace todo y ellos solo revisan, no van a poder. Son <b>guardia pasiva</b>, y la guardia pasiva se oxida.</p>
-  <p>El modelo te da la cantidad, no la capacidad. Mantenerla exige <b>simulacros periódicos de operación manual</b> —igual que un simulacro de incendio— y eso tiene un costo en horas que hoy no está en ninguna fórmula. Un P_min de papel no salva a nadie.</p>
-
-  <h3>2 · Supone que el know-how sigue adentro de la empresa</h3>
-  <p>Relacionado con lo anterior pero distinto: no alcanza con tener gente disponible, tiene que quedar en la empresa <b>quién sepa cómo se seguía trabajando antes</b>. Si automatizaste y en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. La documentación del proceso manual es parte del seguro, no un trámite.</p>
-  <p><b>Y acá es donde este límite muerde más fuerte: en <span class="v-con">R</span>, el respaldo externo.</b> El piso <b class="v-con">P_min</b> al menos habla de gente que está en el área todos los días. R habla de gente que <i>supuestamente</i> sabe hacer la tarea pero <b>hace tiempo que no la hace</b> —o que quizás nunca la hizo en esta versión del proceso—. El modelo <b>no tiene forma de verificarlo</b>: R es una declaración tuya, y es el único número del modelo que <b>baja</b> el riesgo en lugar de subirlo. Todos los demás castigan; este premia.</p>
-  <div class="ejemplo e-con"><span class="tit">Cómo auditar un R antes de creerle</span>
-  Tres preguntas, y si alguna falla el número no vale:<br><br>
-  <b>1 · ¿Lo hicieron alguna vez, con este proceso?</b> No "algo parecido en otra sucursal hace cinco años". Este proceso, esta versión.<br>
-  <b>2 · ¿Está documentado el modo manual?</b> Si la única forma de aprenderlo era mirando a alguien que ya no está, R es cero por más gente que figure.<br>
-  <b>3 · ¿Se probó alguna vez que puedan venir?</b> Porque tienen su propio trabajo. Si nadie ensayó el traspaso, no sabés cuántas horas tardan en estar operativos — y las primeras horas de una caída son las que cuentan.<br><br>
-  <b>Si las tres respuestas no son un sí claro, poné R = 0 y quedate con el IDA crudo.</b> Un respaldo declarado y no probado es exactamente el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.</div>
-
-  <h3>3 · Mide costo y continuidad, no ingresos</h3>
-  <p>El modelo cuenta lo que dejás de gastar, nunca lo que podrías ganar de más. <b>Para operaciones críticas eso es exactamente lo correcto:</b> en una guardia de gas o de energía no hay ingreso que justificar — hay una obligación legal de tener gente disponible 24/7 por si pasa algo. El modelo está pensado justamente para calcular <i>cuánta</i> gente es esa.</p>
-  <p class="nota">Pero si tu caso es comercial y automatizar te genera ventas nuevas —atención a las 3 AM, más capacidad en hora pico—, ese ingreso <b>no entra acá</b> y hay que sumarlo por afuera. El modelo es deliberadamente conservador: te dice el piso de la decisión, no el techo.</p>
-
-  <h3>4 · Modela la convivencia permanente, no la degradación temporal</h3>
-  <p>La convivencia entre humano e IA <b>sí está en el modelo</b>, y vive en la variable <b>r</b>. Si de 1.000 horas hay 200 que necesitan la firma de un abogado, un ingeniero o un arquitecto, cargás <span class="cuenta">r = 20%</span> y el modelo entiende que esas 200 horas <b>nunca</b> se automatizan: la IA hace el trabajo, el profesional firma. Es convivencia estructural y permanente, y está bien representada.</p>
-  <p>Lo que el modelo <b>no</b> sabe representar es la degradación <i>temporal</i>: que la IA no se caiga del todo pero funcione peor durante dos semanas —más lenta, con más errores, con límite de consultas—. El modelo es binario: la IA está o no está. En la realidad, la falla más común es ese estado intermedio, donde tenés que poner gente a corregir sin haber perdido el servicio.</p>
-
-  <h3>5 · El recupero es payback simple, no valor presente</h3>
-  <p><span class="cuenta">T = I ÷ S</span> divide y listo: <b>no descuenta el dinero en el tiempo</b>. No hay tasa, no hay inflación, no hay costo de oportunidad. Un dólar del mes 20 vale lo mismo que uno de hoy. En finanzas esto se llama <b>payback simple</b>, y es distinto del VPN (valor presente neto) o la TIR que va a pedirte un CFO para aprobar la inversión.</p>
-  <p class="nota">Es deliberado: el payback simple se entiende sin explicación y sirve para <b>descartar</b> proyectos, que es lo que hace este modelo. Pero tiene un sesgo que conviene conocer — al no descontar, el recupero se ve <b>mejor</b> de lo que es. Si tu costo de capital es alto o operás en una economía con inflación en dólares, el recupero real es más largo que el que muestra la calculadora. Tratá los 18 meses como un filtro grueso, no como una aprobación financiera: para eso hay que llevar el ahorro mensual a una planilla de VPN con la tasa de tu empresa.</p>
-
-  <h3>6 · Los coeficientes de riesgo son criterio experto, no un dataset</h3>
-  <p>Los recargos de <b class="v-rie">λ</b> —+30% por nube única, +20% por no tener plan de contingencia, +15% por datos sensibles afuera— <b>salen de experiencia profesional, no de un estudio estadístico</b>. No hay detrás una base de incidentes con miles de casos: hay criterio, y conviene decirlo antes de que lo pregunte otro.</p>
-  <p>Lo que sí tienen es <b>un orden defendible</b>, que es lo que hace falta para decidir. Depender de un solo proveedor es la fragilidad más grave porque es la única que no tiene salida —si se cae, no hay a dónde ir—, y por eso pesa más que las otras dos. No tener plan de contingencia viene después: no te cae el servicio, pero te deja sin respuesta ensayada cuando cae. Y los datos sensibles afuera pesan menos en continuidad porque no interrumpen la operación: agregan exposición regulatoria y de reputación, que es un riesgo real pero de otra naturaleza.</p>
-  <p class="nota">Para calibrarlos de verdad haría falta lo mismo que usan las aseguradoras: una base de incidentes por sector con frecuencia, duración y costo de cada caída, y ajustar los coeficientes contra esos datos. Es el próximo paso natural del modelo y está pendiente. <b>Mientras tanto, lo importante es que el orden de magnitud sirva para comparar dos arquitecturas entre sí</b> — que es para lo que se usa λ en la práctica—, aunque el valor absoluto se pueda discutir.</p>
-
-  <div class="ejemplo e-rie"><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span>
-  <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
-  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</div>
-
-  <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
-  Ninguno de los seis invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
-</section>
-
-<section>
-  <div class="remate" style="margin-top:0;">
-    El modelo no está en contra de automatizar. Está en contra de automatizar <b>a ciegas</b>. Todas las cuentas de este sitio dicen lo mismo desde ángulos distintos: la pregunta importante no es <b>cuánta gente puedo sacar</b>, sino <b>cuánta gente tengo que conservar</b> — y cuánto me cuesta no haberlo pensado antes.
-    <div class="preg-final">
-      <div><h4>¿Cuál es tu piso?</h4><span class="nota">¿Con cuánta gente operás mañana si la IA no está?</span></div>
-      <div><h4>¿Cuál es tu IDA?</h4><span class="nota">¿Cuán rehén sos de tu propia arquitectura?</span></div>
-    </div>
-  </div>
-  <p class="nota" style="margin-top:16px;">Si todavía no las respondiste con números, volvé a la <b>Calculadora</b> y cargá los de tu empresa. Tarda dos minutos y no se envía nada a ningún lado.</p>
-</section>
-</div>
 
 <footer>
-  <p>Modelo IDA — Humano · Automatización · Riesgo · Continuidad</p>
-  <p>Por <a href="https://cesarriat.com">César Riat</a> · Licencia MIT</p>
+  <p>IDA Model — Human · Automation · Risk · Continuity</p>
+  <p>By <a href="https://cesarriat.com">César Riat</a> · MIT licence</p>
   <div class="footer-links">
-    <a class="cta" href="https://github.com/All-Aideas/Modelo-IDA"><svg class="ic"><use href="#i-arrow"/></svg> Ver en GitHub</a>
+    <a class="cta" href="https://github.com/All-Aideas/Modelo-IDA"><svg class="ic"><use href="#i-arrow"/></svg> View on GitHub</a>
     <a class="discreto" href="en/"><svg class="ic"><use href="#i-arrow"/></svg> Read this in English</a>
     <!-- Link a Medium: el articulo se dio de baja para reescribirlo. Cuando se
          republique, Medium genera un slug nuevo: reponer el <a class="discreto">
@@ -1194,12 +607,12 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="informe">
   <div class="inf-marca">cesarriat.com</div>
   <div class="inf-cab">
-    <h1>Modelo IDA — Informe de continuidad</h1>
+    <h1>IDA Model — Informe de continuidad</h1>
     <div class="sub" id="inf-fecha"></div>
   </div>
   <div id="inf-cuerpo"></div>
   <div class="inf-pie">
-    <span>Modelo IDA · Humano · Automatización · Riesgo · Continuidad</span>
+    <span>IDA Model · Human · Automation · Risk · Continuity</span>
     <span>Generado en <b>cesarriat.com</b></span>
   </div>
 </div>
@@ -1275,7 +688,7 @@ function svgExtremoA(){
     <text x="${L+8}" y="${py(Pmin)-8}" font-size="11.5" font-weight="700" fill="#1F7A4D" ${F}>Piso de continuidad = ${Pmin} personas</text>
     <text x="${L+8}" y="${py(9.3)}" font-size="11.5" fill="#8a94a6" ${F}>— — cuenta ingenua (llega a cero)</text>
     <text x="${L+8}" y="${py(8.5)}" font-size="11.5" font-weight="700" fill="#D9480F" ${F}>—— modelo con piso</text>
-    <text x="${(L+W-R)/2}" y="${H-10}" font-size="11.5" fill="#8a94a6" text-anchor="middle" ${F}>Automatización efectiva</text>
+    <text x="${(L+W-R)/2}" y="${H-10}" font-size="11.5" fill="#8a94a6" text-anchor="middle" ${F}>Automation efectiva</text>
     <text x="16" y="${T+10}" font-size="11.5" fill="#8a94a6" ${F}>Personas</text>
   </svg>`;
 }
@@ -1324,7 +737,7 @@ const MODULOS={
     simbolo:'En las fórmulas aparece como <b class="v-hum">C_h</b>. Las horas totales son las personas multiplicadas por las horas que trabaja cada una.',
     detalle:'Es la vara contra la que después se compara lo que cuesta la IA. Si la nómina sube y las horas quedan igual, cada hora sale más cara y automatizar se justifica más fácil. Si sumás gente sin subir la nómina en la misma proporción, la hora se abarata y la IA deja de ser tan buen negocio.',
     usa:'Alimenta el cálculo del ahorro.'},
-  aut:{nom:'Automatización', ico:'i-mod-aut', cls:'fm-aut', color:'var(--m-aut)',
+  aut:{nom:'Automation', ico:'i-mod-aut', cls:'fm-aut', color:'var(--m-aut)',
     datos:['a','r','eta'], datos_nodo:['are'], res:['P','S','IDA'],
     produce:'la <b class="v-aut">automatización efectiva</b>: la parte del trabajo que la IA reemplaza de verdad',
     formula:'automatización efectiva  =  lo automatizable  ×  (1 − lo que exige firma)  ×  eficiencia real',
@@ -1338,7 +751,7 @@ const MODULOS={
     simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
     detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es el costo esperado del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
     usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
-  con:{nom:'Continuidad', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
+  con:{nom:'Continuity', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
     datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
     produce:'el <b class="v-con">piso de personas</b>: con cuánta gente te tenés que quedar sí o sí',
     formula:'piso de personas  =  horas mínimas sin IA  ÷  horas que trabaja una persona   (redondeando para arriba)',
@@ -1352,7 +765,7 @@ const DIAG={
     {id:'Ph',   t:'Personas y horas',        s:'cuántos son y cuánto trabajan'},
     {id:'N',    t:'Nómina mensual',          s:'lo que pagás de sueldos'},
     {id:'are',  t:'Automatizable',           s:'qué parte, cuánta firma, qué eficiencia'},
-    {id:'rho',  t:'Arquitectura',            s:'dónde corre la IA y si hay plan B'},
+    {id:'rho',  t:'Architecture',            s:'dónde corre la IA y si hay plan B'},
     {id:'Hmin', t:'Horas mínimas sin IA',    s:'la operación que no puede parar'},
     {id:'R',    t:'Respaldo externo',        s:'quiénes de afuera saben hacerlo'},
     {id:'Cmes', t:'Gasto de IA por mes',     s:'tu factura'},
@@ -1360,9 +773,9 @@ const DIAG={
   ],
   modulos:[
     {id:'hum', t:'Humano',         s:'→ costo de la hora humana',   c:'--m-hum'},
-    {id:'aut', t:'Automatización', s:'→ automatización efectiva',   c:'--m-aut'},
+    {id:'aut', t:'Automation', s:'→ automatización efectiva',   c:'--m-aut'},
     {id:'rie', t:'Riesgo',         s:'→ multiplicador de riesgo',   c:'--m-rie'},
-    {id:'con', t:'Continuidad',    s:'→ piso y cobertura',          c:'--m-con'}
+    {id:'con', t:'Continuity',    s:'→ piso y cobertura',          c:'--m-con'}
   ],
   res:[
     {id:'P',   t:'Dotación',  s:'con cuánta gente te quedás'},
@@ -1600,7 +1013,9 @@ function resetFlow(){
   d.innerHTML=`<p style="margin:0 0 8px; color:var(--gris); font-size:.9rem;">Elegí un <b>módulo</b> (columna del medio) para ver hacia adelante qué datos consume y a qué respuestas alimenta. O elegí una <b>respuesta</b> (columna derecha) para ver hacia atrás todo lo que la construye.</p><p style="margin:0; color:var(--gris); font-size:.9rem;">Fijate en la línea que va de <b>Dotación</b> a <b>Ahorro</b>: las respuestas no son tres números sueltos.</p>`;
 }
 
-const $=id=>document.getElementById(id);
+// Build EN: los paneles de profundizacion no estan en esta edicion, asi que
+// el cableado que los busca tiene que poder fallar sin cortar el script.
+const $=id=>document.getElementById(id)||document.createElement("div");
 // El signo va ANTES del simbolo de moneda: "-$4.288", no "$-4.288".
 const nf=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-AR');
 const nfd=n=>(n<0?'-':'')+'$'+(Math.abs(n)<100?Math.abs(n).toFixed(2).replace('.',','):Math.abs(Math.round(n)).toLocaleString('es-AR'));
@@ -1614,7 +1029,7 @@ let ctModo='api', horasIAactual=614.4, ctValor=0.21;
 function calcAsistente(){
   let v;
   if(ctModo==='api'){
-    // El costo por hora se DERIVA del gasto mensual y las horas automatizadas.
+    // El costo por hora se DERIVA del monthly spend y las horas automatizadas.
     // No se le pide al usuario "tokens por hora": ese numero sale como diagnostico.
     const precio=num('ctp_precio',0), mes=num('ctp_mes',0);
     v = precio*mes;
@@ -1663,7 +1078,7 @@ function calcHmin(){
     : 'Sin puestos simultáneos que cubrir, cargá directamente en el campo de arriba las horas de trabajo que necesitás al mes.';
 }
 
-// ---- Calculadora ----
+// ---- Calculator ----
 // Lee un input numerico protegiendo los divisores: sin esto, P=0 o hp=0
 // producen division por cero y la UI muestra "Infinity" / "$-∞".
 function num(id,min){ const v=parseFloat($(id).value); return isNaN(v)?min:Math.max(v,min); }
@@ -1688,10 +1103,10 @@ function calc(){
   // pagando esos sueldos aunque la IA haga el trabajo.
   //
   // El gasto de IA tiene DOS comportamientos posibles, y hay que elegir uno:
-  //  - VARIABLE (API, el default): el costo por hora es lo fijo; el gasto mensual
+  //  - VARIABLE (API, el default): el costo por hora es lo fijo; el monthly spend
   //    escala con las horas automatizadas. Es lo que preserva el hallazgo central
   //    del modelo (pasado el piso, automatizar de mas baja el ahorro).
-  //  - FIJO (servidor propio, ctFijo=true): el gasto mensual NO se mueve aunque
+  //  - FIJO (servidor propio, ctFijo=true): el monthly spend NO se mueve aunque
   //    cambie la automatizacion -- es lo que de verdad pasa con un servidor
   //    alquilado. Lo que sube o baja es el costo por hora, como consecuencia.
   // Antes esto no se distinguia: el modo "servidor propio" del asistente
@@ -1738,12 +1153,12 @@ function calc(){
   $('out_P_sub').textContent = Pmin>P
     ? `Atención: tu piso (${Pmin}) supera tu dotación actual (${P}). Hoy ya no podrías sostener la operación crítica sin IA — eso hay que resolverlo antes de automatizar nada.`
     : Pecon>=Pmin
-      ? `La cuenta económica manda. Tu piso de continuidad es ${Pmin}.`
+      ? `Economics decide here. Your continuity floor is ${Pmin}.`
       : `El piso de continuidad (${Pmin}) te frena: la economía daría ${Pecon}.`;
   $('out_aef').textContent=(aef*100).toFixed(0)+'%';
   $('out_lambda').textContent=lambda.toFixed(2).replace('.',',');
   $('out_S').textContent=nf(S);
-  $('out_lib').textContent = liberadas===1?'1 persona liberada':`${liberadas} personas liberadas`;
+  $('out_lib').textContent = liberadas===1?'1 persona liberada':`${liberadas} people released`;
   const frenoS=$('out_S_freno');
   if(Pecon<Pmin){
     frenoS.style.display='block';
@@ -1753,23 +1168,23 @@ function calc(){
   $('out_IDA_sub').style.display = cobertura>0 ? 'block' : 'none';
   if(cobertura>0) $('out_IDA_sub').innerHTML=`Sin respaldo externo sería <b>${IDAcrudo.toFixed(0)}</b>: ${R===1?'la persona':'las '+R+' personas'} de afuera cubren el ${(cobertura*100).toFixed(0)}% de tu piso.`;
   const badge=$('out_IDA_badge'), mini=$('out_IDA_mini');
-  if(IDA<30){badge.className='ida-badge ida-verde'; badge.textContent='Resiliente';
+  if(IDA<30){badge.className='ida-badge ida-verde'; badge.textContent='Resilient';
     mini.textContent=`Un IDA de ${IDA.toFixed(0)} significa baja dependencia: automatizaste poco o con arquitectura robusta. Una caída de IA sería una molestia menor, no un paro operativo.`;}
-  else if(IDA<=60){badge.className='ida-badge ida-amarillo'; badge.textContent='Vigilancia';
+  else if(IDA<=60){badge.className='ida-badge ida-amarillo'; badge.textContent='Watch';
     mini.textContent=`Un IDA de ${IDA.toFixed(0)} es dependencia significativa: necesitás piso de continuidad calculado y simulacros de operación manual. Antes de automatizar más, conviene bajar el riesgo de tu arquitectura: un segundo proveedor, o mover la IA adentro.`;}
-  else{badge.className='ida-badge ida-rojo'; badge.textContent='Crítico';
+  else{badge.className='ida-badge ida-rojo'; badge.textContent='Critical';
     mini.textContent=`Un IDA de ${IDA.toFixed(0)} es crítico: tu operación es prácticamente rehén de tu proveedor de IA. Si sos banco, energía o salud, esto debería ser prioridad de directorio.`;}
   const al=$('out_alerta');
   if(S<=0){$('out_pb').textContent='Nunca'; al.className='alerta warn'; al.textContent='Ahorro negativo o nulo: con este riesgo, automatizar cuesta más de lo que ahorra.';}
-  else if(pb>18){$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta warn'; al.textContent='Más de 18 meses: la inversión no se recupera en un plazo razonable.';}
-  else{$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta ok'; al.textContent='Menos de 18 meses: el proyecto tiene sentido.';}
+  else if(pb>18){$('out_pb').textContent=pb.toFixed(0)+' months'; al.className='alerta warn'; al.textContent='Over 18 months: the investment does not pay back within a reasonable horizon.';}
+  else{$('out_pb').textContent=pb.toFixed(0)+' months'; al.className='alerta ok'; al.textContent='Under 18 months: the project makes sense.';}
 }
 // Este listener tiene que registrarse ANTES del bucle genérico de abajo:
 // los listeners de un mismo evento corren en el orden en que se agregan, y
 // calc() necesita ver ctFijo ya actualizado, no el valor de la vuelta anterior.
 // Una edicion manual del campo se toma como "quiero fijar este numero como
 // referencia variable" (comportamiento API, el default). Si querés un monto
-// realmente fijo, usá el asistente en modo "Servidor propio" y "Usar este valor".
+// realmente fijo, usá el asistente en modo "Own server" y "Usar este valor".
 $('CtMes').addEventListener('input',()=>{ctEditado=true; ctFijo=false;});
 
 document.querySelectorAll('#calc input').forEach(el=>{
@@ -1808,7 +1223,7 @@ $('btn-reiniciar').onclick=()=>{
   calc();
 };
 
-function zonaIDA(v){ return v<30?'Resiliente':(v<=60?'Vigilancia':'Crítico'); }
+function zonaIDA(v){ return v<30?'Resilient':(v<=60?'Watch':'Critical'); }
 
 // --- Graficos del informe en SVG: imprimen nitidos y no dependen de Chart.js ---
 function svgIDA(ida){
@@ -1820,9 +1235,9 @@ function svgIDA(ida){
     <rect x="${X(60)}" y="${y}" width="${X(40)}" height="${bh}" fill="#B02A37"/>
     <polygon points="${px},${y-1} ${px-5},${y-8} ${px+5},${y-8}" fill="#2e3a4d"/>
     <text x="${px}" y="${y-11}" font-size="10" font-weight="700" text-anchor="middle" fill="#2e3a4d" ${F}>${ida.toFixed(0)}</text>
-    <text x="0" y="${y+bh+9}" font-size="7" fill="#8a94a6" ${F}>0 · Resiliente</text>
-    <text x="${w/2}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="middle" ${F}>Vigilancia</text>
-    <text x="${w}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="end" ${F}>Crítico · 100</text>
+    <text x="0" y="${y+bh+9}" font-size="7" fill="#8a94a6" ${F}>0 · Resilient</text>
+    <text x="${w/2}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="middle" ${F}>Watch</text>
+    <text x="${w}" y="${y+bh+9}" font-size="7" fill="#8a94a6" text-anchor="end" ${F}>Critical · 100</text>
   </svg>`;
 }
 function svgAhorro(e){
@@ -1854,7 +1269,7 @@ function buildInforme(){
   $('inf-fecha').textContent='Generado el '+new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
   const arq=[...document.querySelectorAll('#arq input:checked')]
     .map(c=>c.parentElement.textContent.replace(/\s+/g,' ').trim()).join(' · ');
-  const pbTxt = e.S>0 ? Math.round(e.pb)+' meses' : 'No se recupera';
+  const pbTxt = e.S>0 ? Math.round(e.pb)+' months' : 'No se recupera';
   const veredicto = e.S<=0
     ? 'Con estos valores, automatizar cuesta más de lo que ahorra: el proyecto no se sostiene por sí solo. Antes de avanzar hay que bajar el costo real de la IA (λ o C_mes) o revisar si el piso de continuidad deja margen para liberar gente.'
     : (e.pb>18
@@ -1886,7 +1301,7 @@ function buildInforme(){
   $('inf-cuerpo').innerHTML=`
   <div class="inf-kpis">
     <div class="inf-kpi"><span class="k-lab">Personas a conservar</span><span class="k-val">${e.Pfinal}</span><span class="k-sub">de ${e.P} actuales</span></div>
-    <div class="inf-kpi ${e.S>0?'ok':'mal'}"><span class="k-lab">Ahorro mensual</span><span class="k-val">${nf(e.S)}</span><span class="k-sub">ajustado por riesgo</span></div>
+    <div class="inf-kpi ${e.S>0?'ok':'mal'}"><span class="k-lab">Monthly saving</span><span class="k-val">${nf(e.S)}</span><span class="k-sub">ajustado por riesgo</span></div>
     <div class="inf-kpi ${clsPb}"><span class="k-lab">Recupero</span><span class="k-val">${e.S>0?Math.round(e.pb):'—'}</span><span class="k-sub">${e.S>0?'meses':'no recupera'}</span></div>
     <div class="inf-kpi ${clsIDA}"><span class="k-lab">IDA</span><span class="k-val">${e.IDA.toFixed(0)}</span><span class="k-sub">${zonaIDA(e.IDA)}</span></div>
   </div>
@@ -1900,7 +1315,7 @@ function buildInforme(){
   <h2>1 · Datos cargados</h2>
   <table>
     <tr><th>Concepto</th><th style="text-align:right">Valor</th></tr>
-    <tr><td>Personas actuales en el área</td><td class="num">${e.P}</td></tr>
+    <tr><td>People currently in the area</td><td class="num">${e.P}</td></tr>
     <tr><td>Nómina mensual total</td><td class="num">${nf(e.N)}</td></tr>
     <tr><td>Horas por persona al mes</td><td class="num">${e.hp} h</td></tr>
     <tr><td>Horas totales del área</td><td class="num">${Math.round(e.H).toLocaleString('es-AR')} h</td></tr>
@@ -1911,22 +1326,22 @@ function buildInforme(){
     <tr><td>Inversión inicial · mantenimiento mensual</td><td class="num">${nf(e.I)} · ${nf(e.M)}</td></tr>
     <tr><td>Horas mínimas para operar sin IA</td><td class="num">${Math.round(e.Hmin).toLocaleString('es-AR')} h</td></tr>
     <tr><td>Respaldo externo declarado (R)</td><td class="num">${e.R} ${e.R===1?'persona':'personas'}</td></tr>
-    <tr><td>Arquitectura</td><td class="num" style="font-weight:400">${arq||'sin definir'}</td></tr>
+    <tr><td>Architecture</td><td class="num" style="font-weight:400">${arq||'sin definir'}</td></tr>
   </table>
 
   <h2>2 · Resultados</h2>
   <table>
     <tr><th>Indicador</th><th style="text-align:right">Resultado</th></tr>
-    <tr><td>Automatización efectiva (a_ef)</td><td class="num">${pc(e.aef)}</td></tr>
+    <tr><td>Automation efectiva (a_ef)</td><td class="num">${pc(e.aef)}</td></tr>
     <tr><td>Multiplicador de riesgo (λ)</td><td class="num">${e.lambda.toFixed(2).replace('.',',')}</td></tr>
     <tr><td>Piso de continuidad (P_min)</td><td class="num">${e.Pmin} personas</td></tr>
     <tr><td>Cobertura del piso con respaldo externo</td><td class="num">${pc(e.cobertura)}</td></tr>
     <tr class="inf-destacado"><td><b>Personas a conservar (P')</b></td><td class="num">${e.Pfinal} personas</td></tr>
     <tr><td>Personas que se liberan</td><td class="num">${e.liberadas}</td></tr>
     <tr><td>Costo mensual de la IA ajustado por riesgo</td><td class="num">${nf(e.costoIA)}</td></tr>
-    <tr class="inf-destacado"><td><b>Ahorro mensual (S)</b></td><td class="num">${nf(e.S)}</td></tr>
-    <tr class="inf-destacado"><td><b>Recupero de la inversión</b></td><td class="num">${pbTxt}</td></tr>
-    <tr class="inf-destacado"><td><b>Índice de Dependencia de IA (IDA)</b></td><td class="num">${e.IDA.toFixed(0)} — ${zonaIDA(e.IDA)}</td></tr>
+    <tr class="inf-destacado"><td><b>Monthly saving (S)</b></td><td class="num">${nf(e.S)}</td></tr>
+    <tr class="inf-destacado"><td><b>Investment payback</b></td><td class="num">${pbTxt}</td></tr>
+    <tr class="inf-destacado"><td><b>AI Dependency Index (IDA)</b></td><td class="num">${e.IDA.toFixed(0)} — ${zonaIDA(e.IDA)}</td></tr>
   </table>
 
   <h2>3 · Análisis económico de la inversión</h2>
@@ -1983,7 +1398,7 @@ function buildCSV(){
   const sec=t=>f.push('',''+t);
   const fila=(k,v,u)=>f.push([k,v,u||''].map(x=>`"${String(x).replace(/"/g,'""')}"`).join(';'));
 
-  f.push('"Modelo IDA - export de supuestos y resultados"');
+  f.push('"IDA Model - export de supuestos y resultados"');
   fila('Generado', new Date().toLocaleString('es-AR'));
   fila('Fuente', 'modelo-ida.web.app');
 
@@ -1995,14 +1410,14 @@ function buildCSV(){
   fila('Costo de la hora humana (C_h)', n(e.N/e.H), 'USD/h');
   fila('Automatizable (a)', n(e.a*100), '%');
   fila('Con firma humana obligatoria (r)', n(e.r*100), '%');
-  fila('Eficiencia real de la IA (eta)', n(e.eta*100), '%');
+  fila('Real AI efficiency (eta)', n(e.eta*100), '%');
   fila('Gasto de IA por mes (C_mes)', n(e.CtMesEf), 'USD/mes');
   fila('Equivale por hora automatizada', n(e.Ct), 'USD/h');
   fila('Inversion inicial (I)', n(e.I), 'USD');
   fila('Mantenimiento mensual (M)', n(e.M), 'USD/mes');
   fila('Horas minimas para operar sin IA (H_min)', n(e.Hmin), 'h/mes');
   fila('Respaldo externo (R)', e.R, 'personas');
-  fila('Arquitectura', arq||'sin definir');
+  fila('Architecture', arq||'sin definir');
 
   sec('"RESULTADOS"');
   fila('Automatizacion efectiva (a_ef)', n(e.aef*100), '%');
@@ -2014,7 +1429,7 @@ function buildCSV(){
   fila('Personas a conservar (P prima)', e.Pfinal, 'personas');
   fila('Personas que se liberan', e.liberadas, 'personas');
   fila('Costo de IA ajustado por riesgo', n(e.costoIA), 'USD/mes');
-  fila('Ahorro mensual (S)', n(e.S), 'USD/mes');
+  fila('Monthly saving (S)', n(e.S), 'USD/mes');
   fila('Recupero (T)', e.S>0?n(e.pb):'no recupera', e.S>0?'meses':'');
   fila('IDA', n(e.IDA), 'sobre 100');
   fila('IDA sin descontar respaldo externo', n(e.IDAcrudo), 'sobre 100');
@@ -2132,7 +1547,7 @@ function updateJugar(){
       {label:`Óptimo ≈ ${aOpt.toFixed(0)}%`,data:xs.map((_,i)=>i===iOpt?maxS:null),borderColor:VERDE,backgroundColor:VERDE,pointRadius:6,showLine:false},
       {label:'S = 0',data:xs.map(()=>0),borderColor:NAVY,borderDash:[2,3],pointRadius:0,borderWidth:1.5},
     ];
-    xTitle='Automatización efectiva (%)'; yTitle='Ahorro mensual (USD)';
+    xTitle='Automation efectiva (%)'; yTitle='Monthly saving (USD)';
     const cr=lam*Ct, aFreno=Math.max(0,(1-Pmin/P)*100);
     explica=`El costo real de la IA es $${cr.toFixed(1)}/h (λ×Ct) contra $${Ch}/h del humano. La línea gris es la cuenta ingenua: supone que cada hora automatizada es un sueldo menos. La naranja es la real: solo ahorrás sueldos de gente que efectivamente podés liberar. `+
       (Pmin<P
@@ -2152,7 +1567,7 @@ function updateJugar(){
       {label:`Inversión máxima recuperable en ${Tmax} meses`,data:techo,borderColor:maxT>0?NARANJA:ROJO,borderWidth:3,pointRadius:0,stepped:true,fill:{target:'origin',above:'rgba(255,111,0,0.08)'}},
       {label:`Techo máximo ≈ ${nf(maxT)} al ${aOpt.toFixed(0)}%`,data:xs.map((_,i)=>i===iOpt?maxT:null),borderColor:VERDE,backgroundColor:VERDE,pointRadius:6,showLine:false},
     ];
-    xTitle='Automatización efectiva (%)'; yTitle='Inversión máxima que se recupera (USD)';
+    xTitle='Automation efectiva (%)'; yTitle='Inversión máxima que se recupera (USD)';
     explica=maxT>0
       ? `Con un payback exigido de ${Tmax} meses, cada punto es <b>lo máximo que podés invertir</b> y todavía recuperarlo. El techo más alto es ${nf(maxT)} y está en el ${aOpt.toFixed(0)}% de automatización — no en el 100%. Si automatizás de más, el ahorro cae y con él cae cuánta plata podés justificar poner. Exigí un payback más corto y el techo baja parejo.`
       : `Con estos valores el ahorro nunca es positivo: no hay inversión que se recupere, por chica que sea. Bajá λ o el costo de la IA, o revisá si el piso de continuidad te está dejando sin gente para liberar.`;
