@@ -709,6 +709,24 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td>¿Cuánto me cuesta el riesgo de mi arquitectura?</td><td>Riesgo</td></tr>
     <tr><td>¿Cuál es mi piso para sobrevivir sin IA?</td><td>Continuidad</td></tr>
   </table>
+  <h3>El precio que pagás hoy no es lo que cuesta</h3>
+  <p>Acá hay algo que conviene mirar antes de armar cualquier plan a dos años. <b>Los proveedores de IA no están cobrando lo que les cuesta atenderte.</b> Están comprando mercado, y el precio del token es una decisión comercial, no el reflejo de un costo.</p>
+  <p>Los números públicos lo muestran. Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos <b>US$ 25.000 millones de facturación</b> y una <b>pérdida del orden de US$ 14.000 millones</b>. La cuenta es directa:</p>
+  <div class="formula-color">25.000 de ingresos &nbsp;+&nbsp; 14.000 de pérdida &nbsp;=&nbsp; 39.000 de costo &nbsp;→&nbsp; <b>1,56</b> de costo por cada 1 que factura</div>
+  <p>Dicho de otra manera: <b>por cada dólar que te cobran, gastan alrededor de un dólar con cincuenta</b>. La diferencia la ponen los inversores, no vos. Y no es parejo entre proveedores: Anthropic recorrió el camino inverso —de un margen bruto negativo en 2024 a terreno positivo en 2026, según los mismos reportes— lo cual refuerza el punto en lugar de debilitarlo: <b>el precio depende de la estrategia de cada empresa y de en qué momento la agarrás</b>, no de una física del costo.</p>
+
+  <div class="ejemplo e-rie"><span class="tit">Qué le pasa a tu proyecto si el precio se normaliza</span>
+  Tomá el ejemplo que trae la calculadora: paga <b>$1.229 por mes</b> de IA y recupera la inversión en 20 meses. Ahora movés <b>solo el precio</b>, sin tocar una sola persona ni una sola hora de trabajo:<br><br>
+  <span class="cuenta">Precio de hoy — $1.229/mes → ahorro $2.457 → recupera en 20 meses</span><br>
+  <span class="cuenta">Si cubriera su costo (×1,56) — $1.917/mes → ahorro $1.425 → 35 meses</span><br>
+  <span class="cuenta">Si además dejara margen (×2) — $2.458/mes → ahorro $613 → 82 meses</span><br><br>
+  El mismo proyecto, la misma gente, la misma automatización. <b>Pasa de aprobado a inviable por una decisión que toma otro</b>, en otro país, sin avisarte.</div>
+
+  <p><b>Acá está el punto, y es el corazón de todo el modelo.</b> Mirá qué cambió y qué no en esas tres filas: el ahorro se derrumbó, el recupero se triplicó… y el <b>piso de continuidad siguió siendo 4 personas</b> en los tres casos. Porque el piso no se calcula con el precio del token: se calcula con las horas que tu operación no puede dejar de cubrir.</p>
+  <div class="ejemplo e-con"><span class="tit">La conclusión práctica</span>
+  <b>Automatizá — pero no armes tu dotación sobre un precio que no controlás.</b> Si el número solo cierra con la tarifa de hoy, no tenés un proyecto: tenés una apuesta a que el subsidio siga. La dotación mínima es justamente la parte de la decisión que <b>sobrevive a un cambio de precio</b>, y por eso es la que hay que calcular primero.</div>
+  <p class="nota">Las cifras de facturación y pérdida son de reportes periodísticos de 2026, no de estados contables auditados, y cambian rápido: tomalas como orden de magnitud. La conclusión no depende del valor exacto — depende de que el precio <b>no esté anclado al costo</b>, y en eso coinciden todas las fuentes.</p>
+
   <p class="nota">Seguí en <b>Fórmulas</b> para ver la cuenta completa paso a paso, o pasá a <b>Casos extremos</b> para entenderla con ejemplos.</p>
 </section>
 </div>
@@ -730,7 +748,11 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <div class="flow-detalle" id="flow-detalle"></div>
 
-  <p class="nota" style="margin-top:14px;">Los ejemplos numéricos que siguen usan los valores que trae la calculadora por defecto: 10 personas, 160 h cada una, nómina $16.000, 60% automatizable, 20% con firma humana, 80% de eficiencia, una sola nube sin plan de contingencia, 640 h mínimas, inversión $50.000 y mantenimiento $500 por mes.</p>
+  <div class="ejemplo e-hum" style="margin-top:14px;"><span class="tit">El caso que vamos a seguir hasta el final: una cadena de farmacias</span>
+  Para que los números no queden en el aire, de acá en adelante todo se calcula sobre <b>el mismo caso</b>.<br><br>
+  Una cadena de farmacias tiene un <b>área de atención al cliente de 10 personas</b>. Reciben consultas por <b>email, teléfono y WhatsApp</b>: si un remedio está en stock, si una obra social lo cubre, en qué sucursal retirarlo, por qué se rechazó una receta electrónica, seguimiento de un pedido a domicilio. Cada persona trabaja 160 horas al mes y entre todas cuestan <b>$16.000 mensuales</b> de nómina.<br><br>
+  Quieren automatizar esa atención con IA. Contestando las tres preguntas del modelo con los valores que trae la calculadora: <b>60%</b> del trabajo es automatizable, <b>20%</b> de eso necesita intervención humana obligatoria —lo que toca dosis, interacciones o una receta que hay que validar—, y la IA rinde al <b>80%</b>. Corren todo sobre <b>una sola nube y sin plan de contingencia</b>, calculan que necesitan cubrir <b>640 horas mensuales</b> pase lo que pase, y el proyecto cuesta <b>$50.000</b> de inversión más <b>$500</b> por mes de mantenimiento.<br><br>
+  <b>Esos son todos los datos.</b> Lo que sigue es la cuenta, paso a paso, con ese caso.</div>
 </section>
 
 <section>
@@ -785,7 +807,7 @@ window.addEventListener('DOMContentLoaded',function(){
   Son dos preguntas distintas, y es donde más se confunde la gente:<br><br>
   <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto no puede por norma?</i> Es la firma del médico, del escribano, del auditor. Eso pasa <b>aunque la IA funcione perfecto</b>: hay tareas que legalmente no se delegan.<br><br>
   <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
-  <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo: <i>"si se cae todo tengo que atender 400 llamados al mes, y una persona atiende 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que revisar pedidos 4 horas por día"</i> → 88 horas más. Total ≈ 290 horas al mes: ese es tu <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona te da el piso.<br><br>
+  <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo. En la farmacia lo hicieron así: <i>"si la IA no está, los pedidos que ya entraron hay que despacharlos igual — son unas 400 consultas al mes que no pueden quedar sin respuesta, y una persona resuelve 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que seguir validando las recetas electrónicas, 4 horas por día"</i> → 240 horas más. Total ≈ <b>640 horas al mes</b>: ese es su <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona da el piso.<br><br>
   Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</div>
 
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>

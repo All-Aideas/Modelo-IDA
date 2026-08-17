@@ -82,6 +82,10 @@ I, M             →     (entran directo en S y T)
 
 ## 3. Los cuatro módulos
 
+> **El caso que se sigue hasta el final: una cadena de farmacias.** Para que los números no queden en el aire, de acá en adelante todo se calcula sobre el mismo caso. Una cadena de farmacias tiene un **área de atención al cliente de 10 personas** que reciben consultas por **email, teléfono y WhatsApp**: si un remedio está en stock, si una obra social lo cubre, en qué sucursal retirarlo, por qué se rechazó una receta electrónica, seguimiento de un pedido a domicilio. Cada una trabaja 160 h al mes y entre todas cuestan **$16.000** de nómina.
+>
+> Quieren automatizar esa atención: **60%** del trabajo es automatizable, **20%** de eso necesita intervención humana obligatoria —lo que toca dosis, interacciones o una receta que hay que validar—, la IA rinde al **80%**, corren sobre **una sola nube sin plan de contingencia**, necesitan cubrir **640 h mensuales** pase lo que pase, y el proyecto cuesta **$50.000** de inversión más **$500** por mes de mantenimiento.
+
 ### Módulo Humano
 ```
 Costo hora humana (Ch) = Nómina mensual ÷ Horas totales
@@ -177,6 +181,35 @@ El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 pers
 >
 > **Y es el número más fácil de inflar de todo el modelo,** porque es el único que *baja* el índice. Por eso el modelo nunca deja que el respaldo lleve el IDA a cero, y por eso este número es el primero que hay que auditar cuando alguien muestra un IDA sospechosamente bajo (ver §9.2).
 
+
+---
+
+## 3.bis El precio que pagás hoy no es lo que cuesta
+
+Antes de armar cualquier plan a dos años conviene mirar esto: **los proveedores de IA no están cobrando lo que les cuesta atenderte**. Están comprando mercado, y el precio del token es una decisión comercial, no el reflejo de un costo.
+
+Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos **US$ 25.000 millones de facturación** y una **pérdida del orden de US$ 14.000 millones**. La cuenta es directa:
+
+```
+25.000 de ingresos + 14.000 de pérdida = 39.000 de costo
+39.000 ÷ 25.000 = 1,56 de costo por cada 1 que factura
+```
+
+Por cada dólar que te cobran, gastan alrededor de un dólar con cincuenta. La diferencia la ponen los inversores, no vos. Y no es parejo entre proveedores: Anthropic recorrió el camino inverso —de un margen bruto negativo en 2024 a terreno positivo en 2026, según los mismos reportes—, lo cual **refuerza** el punto: el precio depende de la estrategia de cada empresa y de en qué momento la agarrás, no de una física del costo.
+
+**Qué le pasa a la farmacia si el precio se normaliza.** Mismo proyecto, misma gente, misma automatización; se mueve **solo el precio**:
+
+| Escenario | Gasto de IA | Ahorro | Recupero |
+|---|---|---|---|
+| Precio de hoy | $1.229/mes | $2.457 | **20 meses** |
+| Si cubriera su costo (×1,56) | $1.917/mes | $1.425 | **35 meses** |
+| Si además dejara margen (×2) | $2.458/mes | $613 | **82 meses** |
+
+Pasa de aprobado a inviable por una decisión que toma otro, en otro país, sin avisarte. **Pero mirá qué no cambió: el piso de continuidad sigue siendo 4 personas en los tres casos.** Porque el piso no se calcula con el precio del token, sino con las horas que la operación no puede dejar de cubrir.
+
+> **La conclusión práctica: automatizá, pero no armes tu dotación sobre un precio que no controlás.** Si el número solo cierra con la tarifa de hoy, no tenés un proyecto: tenés una apuesta a que el subsidio siga. La dotación mínima es la parte de la decisión que **sobrevive a un cambio de precio**, y por eso es la que hay que calcular primero.
+
+*Las cifras de facturación y pérdida son de reportes periodísticos de 2026, no de estados contables auditados, y cambian rápido: tomalas como orden de magnitud. La conclusión no depende del valor exacto — depende de que el precio no esté anclado al costo, y en eso coinciden todas las fuentes.*
 
 ---
 
