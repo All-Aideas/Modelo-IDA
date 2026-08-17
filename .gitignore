@@ -11,3 +11,4 @@ para-medium/
 # proyecto se despliega, no tienen credenciales)
 .firebase/
 firebase-debug.log
+srv.js
