@@ -422,6 +422,8 @@ Fijate que **las cuatro curvas tienen su máximo en el mismo lugar**: el 60%, do
 
 ### Extremo C — "Monto DeepSeek local para automatizar los mails" → te enseña la inversión **I**
 
+> **Ojo, acá cambia el volumen a propósito: los extremos C y D no son la farmacia.** La farmacia automatiza unas 614 h por mes; estos dos muestran qué pasa mucho más abajo (una tarea de 60 h) y mucho más arriba (una operación a escala), que es donde la decisión se da vuelta.
+
 El caso que más confunde, porque mezcla dos verdades. Y acá van números reales, verificados en agosto de 2026.
 
 **Verdad 1:** correr la IA en tus propios servidores **casi elimina el riesgo**. Nadie te corta el servicio, no dependés de ninguna nube, tus datos no salen del edificio. λ baja a casi 1. El modelo abierto de referencia hoy es **DeepSeek V4-Flash** (284B parámetros, licencia MIT): necesita ~175 GB de VRAM y entra en **2× GPUs H200**. Alquilar ese servidor 24/7 cuesta del orden de **USD 5.170 por mes**, fijo, uses lo que uses.
