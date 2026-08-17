@@ -2,6 +2,16 @@
 
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible. Sirve igual para un call center, un banco, un retail o una transportadora de gas.
 
+**Qué es y qué no es.** Se usa **antes de invertir**, para decidir. **No** es un tablero de monitoreo en tiempo real ni reemplaza la plataforma con la que operás: esas ejecutan la mitigación cuando algo falla, y este modelo es el que te dice cuánto vale la pena gastar en ellas.
+
+**Contesta tres preguntas:**
+
+| | Pregunta | Resultado |
+|---|---|---|
+| **Cuánta gente** | ¿Con cuántas personas seguís operando si la IA no está? | `P'` — el piso del que no podés bajar |
+| **Si conviene** | ¿Cuánto ahorrás de verdad y en cuántos meses se paga? | `S` y `T` — más el techo de inversión |
+| **Cuán expuesto** | ¿Qué tan rehén quedás de tu proveedor? | `IDA` — de 0 a 100 |
+
 **[Probá la calculadora interactiva](https://modelo-ida.web.app)** · [Read this in English](https://modelo-ida.web.app/en/) · Autor: [César Riat](https://cesarriat.com)
 
 ---
@@ -425,7 +435,7 @@ Ese 26% es incómodo y por eso vale la pena: dice que con estos rangos el proyec
 
 ## 7. Conclusiones
 
-Tres son las que importan (7.1, 7.2 y 7.3): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La cuarta (7.4) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
+Cuatro son las que importan (7.1 a 7.4): contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que se recomienda hoy en casi cualquier presentación sobre IA. La quinta (7.5) es cómo llevar todo esto a un canal físico —una caja, una ventanilla, una guardia—, que es donde el modelo más sirve.
 
 ### 7.1 · El máximo de automatización no es el óptimo
 
@@ -497,7 +507,21 @@ Mismo servidor, mismo precio, y el umbral se movió **20 veces** — de 251 pers
 
 > **La frase para llevarse:** no preguntes si conviene la IA local. Preguntá **contra qué la comparás y a qué escala**: el mismo servidor es un disparate para tres personas y la mejor decisión posible para trescientas. **El costo fijo no se discute, se supera con volumen** — y el modelo te dice desde qué volumen exacto.
 
-### 7.4 · Cómo se aplica fuera de una oficina: banco y retail
+### 7.4 · La cifra con la que se negocia: hasta cuánto podés invertir
+
+Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es **el techo de inversión**. La fórmula del recupero es `T = I ÷ S`; despejada al revés, con el límite de 18 meses:
+
+```
+inversión máxima = S × 18
+```
+
+En el ejemplo, con un ahorro de $2.457/mes, el techo es **$44.222** — y la inversión evaluada era $50.000. Ahí está la razón exacta por la que el proyecto no cierra, dicha de la forma más accionable: no *"el payback da 20 meses"*, sino **"este proyecto vale $44.222, no $50.000"**.
+
+> **Por qué la vuelta importa.** Las dos frases dicen lo mismo pero abren conversaciones distintas. *"El recupero da 20 meses"* es un veredicto: aprobás o cancelás. *"Este proyecto vale hasta $44.222"* es una posición de negociación — te sentás con un número propio, calculado con tu ahorro y tu riesgo, en vez de discutir contra el presupuesto que te trajeron. Cambia quién pone el precio de referencia. Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, tenés margen para pedir más alcance por la misma plata.
+
+> **La trampa de subir el techo.** El techo sube si sube S, y aparece la tentación de automatizar más. Ya sabés cómo termina: pasado el piso, automatizar de más baja el ahorro, así que el techo *baja*. Al 60% el techo llega a $111.960; al 100% se derrumba a $77.400 con un IDA de 100. La forma sana es la misma de siempre: **bajar λ**. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a **$53.070** — de golpe los $50.000 entran.
+
+### 7.5 · Cómo se aplica fuera de una oficina: banco y retail
 
 El modelo se explica con horas de oficina, pero donde más falta hace es donde hay **puestos físicos de atención**.
 
@@ -555,6 +579,17 @@ Antes de confiar en una calculadora nueva, la pregunta correcta es: **¿por qué
 | **Índices académicos de dependencia de IA** | Miden cuánto depende de la IA una economía o un sector, a nivel macro. | No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde. |
 | **Normas de gestión (ISO/IEC 42001, ISO 22301)** | Te exigen plan de contingencia y evaluación de riesgos: definen el *qué*. | Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión. |
 | **Plataformas de riesgo y seguridad de IA** | Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento. | Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse *sin* IA. |
+| **Plataformas de IAOps y GRC corporativo** | Operan en producción: monitorean, desvían tráfico entre proveedores y ejecutan el failover en tiempo real sobre datos reales. | Te dicen *cómo* reaccionar cuando falla. No te dicen **si convenía invertir** ni cuánta gente conservar — llegan después de la decisión que este modelo ayuda a tomar. |
+
+La última fila merece una aclaración, porque es donde más se confunde: **este modelo no compite con esas plataformas, va antes.** Ellas ejecutan la mitigación; el modelo te dice cuánto vale la pena gastar en ellas. Un failover automático entre nubes es exactamente lo que baja tu λ — y el modelo es lo que te permite defender ese gasto ante finanzas con un número.
+
+**Se usa de tres maneras distintas:**
+
+| Modo | Cuándo | Qué datos | Qué te llevás |
+|---|---|---|---|
+| **Diagnóstico** (2 min) | La primera vez, o en una reunión | Números a ojo | Una primera alerta: si tu piso ya supera tu dotación, hay un problema hoy |
+| **Decisión** | Antes de aprobar una inversión o un recorte | Datos reales + Montecarlo con tus rangos | Techo de inversión, dotación a conservar, IDA — con CSV para auditar |
+| **Auditoría** (trimestral) | Después, como control recurrente | Los mismos, actualizados | Si el IDA se movió sin que nadie lo note |
 
 Cada pieza existe por separado. Lo que no existía es la **unión**: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.
 
@@ -571,6 +606,8 @@ Cada pieza existe por separado. Lo que no existía es la **unión**: personas + 
 Ningún modelo es honesto si no dice qué *no* hace.
 
 **1 · Supone que la gente que conservás todavía sabe hacerlo.** El piso asume que pueden ejecutar el proceso manual el día que haga falta. Si hace ocho meses que la IA hace todo y ellos solo revisan, no van a poder: son **guardia pasiva**, y la guardia pasiva se oxida. Mantener la capacidad exige **simulacros periódicos de operación manual** —como un simulacro de incendio— y eso cuesta horas que no están en ninguna fórmula. Un P_min de papel no salva a nadie.
+
+> **Se podría modelar y no está.** Una versión futura podría pedirte cada cuánto hacés simulacros y penalizar la eficiencia de tu gente de contingencia con el tiempo, empujando el piso hacia arriba mes a mes sin simulacros. No está por decisión: el modelo ya arrastra coeficientes basados en criterio (ver límite 6) y agregar una tasa de degradación inventada sumaría precisión aparente, no confiabilidad. Prefiero que quede declarado como límite y no escondido dentro de una fórmula.
 
 **2 · Supone que el know-how sigue adentro.** No alcanza con tener gente disponible: tiene que quedar quién sepa **cómo se trabajaba antes**. Si en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. Documentar el proceso manual es parte del seguro.
 
@@ -596,6 +633,8 @@ Y **acá es donde este límite muerde más fuerte: en R, el respaldo externo.** 
 > *¿Por qué λ no toca el mantenimiento (M)?* Crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que M también debería subir con el riesgo. No lo hace, y el efecto es que **el modelo subestima el costo de una arquitectura mala**. Preferimos ese error al inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.
 >
 > *¿Por qué λ multiplica el gasto en IA y no el daño de la caída?* Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: comparando arquitecturas de costo muy distinto, la prima en dólares puede quedar al revés — correr local, que es más seguro, tiene una factura mucho mayor, así que su 2% de recargo puede superar en pesos al 50% de una API barata. **Dentro de una misma arquitectura la comparación es válida**, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante.
+
+**7 · λ mira la infraestructura, no el modelo que usás.** Los agravantes preguntan **dónde corre** la IA: una nube, varias, tus servidores. Eso cubre que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que **el modelo en sí cambie debajo tuyo**. Un proveedor de frontera puede degradar la calidad entre versiones sin avisar, cambiar políticas de uso o privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado comercialmente por una decisión geopolítica ajena a vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y te rompe la operación igual. **El modelo no lo mide.** Podría agregarse como un agravante más de λ y probablemente sea el próximo; no está todavía por la misma razón del límite 6. Mientras tanto tratalo como un riesgo **real y no contemplado**: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que muestra el IDA.
 
 > **Cómo leer estos límites:** ninguno invalida el modelo, y los primeros cuatro empujan en la misma dirección — **hacia arriba**. Un piso que no se entrena, un know-how que se fue y una degradación no contemplada hacen que necesites **más** gente, no menos. Si el modelo te da un número, tratalo como el **mínimo del mínimo**.
 

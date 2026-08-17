@@ -52,6 +52,19 @@ window.addEventListener('DOMContentLoaded',function(){
   header.hero{background:linear-gradient(135deg,var(--navy-oscuro),var(--navy)); color:#fff; padding:56px 20px 44px; text-align:center;}
   header.hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem); font-weight:800; max-width:820px; margin:0 auto 14px; line-height:1.2;}
   header.hero p{color:#c9d2e0; font-weight:500; max-width:640px; margin:0 auto; font-size:1rem;}
+  /* Alcance y preguntas: van en el hero porque el error mas comun de quien
+     llega es no saber en que etapa se usa el modelo, y eso se decide arriba. */
+  .hero-alcance{max-width:760px; margin:18px auto 0; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .hero-alcance span{font-size:.78rem; padding:6px 13px; border-radius:100px; font-weight:600; line-height:1.35;}
+  .hero-alcance .es{background:rgba(255,111,0,.18); color:#ffb870; border:1px solid rgba(255,111,0,.45);}
+  .hero-alcance .no{background:rgba(255,255,255,.07); color:#9fb0c6; border:1px solid rgba(255,255,255,.14);}
+  .hero-preg{max-width:820px; margin:22px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media(max-width:700px){.hero-preg{grid-template-columns:1fr;}}
+  .hero-preg div{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:10px; padding:12px 14px; text-align:left;}
+  .hero-preg b{display:block; color:var(--naranja); font-size:.72rem; text-transform:uppercase;
+    letter-spacing:.05em; margin-bottom:4px;}
+  .hero-preg span{color:#dbe3ee; font-size:.86rem; line-height:1.4;}
   nav.tabs{position:sticky; top:0; z-index:20; background:var(--blanco); border-bottom:1px solid var(--borde); display:flex; justify-content:center; gap:2px; padding:8px; box-shadow:0 2px 8px rgba(46,58,77,.05); flex-wrap:wrap;}
   nav.tabs button{background:none; border:none; font-family:inherit; font-weight:700; font-size:.86rem; color:var(--gris); padding:10px 14px; border-radius:8px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:7px;}
   nav.tabs button.active{background:var(--naranja-claro); color:var(--naranja);}
@@ -340,6 +353,16 @@ window.addEventListener('DOMContentLoaded',function(){
 <header class="hero">
   <h1>¿Cuánta gente necesitás para operar el día que la IA no esté?</h1>
   <p>Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Cargá los números de tu empresa y obtené el resultado al instante.</p>
+  <div class="hero-alcance">
+    <span class="es">Se usa ANTES de invertir, para decidir</span>
+    <span class="no">No es un tablero de monitoreo en tiempo real</span>
+    <span class="no">No reemplaza tu plataforma de operación</span>
+  </div>
+  <div class="hero-preg">
+    <div><b>Cuánta gente</b><span>Con cuántas personas seguís operando si la IA no está. Es el piso del que no podés bajar.</span></div>
+    <div><b>Si conviene</b><span>Cuánto ahorrás de verdad y en cuántos meses se paga la inversión.</span></div>
+    <div><b>Cuán expuesto</b><span>Un número de 0 a 100 que resume qué tan rehén quedás de tu proveedor.</span></div>
+  </div>
 </header>
 
 <nav class="tabs">
@@ -559,6 +582,11 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="res-num" id="out_pb" style="font-size:1.8rem;">20 meses</div>
       <div class="alerta warn" id="out_alerta">Más de 18 meses: la inversión no se recupera en un plazo razonable.</div>
     </div>
+    <div class="res-item">
+      <div class="res-label">Hasta cuánto podés invertir</div>
+      <div class="res-num" id="out_techo" style="font-size:1.8rem;">$44.222</div>
+      <div class="res-sub" id="out_techo_sub">Es el máximo que este ahorro devuelve en 18 meses. Arriba de eso, el proyecto no cierra.</div>
+    </div>
   </div>
 </section>
 </div>
@@ -577,8 +605,10 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td><b>Índices académicos de dependencia de IA</b></td><td>Miden cuánto depende de la IA una economía o un sector, a nivel macro.</td><td>No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde.</td></tr>
     <tr><td><b>Normas de gestión (ISO/IEC 42001, ISO 22301)</b></td><td>Te exigen plan de contingencia y evaluación de riesgos: definen el <i>qué</i>.</td><td>Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión.</td></tr>
     <tr><td><b>Plataformas de riesgo y seguridad de IA</b></td><td>Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento.</td><td>Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse <i>sin</i> IA.</td></tr>
+    <tr><td><b>Plataformas de IAOps y GRC corporativo</b></td><td>Operan en producción: monitorean, desvían tráfico entre proveedores y ejecutan el failover en tiempo real sobre datos reales.</td><td>Te dicen <i>cómo</i> reaccionar cuando falla. No te dicen <b>si convenía invertir</b> ni cuánta gente conservar — y llegan después de la decisión que este modelo ayuda a tomar.</td></tr>
   </table>
   </div>
+  <p class="nota">La última fila merece una aclaración, porque es donde más se confunde: <b>este modelo no compite con esas plataformas, va antes.</b> Ellas ejecutan la mitigación; el modelo te dice cuánto vale la pena gastar en ellas. Un failover automático entre nubes es exactamente lo que baja tu λ — y el modelo es lo que te permite defender ese gasto ante finanzas con un número.</p>
   <p class="nota">Cada pieza existe por separado. Lo que no existía es la <b>unión</b>: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.</p>
 
   <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
@@ -599,6 +629,30 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>Lo que este modelo todavía no tiene</h3>
   <p>El benchmark honesto incluye los huecos propios. Los coeficientes de λ (+30% una sola nube, +20% sin plan de contingencia, +15% datos sensibles afuera) salen de criterio experto e incidentes públicos, no de un dataset calibrado por sector: son un punto de partida razonable, no una verdad revelada. Y el modelo todavía no publica casos reales con métricas de antes y después. Las dos cosas están en la hoja de ruta; mientras tanto, todas las fórmulas están a la vista y la cuenta corre entera en tu navegador — podés desafiarla con tus propios números.</p>
+  <h3>Se usa de tres maneras distintas</h3>
+  <p>La mayoría lo abre una vez y se va. Pero el mismo modelo sirve en tres momentos, y en cada uno se carga distinto:</p>
+  <div class="tabla-scroll">
+  <table>
+    <tr><th>Modo</th><th>Cuándo</th><th>Qué datos usás</th><th>Qué te llevás</th></tr>
+    <tr><td><b>Diagnóstico</b> <span class="hint">2 minutos</span></td><td>La primera vez, o en una reunión, para ver si el tema existe.</td><td>Números a ojo, los que te acordás.</td><td>Una primera alerta: si tu piso ya supera tu dotación, hay un problema hoy.</td></tr>
+    <tr class="fila-ok"><td><b>Decisión</b></td><td>Antes de aprobar una inversión o un recorte.</td><td>Datos reales de nómina, horas y factura de IA. Montecarlo con tus rangos.</td><td>El techo de inversión, la dotación a conservar y el IDA — con el CSV para que finanzas lo audite.</td></tr>
+    <tr><td><b>Auditoría</b> <span class="hint">trimestral</span></td><td>Después, como control recurrente.</td><td>Los mismos datos, actualizados.</td><td>Si el IDA se movió. Automatizaste más, cambió el proveedor, se fue gente: el índice se corre y nadie lo nota sin medirlo.</td></tr>
+  </table>
+  </div>
+
+  <h3>Preguntas que aparecen siempre</h3>
+  <div class="ejemplo e-con"><span class="tit">¿Esto reemplaza a mi plataforma de monitoreo?</span>
+  No, y no se le parece. Una plataforma de monitoreo trabaja <b>en producción</b>: mira métricas reales y reacciona cuando algo falla. Este modelo trabaja <b>antes</b>, sobre una decisión que todavía no tomaste. Son etapas distintas del mismo problema, y la salida de este es el presupuesto de aquella.</div>
+
+  <div class="ejemplo e-con"><span class="tit">¿Sirve si ya automaticé?</span>
+  Sirve, y probablemente más. Si ya automatizaste, la pregunta deja de ser "¿conviene?" y pasa a ser <b>"¿en qué zona quedé?"</b>. El IDA te da ese número y el piso te dice si tu dotación actual todavía alcanza para operar sin IA. Es común descubrir acá que el piso ya quedó por encima de la gente que hay: eso es un hallazgo, no un error de carga.</div>
+
+  <div class="ejemplo e-con"><span class="tit">¿Qué datos necesito para empezar?</span>
+  Cuatro: cuánta gente hay en el área, cuánto suma la nómina, qué parte del trabajo podría hacer la IA, y cuántas horas al mes no pueden parar. Con eso ya tenés un resultado. Todo lo demás —arquitectura, inversión, respaldo externo— refina ese número, pero no hace falta para arrancar.</div>
+
+  <div class="ejemplo e-con"><span class="tit">¿Los números son exactos?</span>
+  No, y no pretenden serlo: <b>son el piso del piso</b>. El modelo es deliberadamente conservador y todos sus límites empujan en la misma dirección — necesitás más gente, no menos. Si querés incertidumbre explícita en vez de un valor único, para eso está el Montecarlo, que corre tu proyecto 10.000 veces y te devuelve una probabilidad en lugar de una promesa.</div>
+
   <p class="nota">Volvé a la <b>Calculadora</b> para correr tu caso, o seguí en <b>Cómo funciona</b> para ver la lógica desde cero.</p>
 </section>
 </div>
@@ -972,7 +1026,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="panel" id="conclusiones">
 <section>
   <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
-  <p>Si te llevás tres cosas de todo este modelo, que sean las tres primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b> y los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro.</p>
+  <p>Si te llevás cuatro cosas de todo este modelo, que sean las cuatro primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b>, los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro, y el <b>techo de inversión</b> — la única cifra del modelo que se lleva a una negociación.</p>
   <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
 </section>
 
@@ -1064,7 +1118,23 @@ window.addEventListener('DOMContentLoaded',function(){
 </section>
 
 <section>
-  <h3 class="mod h-hum" style="font-size:1.15rem;">4 · Y una advertencia sobre los números lindos</h3>
+  <h3 class="mod h-hum" style="font-size:1.15rem;">4 · La cifra con la que se negocia: hasta cuánto podés invertir</h3>
+  <p>Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es <b>el techo de inversión</b>.</p>
+  <p>La fórmula del recupero es <span class="cuenta">T = I ÷ S</span>. Despejada al revés, con el límite de 18 meses que propone el modelo, queda:</p>
+  <div class="formula-color">inversión máxima &nbsp;=&nbsp; <span class="t t-res">S</span> &nbsp;×&nbsp; 18</div>
+  <p>En el ejemplo del sitio, con un ahorro de $2.457 por mes, el techo es <b>$44.222</b>. Y la inversión que se estaba evaluando era de $50.000. <b>Ahí está la razón exacta por la que el proyecto no cierra</b>, y expresada de la forma más accionable posible: no "el payback da 20 meses", sino <b>"este proyecto vale $44.222, no $50.000"</b>.</p>
+
+  <div class="ejemplo e-con"><span class="tit">Por qué esta vuelta importa tanto</span>
+  Las dos frases dicen lo mismo, pero <b>abren conversaciones distintas</b>.<br><br>
+  <b>"El recupero da 20 meses"</b> es un veredicto: el proyecto pasa o no pasa, y lo único que podés hacer es aprobarlo igual o cancelarlo.<br><br>
+  <b>"Este proyecto vale hasta $44.222"</b> es una posición de negociación. Te sentás con la consultora o con el proveedor y tenés un número propio, calculado con tu ahorro y tu riesgo, en vez de discutir contra el presupuesto que te trajeron. Cambia quién pone el precio de referencia.<br><br>
+  Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, sabés que tenés margen para pedir más alcance o mejor soporte por la misma plata.</div>
+
+  <div class="ejemplo e-rie"><span class="tit">La trampa de subir el techo</span>
+  El techo sube si sube <b class="v-res">S</b>, y ahí aparece la tentación de automatizar más para agrandarlo. Ya sabés cómo termina eso: pasado el piso, <b>automatizar de más baja el ahorro</b>, así que el techo <i>baja</i>. Y el óptimo de automatización es el mismo para el techo que para el ahorro: al 60% el techo llega a $111.960, y al 100% se derrumba a $77.400 con un IDA de 100.<br><br>
+  La forma sana de subir el techo es la misma que la de todo el modelo: <b>bajar λ</b>. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a <b>$53.070</b> — de golpe la inversión de $50.000 entra. Mismo proyecto, misma gente, y el número dejó de ser un problema.</div>
+
+  <h3 class="mod h-hum" style="font-size:1.15rem;">5 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
   <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan (y un 7% que directamente no recupera nunca o tarda más de 60 meses).</p>
   <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
@@ -1128,6 +1198,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3>1 · Supone que la gente que conservás todavía sabe hacerlo</h3>
   <p>El piso de continuidad asume que esas personas pueden <b>ejecutar el proceso manual el día que haga falta</b>. Pero si hace ocho meses que la IA hace todo y ellos solo revisan, no van a poder. Son <b>guardia pasiva</b>, y la guardia pasiva se oxida.</p>
   <p>El modelo te da la cantidad, no la capacidad. Mantenerla exige <b>simulacros periódicos de operación manual</b> —igual que un simulacro de incendio— y eso tiene un costo en horas que hoy no está en ninguna fórmula. Un P_min de papel no salva a nadie.</p>
+  <p class="nota"><b>Se podría modelar y no está.</b> Una versión futura podría pedirte cada cuánto hacés simulacros y penalizar la eficiencia de tu gente de contingencia con el tiempo, empujando el piso hacia arriba mes a mes sin simulacros. No está por decisión: el modelo ya arrastra coeficientes basados en criterio (ver límite 6) y agregar una tasa de degradación inventada sumaría precisión aparente, no confiabilidad. Prefiero que quede declarado como límite y no escondido dentro de una fórmula.</p>
 
   <h3>2 · Supone que el know-how sigue adentro de la empresa</h3>
   <p>Relacionado con lo anterior pero distinto: no alcanza con tener gente disponible, tiene que quedar en la empresa <b>quién sepa cómo se seguía trabajando antes</b>. Si automatizaste y en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. La documentación del proceso manual es parte del seguro, no un trámite.</p>
@@ -1160,8 +1231,13 @@ window.addEventListener('DOMContentLoaded',function(){
   <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
   <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</div>
 
+  <h3>7 · λ mira la infraestructura, no el modelo que usás</h3>
+  <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
+  <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado comercialmente por una decisión geopolítica que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
+  <p class="nota">Se podría agregar como un agravante más de λ, y probablemente sea el próximo. No está todavía por la misma razón que se explica en el límite 6: sumar un coeficiente nuevo sin poder calibrarlo agranda el modelo sin hacerlo más confiable. Mientras tanto, tratalo como un riesgo <b>real y no contemplado</b>: si tu operación depende de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
+
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
-  Ninguno de los seis invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
+  Ninguno de los siete invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
 </section>
 
 <section>
@@ -1727,6 +1803,16 @@ function calc(){
   const IDAcrudo=Math.min(aef*lambda*100,100);
   const IDA=Math.min(aef*lambda*factorR*100,100);
   estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo};
+  // Techo de inversion: la cuenta al reves del payback. Ya estaba en el PDF y
+  // en el CSV, pero es la cifra mas accionable del modelo -- con cuanto podes
+  // sentarte a negociar con una consultora -- asi que va tambien en pantalla.
+  const techo18 = S>0 ? S*18 : 0;
+  $('out_techo').textContent = S>0 ? nf(techo18) : '—';
+  $('out_techo_sub').innerHTML = S<=0
+    ? 'Con ahorro cero o negativo no hay inversión que se justifique: ningún monto vuelve.'
+    : (I>techo18
+      ? `Tu inversión de ${nf(I)} <b>supera ese techo</b>: por eso el recupero se estira más allá de los 18 meses.`
+      : `Es el máximo que este ahorro devuelve en 18 meses. Tu inversión de ${nf(I)} entra dentro, así que hay margen.`);
   const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
   $('aviso-R').style.display = R>0 ? 'block' : 'none';
   if(R>0) $('aviso-R').innerHTML = cobertura>=1

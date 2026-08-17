@@ -52,6 +52,19 @@ window.addEventListener('DOMContentLoaded',function(){
   header.hero{background:linear-gradient(135deg,var(--navy-oscuro),var(--navy)); color:#fff; padding:56px 20px 44px; text-align:center;}
   header.hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem); font-weight:800; max-width:820px; margin:0 auto 14px; line-height:1.2;}
   header.hero p{color:#c9d2e0; font-weight:500; max-width:640px; margin:0 auto; font-size:1rem;}
+  /* Alcance y preguntas: van en el hero porque el error mas comun de quien
+     llega es no saber en que etapa se usa el modelo, y eso se decide arriba. */
+  .hero-alcance{max-width:760px; margin:18px auto 0; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  .hero-alcance span{font-size:.78rem; padding:6px 13px; border-radius:100px; font-weight:600; line-height:1.35;}
+  .hero-alcance .es{background:rgba(255,111,0,.18); color:#ffb870; border:1px solid rgba(255,111,0,.45);}
+  .hero-alcance .no{background:rgba(255,255,255,.07); color:#9fb0c6; border:1px solid rgba(255,255,255,.14);}
+  .hero-preg{max-width:820px; margin:22px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media(max-width:700px){.hero-preg{grid-template-columns:1fr;}}
+  .hero-preg div{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:10px; padding:12px 14px; text-align:left;}
+  .hero-preg b{display:block; color:var(--naranja); font-size:.72rem; text-transform:uppercase;
+    letter-spacing:.05em; margin-bottom:4px;}
+  .hero-preg span{color:#dbe3ee; font-size:.86rem; line-height:1.4;}
   nav.tabs{position:sticky; top:0; z-index:20; background:var(--blanco); border-bottom:1px solid var(--borde); display:flex; justify-content:center; gap:2px; padding:8px; box-shadow:0 2px 8px rgba(46,58,77,.05); flex-wrap:wrap;}
   nav.tabs button{background:none; border:none; font-family:inherit; font-weight:700; font-size:.86rem; color:var(--gris); padding:10px 14px; border-radius:8px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:7px;}
   nav.tabs button.active{background:var(--naranja-claro); color:var(--naranja);}
@@ -340,6 +353,16 @@ window.addEventListener('DOMContentLoaded',function(){
 <header class="hero">
   <h1>How many people do you need to keep operating the day the AI is gone?</h1>
   <p>Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Enter your own numbers and get the result instantly.</p>
+  <div class="hero-alcance">
+    <span class="es">Use it BEFORE investing, to decide</span>
+    <span class="no">Not a real-time monitoring dashboard</span>
+    <span class="no">Does not replace your operations platform</span>
+  </div>
+  <div class="hero-preg">
+    <div><b>How many people</b><span>How many people keep you running if the AI is gone. This is the floor you cannot go below.</span></div>
+    <div><b>Whether it pays</b><span>What you actually save, and how many months until the investment pays for itself.</span></div>
+    <div><b>How exposed</b><span>A 0-to-100 number summarising how hostage you are to your provider.</span></div>
+  </div>
 </header>
 
 <nav class="tabs">
@@ -560,6 +583,11 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="res-label">Investment payback</div>
       <div class="res-num" id="out_pb" style="font-size:1.8rem;">20 meses</div>
       <div class="alerta warn" id="out_alerta">Over 18 months: the investment does not pay back within a reasonable horizon.</div>
+    </div>
+    <div class="res-item">
+      <div class="res-label">How much you can invest</div>
+      <div class="res-num" id="out_techo" style="font-size:1.8rem;">$44.222</div>
+      <div class="res-sub" id="out_techo_sub">This is the most this saving returns in 18 months. Above that, the project does not close.</div>
     </div>
   </div>
 </section>
@@ -1142,6 +1170,16 @@ function calc(){
   const IDAcrudo=Math.min(aef*lambda*100,100);
   const IDA=Math.min(aef*lambda*factorR*100,100);
   estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo};
+  // Techo de inversion: la cuenta al reves del payback. Ya estaba en el PDF y
+  // en el CSV, pero es la cifra mas accionable del modelo -- con cuanto podes
+  // sentarte a negociar con una consultora -- asi que va tambien en pantalla.
+  const techo18 = S>0 ? S*18 : 0;
+  $('out_techo').textContent = S>0 ? nf(techo18) : '—';
+  $('out_techo_sub').innerHTML = S<=0
+    ? 'With zero or negative saving no investment is justified: no amount comes back.'
+    : (I>techo18
+      ? `Your investment of ${nf(I)} <b>exceeds that ceiling</b>: that is why payback stretches beyond 18 months.`
+      : `This is the most this saving returns in 18 months. Your investment of ${nf(I)} fits within it, so there is room.`);
   const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
   $('aviso-R').style.display = R>0 ? 'block' : 'none';
   if(R>0) $('aviso-R').innerHTML = cobertura>=1
