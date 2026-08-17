@@ -420,10 +420,12 @@ window.addEventListener('DOMContentLoaded',function(){
           <div class="cuerpo"><b>No es qué tan inteligente es la IA: es cuánto trabajo terminado entrega.</b><br><br>Seguimos con los emails. Le pasás 10 reclamos de los que sí puede contestar. Vuelve con las 10 respuestas escritas, pero al revisarlas ves que <b>2 hay que rehacerlas</b>: una cita mal el número de cuenta, otra promete una visita para un día que no corresponde. Alguien tuvo que leerlas, detectarlas y corregirlas.<br><br>Entonces no rindió como una persona: rindió como <b>8 de cada 10</b> → <b>η = 80%</b>.<br><br>Por eso nunca es 100%: siempre queda alguien revisando. Si nadie revisa, η no subió — lo que subió es el riesgo de mandar algo mal a un cliente.</div>
         </details>
       </div>
-      <div class="ejemplo e-aut" style="margin-top:2px;"><span class="tit">Los tres juntos, en el mismo caso</span>
-      La gasífera arrancó pensando que automatizaba el 60% del trabajo. Pero de ese 60%, un 20% necesita firma humana, y de lo que queda la IA rinde 8 de cada 10:<br><br>
-      <span class="cuenta">0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
-      <b>Ese 38,4% es el número real con el que hay que hacer las cuentas</b>, no el 60% de la promesa inicial.</div>
+      <details class="mas" style="margin-top:2px;">
+        <summary>Los tres juntos, en el mismo caso</summary>
+        <div class="cuerpo">La gasífera arrancó pensando que automatizaba el 60% del trabajo. Pero de ese 60%, un 20% necesita firma humana, y de lo que queda la IA rinde 8 de cada 10:<br><br>
+        <span class="cuenta">0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
+        <b>Ese 38,4% es el número real con el que hay que hacer las cuentas</b>, no el 60% de la promesa inicial.</div>
+      </details>
       <h3>Continuidad</h3>
       <div class="campo">
         <label>Horas/mes mínimas para operar SIN IA <span class="hint">horas de trabajo, no cantidad de personas ni de puestos</span></label>
@@ -628,11 +630,13 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td><b>Plataformas de IAOps y GRC corporativo</b></td><td>Operan en producción: monitorean, desvían tráfico entre proveedores y ejecutan el failover en tiempo real sobre datos reales.</td><td>Te dicen <i>cómo</i> reaccionar cuando falla. No te dicen <b>si convenía invertir</b> ni cuánta gente conservar — y llegan después de la decisión que este modelo ayuda a tomar.</td></tr>
   </table>
   </div>
-  <p class="nota">La última fila merece una aclaración, porque es donde más se confunde: <b>este modelo no compite con esas plataformas, va antes.</b> Ellas ejecutan la mitigación; el modelo te dice cuánto vale la pena gastar en ellas. Un failover automático entre nubes es exactamente lo que baja tu λ — y el modelo es lo que te permite defender ese gasto ante finanzas con un número.</p>
+  <p class="nota">La última fila merece una aclaración, porque es donde más se confunde: <b>este modelo no compite con esas plataformas, va antes.</b> Ellas ejecutan la mitigación; el modelo te dice cuánto vale la pena gastar en ellas. Tener un segundo proveedor listo para tomar la posta es justamente lo que vuelve más robusta tu operación — y este modelo es lo que te permite defender ese gasto ante finanzas <b>con un número</b>, en vez de con una intuición.</p>
   <p class="nota">Cada pieza existe por separado. Lo que no existía es la <b>unión</b>: personas + arquitectura técnica + riesgo de negocio en una sola cuenta que se pueda auditar.</p>
 
   <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
-  <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas empresas resultó no tener gente suficiente que supiera ejecutarlo.</p>
+  <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas organizaciones resultó no tener gente suficiente que supiera ejecutarlo.</p>
+  <p><b>Y no hace falta que se caiga nada.</b> En junio de 2026 el gobierno de Estados Unidos <b>prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic</b>, y después levantó la restricción solo en parte, dejando el acceso limitado a una lista corta de empresas. Los servidores nunca dejaron de funcionar: simplemente, de un día para otro, había gente que ya no podía usar el modelo sobre el que había montado su operación.</p>
+  <p class="nota">Ese caso es incómodo porque <b>no lo cubre ningún plan técnico</b>. Podés tener multi-cloud, failover automático y todos los backups del mundo: si la decisión es regulatoria o geopolítica, tu arquitectura no te salva. Lo único que te sostiene es la gente que todavía sabe hacer el trabajo sin esa herramienta — que es exactamente lo que este modelo te obliga a contar antes de que pase.</p>
   <p><b>El plan de contingencia se escribe sin número.</b> La norma exige "volver a operación manual", y el documento lo promete — con una dotación que ya no alcanza para operar manualmente. El papel cumple; la operación no.</p>
   <p><b>El directorio no tiene métrica de exposición.</b> Se discute cuánto ahorra la IA — nunca cuán rehén queda la organización del proveedor. Sin un número comparable entre áreas y entre organizaciones, la dependencia no entra en la agenda hasta que se corta.</p>
   <p><b>La inversión se aprueba con el escenario promedio.</b> "Recuperás en 20 meses" suena a plan. Corrido 10.000 veces con rangos realistas, solo el 26% de los futuros recupera en menos de 18 — eso es una apuesta, y conviene saberlo antes de firmar.</p>
@@ -1254,7 +1258,8 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>7 · λ mira la infraestructura, no el modelo que usás</h3>
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
-  <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado comercialmente por una decisión geopolítica que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
+  <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
+  <p>Y no es hipotético: en <b>junio de 2026</b> el gobierno de Estados Unidos prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic, y después levantó la restricción solo en parte. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube.</p>
   <p class="nota">Se podría agregar como un agravante más de λ, y probablemente sea el próximo. No está todavía por la misma razón que se explica en el límite 6: sumar un coeficiente nuevo sin poder calibrarlo agranda el modelo sin hacerlo más confiable. Mientras tanto, tratalo como un riesgo <b>real y no contemplado</b>: si tu operación depende de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
