@@ -522,6 +522,14 @@ window.addEventListener('DOMContentLoaded',function(){
         <label>Mantenimiento mensual (USD)</label>
         <input type="number" id="M" value="500" min="0" step="100">
       </div>
+      <div class="campo">
+        <label>Plazo máximo de recupero (meses) <span class="hint">el filtro con el que aprobás o descartás</span></label>
+        <input type="number" id="Tmax" value="18" min="1" step="1">
+        <details class="mas">
+          <summary>Por qué 18 y cuándo moverlo</summary>
+          <div class="cuerpo">18 meses es el default porque en IA es una eternidad: a dos años vista cambió el precio del token, el modelo que usás y hasta el proveedor. Un proyecto que tarda más que eso en devolver la plata se paga con supuestos que ya no van a existir.<br><br>Pero <b>el plazo es tuyo, no del modelo</b>. Un banco evaluando infraestructura crítica trabaja con horizontes de 36 meses sin despeinarse; una startup quemando caja no aguanta 12. Movelo al plazo con el que tu empresa aprueba inversiones de verdad: cambia el semáforo del recupero y cambia el techo de inversión, que se calcula como ahorro × este plazo.</div>
+        </details>
+      </div>
       <h3>Arquitectura</h3>
       <p class="hint" style="margin:-4px 0 8px;">Definen tu <b class="v-rie">multiplicador de riesgo</b>: arranca en 1,00 y sube con cada casillero.</p>
       <div class="arq-group" id="arq">
@@ -583,9 +591,9 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="alerta warn" id="out_alerta">Más de 18 meses: la inversión no se recupera en un plazo razonable.</div>
     </div>
     <div class="res-item">
-      <div class="res-label">Hasta cuánto podés invertir</div>
+      <div class="res-label" id="out_techo_lab">Hasta cuánto podés invertir (a 18 meses)</div>
       <div class="res-num" id="out_techo" style="font-size:1.8rem;">$44.222</div>
-      <div class="res-sub" id="out_techo_sub">Es el máximo que este ahorro devuelve en 18 meses. Arriba de eso, el proyecto no cierra.</div>
+      <div class="res-sub" id="out_techo_sub">Es el máximo que este ahorro devuelve en tu plazo. Arriba de eso, el proyecto no cierra.</div>
     </div>
   </div>
 </section>
@@ -806,7 +814,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>Cuánto ahorrás en sueldos:</b> cada persona cuesta <span class="cuenta">N ÷ P = 16.000 ÷ 10 = $1.600/mes</span>, así que <span class="cuenta">3 × $1.600 = $4.800/mes</span>.</div></div>
   <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>Cuánto te cuesta la IA:</b> tu gasto mensual, ajustado por riesgo: <span class="cuenta">1,5 × $1.229 ≈ $1.843/mes</span>. Acá entra el multiplicador de riesgo: tu proveedor te factura $1.229, pero con una arquitectura frágil el costo real que el modelo te cobra es $1.843 (el modelo trabaja con el valor exacto, $1.228,80, antes de redondear para mostrarlo).</div></div>
   <div class="paso"><div class="paso-n">4</div><div class="paso-tx"><b>Restás todo:</b> <span class="cuenta">$4.800 − $1.843 − $500 = S = $2.457/mes</span>.</div></div>
-  <div class="paso"><div class="paso-n">5</div><div class="paso-tx"><b>Para qué sirve S:</b> para dos decisiones. Primera, el semáforo — si S sale <b>cero o negativo</b>, automatizar cuesta más de lo que ahorra y el proyecto no va, por lindo que suene. Segunda, el recupero: <span class="cuenta">T = $50.000 ÷ $2.457 = 20 meses</span>. Regla del modelo: <b>arriba de 18 meses, no avances</b> — en IA, 18 meses es una eternidad tecnológica.</div></div>
+  <div class="paso"><div class="paso-n">5</div><div class="paso-tx"><b>Para qué sirve S:</b> para dos decisiones. Primera, el semáforo — si S sale <b>cero o negativo</b>, automatizar cuesta más de lo que ahorra y el proyecto no va, por lindo que suene. Segunda, el recupero: <span class="cuenta">T = $50.000 ÷ $2.457 = 20 meses</span>. Regla por defecto: <b>arriba de 18 meses, no avances</b> — en IA, 18 meses es una eternidad tecnológica. Ese plazo <b>lo elegís vos</b> en la calculadora: un banco evaluando infraestructura crítica trabaja con 36 meses, una startup quemando caja no aguanta 12.</div></div>
 
   <div class="ejemplo e-rie" style="margin-top:18px;"><span class="tit">La trampa que esta fórmula evita</span>
   La cuenta intuitiva —y la que hace casi todo el mundo— es <span class="cuenta">horas automatizadas × costo de la hora humana</span>: 614,4 h × $10 = $6.144 de ahorro en sueldos. <b>Es falso.</b> Vos no pagás horas, pagás sueldos: automatizar 3,84 personas-equivalente cuando solo podés echar 3 no ahorra 3,84 sueldos, ahorra 3 — o sea <b>$4.800</b>, no $6.144. Esas dos cifras son ahorro <i>bruto</i>: todavía no restamos la IA ni el mantenimiento.<br><br>
@@ -1120,8 +1128,9 @@ window.addEventListener('DOMContentLoaded',function(){
 <section>
   <h3 class="mod h-hum" style="font-size:1.15rem;">4 · La cifra con la que se negocia: hasta cuánto podés invertir</h3>
   <p>Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es <b>el techo de inversión</b>.</p>
-  <p>La fórmula del recupero es <span class="cuenta">T = I ÷ S</span>. Despejada al revés, con el límite de 18 meses que propone el modelo, queda:</p>
-  <div class="formula-color">inversión máxima &nbsp;=&nbsp; <span class="t t-res">S</span> &nbsp;×&nbsp; 18</div>
+  <p>La fórmula del recupero es <span class="cuenta">T = I ÷ S</span>. Despejada al revés, contra el plazo con el que tu empresa aprueba inversiones, queda:</p>
+  <div class="formula-color">inversión máxima &nbsp;=&nbsp; <span class="t t-res">S</span> &nbsp;×&nbsp; <span class="t t-dato">plazo de recupero</span></div>
+  <p class="nota">El plazo por defecto es <b>18 meses</b> —en IA, dos años es una eternidad— pero es un campo más de la calculadora, no una ley del modelo. Movelo al horizonte con el que <i>tu</i> empresa decide y el techo se recalcula: a 36 meses el mismo ahorro justifica el doble de inversión. Los números que siguen usan 18.</p>
   <p>En el ejemplo del sitio, con un ahorro de $2.457 por mes, el techo es <b>$44.222</b>. Y la inversión que se estaba evaluando era de $50.000. <b>Ahí está la razón exacta por la que el proyecto no cierra</b>, y expresada de la forma más accionable posible: no "el payback da 20 meses", sino <b>"este proyecto vale $44.222, no $50.000"</b>.</p>
 
   <div class="ejemplo e-con"><span class="tit">Por qué esta vuelta importa tanto</span>
@@ -1748,6 +1757,11 @@ function calc(){
   const P=num('P',1), N=num('N',0), hp=num('hp',1);
   const a=+$('a').value/100, r=+$('r').value/100, eta=+$('eta').value/100;
   const CtMes=num('CtMes',0), I=num('I',0), M=num('M',0), Hmin=num('Hmin',0);
+  // Plazo de recupero: era una constante 18 desparramada por todo el codigo.
+  // No es una ley del modelo, es la politica de inversion de cada empresa: un
+  // banco aprueba a 36 meses y una startup no aguanta 12. Default 18 para que
+  // todo lo publicado siga dando igual.
+  const Tmax=num('Tmax',1);
   $('a_v').textContent=$('a').value+'%';
   $('r_v').textContent=$('r').value+'%';
   $('eta_v').textContent=$('eta').value+'%';
@@ -1802,17 +1816,20 @@ function calc(){
   const pb=S>0?I/S:Infinity;
   const IDAcrudo=Math.min(aef*lambda*100,100);
   const IDA=Math.min(aef*lambda*factorR*100,100);
-  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo};
   // Techo de inversion: la cuenta al reves del payback. Ya estaba en el PDF y
   // en el CSV, pero es la cifra mas accionable del modelo -- con cuanto podes
   // sentarte a negociar con una consultora -- asi que va tambien en pantalla.
-  const techo18 = S>0 ? S*18 : 0;
-  $('out_techo').textContent = S>0 ? nf(techo18) : '—';
+  // OJO: se declara ANTES de armar `estado`. Al reves cae en zona muerta y el
+  // script entero se corta en silencio (es la trampa TDZ de la skill).
+  const techoMax = S>0 ? S*Tmax : 0;
+  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax};
+  $('out_techo').textContent = S>0 ? nf(techoMax) : '—';
+  $('out_techo_lab').textContent = `Hasta cuánto podés invertir (a ${Tmax} ${Tmax===1?'mes':'meses'})`;
   $('out_techo_sub').innerHTML = S<=0
     ? 'Con ahorro cero o negativo no hay inversión que se justifique: ningún monto vuelve.'
-    : (I>techo18
-      ? `Tu inversión de ${nf(I)} <b>supera ese techo</b>: por eso el recupero se estira más allá de los 18 meses.`
-      : `Es el máximo que este ahorro devuelve en 18 meses. Tu inversión de ${nf(I)} entra dentro, así que hay margen.`);
+    : (I>techoMax
+      ? `Tu inversión de ${nf(I)} <b>supera ese techo</b>: por eso el recupero se estira más allá de tu plazo de ${Tmax}.`
+      : `Es el máximo que este ahorro devuelve en tu plazo de ${Tmax}. Tu inversión de ${nf(I)} entra dentro, así que hay margen.`);
   const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
   $('aviso-R').style.display = R>0 ? 'block' : 'none';
   if(R>0) $('aviso-R').innerHTML = cobertura>=1
@@ -1847,8 +1864,8 @@ function calc(){
     mini.textContent=`Un IDA de ${IDA.toFixed(0)} es crítico: tu operación es prácticamente rehén de tu proveedor de IA. Si sos banco, energía o salud, esto debería ser prioridad de directorio.`;}
   const al=$('out_alerta');
   if(S<=0){$('out_pb').textContent='Nunca'; al.className='alerta warn'; al.textContent='Ahorro negativo o nulo: con este riesgo, automatizar cuesta más de lo que ahorra.';}
-  else if(pb>18){$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta warn'; al.textContent='Más de 18 meses: la inversión no se recupera en un plazo razonable.';}
-  else{$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta ok'; al.textContent='Menos de 18 meses: el proyecto tiene sentido.';}
+  else if(pb>Tmax){$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta warn'; al.textContent=`Más de ${Tmax} meses: supera el plazo con el que decidís, así que no pasa el filtro.`;}
+  else{$('out_pb').textContent=pb.toFixed(0)+' meses'; al.className='alerta ok'; al.textContent=`Dentro de tu plazo de ${Tmax} meses: el proyecto tiene sentido.`;}
 }
 // Este listener tiene que registrarse ANTES del bucle genérico de abajo:
 // los listeners de un mismo evento corren en el orden en que se agregan, y
@@ -1874,7 +1891,7 @@ $('ct-fijo-soltar').onclick=(ev)=>{ ev.preventDefault(); ctFijo=false; ctEditado
 $('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
 
 // ---- Botones de accion ----
-const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,
+const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,Tmax:18,
   ctp_precio:0.21,ctp_mes:614,ctl_srv:5170,ctl_luz:250,ctl_sys:3000,ctl_otros:0,
   hm_puestos:2,hm_oper:176};
 
@@ -1943,9 +1960,9 @@ function buildInforme(){
   const pbTxt = e.S>0 ? Math.round(e.pb)+' meses' : 'No se recupera';
   const veredicto = e.S<=0
     ? 'Con estos valores, automatizar cuesta más de lo que ahorra: el proyecto no se sostiene por sí solo. Antes de avanzar hay que bajar el costo real de la IA (λ o C_mes) o revisar si el piso de continuidad deja margen para liberar gente.'
-    : (e.pb>18
-      ? 'El recupero supera los 18 meses, el límite práctico que propone el modelo. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino bajar λ: sumar un segundo proveedor, armar un plan de contingencia o mover la IA adentro.'
-      : 'El recupero entra dentro de los 18 meses: el proyecto se sostiene económicamente con los supuestos cargados.');
+    : (e.pb>e.Tmax
+      ? `El recupero supera los ${e.Tmax} meses que se fijaron como plazo de decisión. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino bajar λ: sumar un segundo proveedor, armar un plan de contingencia o mover la IA adentro.`
+      : `El recupero entra dentro de los ${e.Tmax} meses fijados como plazo: el proyecto se sostiene económicamente con los supuestos cargados.`);
   const lecturaIDA = e.IDA<30
     ? 'Dependencia baja. Una caída de IA sería una molestia, no un paro operativo.'
     : (e.IDA<=60
@@ -1955,18 +1972,18 @@ function buildInforme(){
     ? `<p class="inf-nota"><b>El piso está activo.</b> La cuenta económica permitiría bajar a ${e.Pecon} personas, pero la continuidad obliga a conservar ${e.Pmin}. Se siguen pagando ${nf((e.Pmin-e.Pecon)*e.sueldo)} por mes en sueldos mientras la IA hace ese trabajo: esa es la prima de seguro operativo. Desde este punto, automatizar más reduce el ahorro en lugar de aumentarlo.</p>`
     : '';
   // Break-even economico: el techo de inversion que el ahorro logra devolver
-  const techo18 = e.S>0 ? e.S*18 : 0;
+  const techo18 = e.techoMax;
   const veredictoROI = e.S<=0
     ? `<b>La inversión no se justifica con ningún monto.</b> El ahorro mensual es ${nf(e.S)}, es decir nulo o negativo: no hay plata que ponés que vuelva, porque la operación no genera excedente. Primero hay que lograr que el ahorro sea positivo, después discutir cuánto invertir.`
     : (e.I>techo18
-      ? `<b>La inversión de ${nf(e.I)} es demasiado grande para este ahorro.</b> Con ${nf(e.S)} por mes, en 18 meses recuperás como máximo ${nf(techo18)}. Para que el proyecto cierre, la inversión no debería superar ese techo — o hay que aumentar el ahorro, que se logra bajando λ, no automatizando más.`
-      : `<b>La inversión de ${nf(e.I)} está dentro de lo que este ahorro puede devolver.</b> El techo a 18 meses es ${nf(techo18)}, así que hay margen. A 36 meses el proyecto deja ${nf(e.S*36-e.I)} netos sobre lo invertido.`);
-  const clsPb = e.S<=0 ? 'mal' : (e.pb<=18?'ok':'mal');
+      ? `<b>La inversión de ${nf(e.I)} es demasiado grande para este ahorro.</b> Con ${nf(e.S)} por mes, en ${e.Tmax} meses recuperás como máximo ${nf(techo18)}. Para que el proyecto cierre, la inversión no debería superar ese techo — o hay que aumentar el ahorro, que se logra bajando λ, no automatizando más.`
+      : `<b>La inversión de ${nf(e.I)} está dentro de lo que este ahorro puede devolver.</b> El techo a ${e.Tmax} meses es ${nf(techo18)}, así que hay margen. A 36 meses el proyecto deja ${nf(e.S*36-e.I)} netos sobre lo invertido.`);
+  const clsPb = e.S<=0 ? 'mal' : (e.pb<=e.Tmax?'ok':'mal');
   const clsIDA = e.IDA<30?'ok':(e.IDA<=60?'':'mal');
   const resumen = e.S<=0
     ? `Con los supuestos cargados el proyecto <b>no se sostiene</b>: automatizar cuesta más de lo que ahorra. Antes de avanzar hay que bajar el costo real de la IA o revisar el piso de continuidad.`
-    : (e.pb>18
-      ? `El proyecto <b>no pasa el filtro de 18 meses</b>. Conservás ${e.Pfinal} personas y ahorrás ${nf(e.S)} por mes, pero la inversión tarda ${Math.round(e.pb)} meses en volver. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino <b>bajar λ</b>.`
+    : (e.pb>e.Tmax
+      ? `El proyecto <b>no pasa el filtro de ${e.Tmax} meses</b>. Conservás ${e.Pfinal} personas y ahorrás ${nf(e.S)} por mes, pero la inversión tarda ${Math.round(e.pb)} meses en volver. La palanca más efectiva no es automatizar más —eso empeora el ahorro una vez que se toca el piso— sino <b>bajar λ</b>.`
       : `El proyecto <b>se sostiene</b>: conservás ${e.Pfinal} personas, ahorrás ${nf(e.S)} por mes y recuperás la inversión en ${Math.round(e.pb)} meses. Queda pendiente la exposición: con IDA ${e.IDA.toFixed(0)} estás en zona ${zonaIDA(e.IDA).toLowerCase()}.`);
 
   $('inf-cuerpo').innerHTML=`
@@ -2022,7 +2039,8 @@ function buildInforme(){
     <tr><td>Gasto de IA por mes (ajustado por riesgo λ)</td><td class="num">${nf(e.costoIA)}</td></tr>
     <tr><td>Mantenimiento mensual</td><td class="num">${nf(e.M)}</td></tr>
     <tr class="inf-destacado"><td><b>Ahorro neto por mes</b></td><td class="num">${nf(e.S)}</td></tr>
-    <tr><td>Techo de inversión que se justifica (a 18 meses)</td><td class="num">${e.S>0?nf(e.S*18):'—'}</td></tr>
+    <tr><td>Plazo de recupero fijado</td><td class="num">${e.Tmax} meses</td></tr>
+    <tr class="inf-destacado"><td><b>Techo de inversión que se justifica</b></td><td class="num">${e.S>0?nf(e.techoMax):'—'}</td></tr>
     <tr><td>Resultado acumulado a 12 meses</td><td class="num">${nf(e.S*12-e.I)}</td></tr>
     <tr><td>Resultado acumulado a 24 meses</td><td class="num">${nf(e.S*24-e.I)}</td></tr>
     <tr class="inf-destacado"><td><b>ROI a 36 meses</b></td><td class="num">${e.I>0?(((e.S*36-e.I)/e.I)*100).toFixed(0)+'%':'—'}</td></tr>
@@ -2033,7 +2051,7 @@ function buildInforme(){
   <p>Los números de arriba usan un valor exacto por variable. Corriendo el mismo proyecto <b>${ultimoMC.sims.toLocaleString('es-AR')} veces</b> con rangos en lugar de valores fijos, el recupero deja de ser una promesa y pasa a ser una probabilidad.</p>
   <table>
     <tr><th>Resultado sobre ${ultimoMC.sims.toLocaleString('es-AR')} escenarios</th><th style="text-align:right">Valor</th></tr>
-    <tr class="inf-destacado"><td><b>Recupera en 18 meses o menos</b></td><td class="num">${ultimoMC.p18.toFixed(0)}%</td></tr>
+    <tr class="inf-destacado"><td><b>Recupera en ${ultimoMC.Tmax} meses o menos</b></td><td class="num">${ultimoMC.p18.toFixed(0)}%</td></tr>
     <tr><td>No recupera nunca (ahorro negativo)</td><td class="num">${ultimoMC.pNeg.toFixed(0)}%</td></tr>
     <tr><td>Recupera pero tarda más de 60 meses</td><td class="num">${ultimoMC.pTarde.toFixed(0)}%</td></tr>
     <tr><td>Mediana de los que recuperan dentro de 60 meses</td><td class="num">${ultimoMC.mediana.toFixed(0)} meses</td></tr>
@@ -2086,6 +2104,7 @@ function buildCSV(){
   fila('Equivale por hora automatizada', n(e.Ct), 'USD/h');
   fila('Inversion inicial (I)', n(e.I), 'USD');
   fila('Mantenimiento mensual (M)', n(e.M), 'USD/mes');
+  fila('Plazo maximo de recupero', e.Tmax, 'meses');
   fila('Horas minimas para operar sin IA (H_min)', n(e.Hmin), 'h/mes');
   fila('Respaldo externo (R)', e.R, 'personas');
   fila('Arquitectura', arq||'sin definir');
@@ -2107,7 +2126,7 @@ function buildCSV(){
   fila('Zona', zonaIDA(e.IDA));
 
   sec('"ANALISIS DE LA INVERSION"');
-  fila('Techo de inversion que se justifica a 18 meses', e.S>0?n(e.S*18):'0', 'USD');
+  fila('Techo de inversion que se justifica a '+e.Tmax+' meses', e.S>0?n(e.techoMax):'0', 'USD');
   fila('Resultado acumulado a 12 meses', n(e.S*12-e.I), 'USD');
   fila('Resultado acumulado a 24 meses', n(e.S*24-e.I), 'USD');
   fila('Resultado acumulado a 36 meses', n(e.S*36-e.I), 'USD');
@@ -2116,7 +2135,7 @@ function buildCSV(){
   if(ultimoMC){
     sec('"MONTECARLO"');
     fila('Escenarios simulados', ultimoMC.sims);
-    fila('Recupera en 18 meses o menos', n(ultimoMC.p18), '%');
+    fila('Recupera en '+ultimoMC.Tmax+' meses o menos', n(ultimoMC.p18), '%');
     fila('No recupera nunca (ahorro negativo)', n(ultimoMC.pNeg), '%');
     fila('Recupera pero tarda mas de 60 meses', n(ultimoMC.pTarde), '%');
     fila('Mediana de los que recuperan dentro de 60 meses', n(ultimoMC.mediana), 'meses');
@@ -2324,7 +2343,8 @@ function mcBase(){
     Nom: e.N    || 16000,
     Pmin:e.Pmin !== undefined ? e.Pmin : 4,
     M:   e.M    !== undefined ? e.M    : 500,
-    I:   e.I    || 50000
+    I:   e.I    || 50000,
+    Tmax:e.Tmax || 18
   };
 }
 // El panel se arma una sola vez (mcInit), asi que este texto lo refresca calc()
@@ -2355,7 +2375,7 @@ function runMC(){
   const E=[+$('mcEta_lo').value/100,+$('mcEta_hi').value/100];
   const C=[+$('mcCt_lo').value,+$('mcCt_hi').value];
   const L=[+$('mcLam_lo').value,+$('mcLam_hi').value];
-  const {r,P,hp,Nom,Pmin,M,I}=mcBase();
+  const {r,P,hp,Nom,Pmin,M,I,Tmax}=mcBase();
   const H=P*hp, sueldo=Nom/P;
   ultimoMC=null;
   const SIMS=10000, paybacks=[];
@@ -2373,16 +2393,16 @@ function runMC(){
   const bins=30, max=60, w=max/bins, counts=new Array(bins).fill(0);
   paybacks.forEach(p=>{const idx=Math.min(Math.floor(p/w),bins-1); counts[idx]++;});
   const labels=counts.map((_,i)=>((i*w)).toFixed(0));
-  const colors=counts.map((_,i)=> (i*w)<18 ? NARANJA : GRIS);
+  const colors=counts.map((_,i)=> (i*w)<Tmax ? NARANJA : GRIS);
   // Las probabilidades se calculan sobre las 10.000 corridas, NUNCA sobre el
   // subconjunto que entro al histograma: dividir por paybacks.length escondia
   // los escenarios malos (ahorro negativo o recupero >60 meses), inflaba el %
   // de exito y daba NaN cuando ningun escenario recuperaba.
-  const p18=paybacks.filter(p=>p<=18).length/SIMS*100;
+  const p18=paybacks.filter(p=>p<=Tmax).length/SIMS*100;
   const pNeg=neg/SIMS*100, pTarde=tarde/SIMS*100;
   const sorted=[...paybacks].sort((a,b)=>a-b);
   const mediana=sorted.length?sorted[Math.floor(sorted.length/2)]:0;
-  ultimoMC={sims:SIMS, p18, pNeg, pTarde, mediana, viables:paybacks.length,
+  ultimoMC={sims:SIMS, p18, pNeg, pTarde, mediana, viables:paybacks.length, Tmax,
     rangos:{a:[A[0]*100,A[1]*100], eta:[E[0]*100,E[1]*100], ct:C, lam:L}};
 
   if(chartMC) chartMC.destroy();
@@ -2394,7 +2414,7 @@ function runMC(){
   });
   $('mc-resumen').innerHTML = paybacks.length===0
     ? `De 10.000 futuros simulados, <b>ninguno</b> recupera la inversión dentro de 60 meses${neg>0?` — en el ${pNeg.toFixed(0)}% el ahorro fue directamente negativo`:''}. Con estos rangos el proyecto no cierra: bajá λ, el costo por hora o la inversión inicial, y volvé a correr.`
-    : `Naranja = recupera en ≤18 meses. De 10.000 futuros simulados: <b>${p18.toFixed(0)}%</b> recupera la inversión en menos de 18 meses · <b>${pNeg.toFixed(0)}%</b> nunca la recupera (ahorro negativo) · <b>${pTarde.toFixed(0)}%</b> recupera pero tarda más de 60 meses. Mediana de los que recuperan dentro de 60 meses: <b>${mediana.toFixed(0)} meses</b>. Los tres porcentajes se calculan sobre las 10.000 corridas. Movés los rangos y volvés a correr para ver cómo cambia tu probabilidad de éxito.`;
+    : `Naranja = recupera dentro de tu plazo de ${Tmax} meses. De 10.000 futuros simulados: <b>${p18.toFixed(0)}%</b> recupera la inversión en ${Tmax} meses o menos · <b>${pNeg.toFixed(0)}%</b> nunca la recupera (ahorro negativo) · <b>${pTarde.toFixed(0)}%</b> recupera pero tarda más de 60 meses. Mediana de los que recuperan dentro de 60 meses: <b>${mediana.toFixed(0)} meses</b>. Los tres porcentajes se calculan sobre las 10.000 corridas. Movés los rangos y volvés a correr para ver cómo cambia tu probabilidad de éxito.`;
 }
 $('run-mc').addEventListener('click',runMC);
 // montecarlo se inicializa al abrir su pestaña (lazy init arriba)

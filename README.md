@@ -193,7 +193,7 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 2. **Ahorro en sueldos:** cada persona cuesta `N ÷ P = $1.600/mes` → `3 × $1.600 = $4.800`.
 3. **Costo de la IA:** `1.600 × 0,384 × 1,5 × $2 = $1.843/mes`. Acá entra λ: la factura dice $2/h, el riesgo la convierte en $3/h.
 4. **Ahorro:** `$4.800 − $1.843 − $500 = $2.457/mes`.
-5. **Para qué sirve S:** es el semáforo y el divisor del recupero. Si S ≤ 0, automatizar cuesta más de lo que ahorra. Si S > 0, `T = $50.000 ÷ $2.457 = 20 meses`. Regla práctica: **arriba de 18 meses, no avances** — este proyecto, con la cuenta honesta, no pasa.
+5. **Para qué sirve S:** es el semáforo y el divisor del recupero. Si S ≤ 0, automatizar cuesta más de lo que ahorra. Si S > 0, `T = $50.000 ÷ $2.457 = 20 meses`. Regla por defecto: **arriba de 18 meses, no avances** — este proyecto, con la cuenta honesta, no pasa. Ese plazo lo elegís en la calculadora: es política de inversión de cada empresa, no una constante del modelo.
 
 > #### La trampa que esta fórmula evita
 >
@@ -509,11 +509,13 @@ Mismo servidor, mismo precio, y el umbral se movió **20 veces** — de 251 pers
 
 ### 7.4 · La cifra con la que se negocia: hasta cuánto podés invertir
 
-Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es **el techo de inversión**. La fórmula del recupero es `T = I ÷ S`; despejada al revés, con el límite de 18 meses:
+Todo el modelo se usa para decidir, y hay una sola cuenta que se puede llevar a una reunión con un proveedor. No es el IDA ni el ahorro: es **el techo de inversión**. La fórmula del recupero es `T = I ÷ S`; despejada al revés, contra el plazo con el que tu empresa aprueba inversiones:
 
 ```
-inversión máxima = S × 18
+inversión máxima = S × plazo de recupero
 ```
+
+El plazo por defecto es **18 meses** —en IA, dos años es una eternidad— pero **es un campo de la calculadora, no una ley del modelo**. Un banco evaluando infraestructura crítica trabaja con 36 meses; una startup quemando caja no aguanta 12. Movelo y se recalculan tres cosas a la vez: el techo de inversión, el semáforo del recupero y el porcentaje de éxito del Montecarlo. Los números que siguen usan 18.
 
 En el ejemplo, con un ahorro de $2.457/mes, el techo es **$44.222** — y la inversión evaluada era $50.000. Ahí está la razón exacta por la que el proyecto no cierra, dicha de la forma más accionable: no *"el payback da 20 meses"*, sino **"este proyecto vale $44.222, no $50.000"**.
 
