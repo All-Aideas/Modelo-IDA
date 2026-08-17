@@ -351,7 +351,9 @@ Dos empresas automatizan lo mismo y pagan el mismo precio por token. Una corre t
 
 Ese riesgo se convierte en un recargo sobre el costo de la IA: el **multiplicador λ**. Si λ crece tanto que el costo real de la hora de IA alcanza al de la hora humana, la curva de ahorro se aplana. Si lo supera, **pagás por automatizar**.
 
-![Riesgo animado](assets/g4_riesgo_animado.gif)
+![Ahorro mensual según cuánto automatices, para cuatro niveles de riesgo λ: todas las curvas alcanzan su máximo en el piso de continuidad y después bajan](assets/g4_riesgo_lambda.svg)
+
+Fijate que **las cuatro curvas tienen su máximo en el mismo lugar**: el 60%, donde el piso toma el control. λ no mueve el óptimo, mueve *cuánto ganás* en ese óptimo — y con la hora de IA al precio de la hora humana, la curva se hunde y automatizar te cuesta plata.
 
 ### Extremo C — "Monto DeepSeek local para automatizar los mails" → te enseña la inversión **I**
 
