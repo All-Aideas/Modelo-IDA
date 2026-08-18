@@ -5,6 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IDA Model — How many people do you need the day the AI is gone?</title>
 <meta name="description" content="Calculate your minimum continuity headcount and your AI Dependency Index. Por César Riat.">
+
+<!-- Idiomas: la edicion inglesa se genera desde este mismo archivo. Los dos
+     documentos declaran el mismo juego de alternates, que es lo correcto. -->
+<link rel="alternate" hreflang="es" href="https://modelo-ida.web.app/">
+<link rel="alternate" hreflang="en" href="https://modelo-ida.web.app/en/">
+<link rel="alternate" hreflang="x-default" href="https://modelo-ida.web.app/">
+
+<!-- Ficha estructurada: describe la calculadora, no el articulo. Se declara
+     como herramienta gratuita que corre en el navegador, que is what it es. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "IDA Model",
+  "alternateName": "AI Dependency Index",
+  "url": "https://modelo-ida.web.app/en/",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any device with a web browser",
+  "inLanguage": ["es", "en"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://opensource.org/licenses/MIT",
+  "description": "Business continuity calculator for AI outages. It works out the minimum headcount you must keep (P'), whether automating pays off (saving and payback), and the AI Dependency Index (IDA), a 0-to-100 number summarising how exposed your operation is if the AI provider becomes unavailable.",
+  "featureList": [
+    "Minimum continuity headcount",
+    "AI Dependency Index (IDA)",
+    "Architecture-risk-adjusted saving",
+    "Justifiable investment ceiling",
+    "Monte Carlo simulation with 10,000 scenarios",
+    "On-premise AI versus cloud API comparator",
+    "PDF report and CSV export"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "César Riat",
+    "url": "https://cesarriat.com"
+  },
+  "codeRepository": "https://github.com/All-Aideas/Modelo-IDA"
+}
+</script>
 <meta name="author" content="César Riat">
 
 <!-- EDITAR: si cambiás el dominio, actualizá estas 3 líneas (deben ser URLs absolutas) -->
@@ -1226,7 +1266,9 @@ function calc(){
   $('out_aef').textContent=(aef*100).toFixed(0)+'%';
   $('out_lambda').textContent=lambda.toFixed(2).replace('.',',');
   $('out_S').textContent=nf(S);
-  $('out_lib').textContent = liberadas===1?'1 persona liberada':`${liberadas} people released`;
+  $('out_lib').textContent = liberadas < 0
+    ? `te faltan ${-liberadas} para cubrir el piso`
+    : (liberadas===1?'1 persona liberada':`${liberadas} people released`);
   const frenoS=$('out_S_freno');
   if(Pecon<Pmin){
     frenoS.style.display='block';

@@ -5,6 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Modelo IDA — ¿Cuánta gente necesitás el día que la IA no esté?</title>
 <meta name="description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA. Por César Riat.">
+
+<!-- Idiomas: la edicion inglesa se genera desde este mismo archivo. Los dos
+     documentos declaran el mismo juego de alternates, que es lo correcto. -->
+<link rel="alternate" hreflang="es" href="https://modelo-ida.web.app/">
+<link rel="alternate" hreflang="en" href="https://modelo-ida.web.app/en/">
+<link rel="alternate" hreflang="x-default" href="https://modelo-ida.web.app/">
+
+<!-- Ficha estructurada: describe la calculadora, no el articulo. Se declara
+     como herramienta gratuita que corre en el navegador, que es lo que es. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Modelo IDA",
+  "alternateName": "Índice de Dependencia de IA",
+  "url": "https://modelo-ida.web.app/",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Cualquiera con navegador web",
+  "inLanguage": ["es", "en"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://opensource.org/licenses/MIT",
+  "description": "Calculadora de continuidad operativa ante la caída de la IA. Calcula la dotación mínima que hay que conservar (P'), si la automatización conviene (ahorro y recupero) y el Índice de Dependencia de IA (IDA), un número de 0 a 100 que resume cuán expuesta queda la operación si el proveedor de IA deja de estar disponible.",
+  "featureList": [
+    "Dotación mínima de continuidad",
+    "Índice de Dependencia de IA (IDA)",
+    "Ahorro ajustado por riesgo de arquitectura",
+    "Techo de inversión justificable",
+    "Simulación de Montecarlo con 10.000 escenarios",
+    "Comparador de IA local contra API en la nube",
+    "Informe en PDF y export a CSV"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "César Riat",
+    "url": "https://cesarriat.com"
+  },
+  "codeRepository": "https://github.com/All-Aideas/Modelo-IDA"
+}
+</script>
 <meta name="author" content="César Riat">
 
 <!-- EDITAR: si cambiás el dominio, actualizá estas 3 líneas (deben ser URLs absolutas) -->
@@ -794,7 +834,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.843</span> en la evaluación del proyecto.<br><br>
   ¿Por qué? Porque además de la factura estás corriendo un riesgo que hoy no pagás pero que algún día se cobra solo: el día que esa nube única se cae y no tenés plan B, perdés operación, ventas y credibilidad de golpe. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara <i>cuando todavía estás a tiempo de cambiarla</i>.<br><br>
   Es la misma lógica del seguro del auto: manejar sin seguro no te sale más barato, te sale igual hasta que chocás.<br><br>
-  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo real cae de $1.843 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
+  Si migrás a multi-cloud y armás el plan de contingencia, el multiplicador baja a 1,10 y el costo que te imputa el modelo cae de $1.843 a $1.352 por mes. Misma factura del proveedor, 27% más barata en términos reales.</div>
 
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Módulo Continuidad → produce P_min</h3>
   <div class="formula f-con">$$P_{min} = \Big\lceil \frac{H_{min}}{h_{persona}} \Big\rceil$$</div>
@@ -1001,7 +1041,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>La cuenta ingenua dice cero personas. El modelo dice no: la dotación cae hasta chocar con un piso —el mínimo para operar sin IA— y ahí se planta. La diferencia es tu <b>prima de seguro operativo</b>.</p>
   <div class="grafico-svg" id="graf-A"></div>
   <h3>Extremo B — Una sola nube sin plan B → el riesgo λ</h3>
-  <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo real de la IA alcanza al humano, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
+  <p>Dos empresas automatizan lo mismo y pagan lo mismo en la factura. La que corre sobre una sola nube "maneja sin seguro": el riesgo aparece todo junto el día del choque. Si λ sube tanto que el costo imputado de la hora de IA alcanza al de la hora humana, dejás de ahorrar; si lo supera, <b>pagás por automatizar</b>.</p>
   <img class="grafico" src="assets/g4_riesgo_lambda.svg" alt="Ahorro mensual según cuánto automatices, para cuatro niveles de riesgo λ: todas las curvas alcanzan su máximo en el piso de continuidad y después bajan; con la hora de IA al precio de la hora humana, automatizar pasa a costar plata">
   <p class="nota">Fijate que <b>las cuatro curvas tienen su máximo en el mismo lugar</b>: el 60%, donde el piso toma el control. λ no mueve el óptimo, mueve <i>cuánto ganás</i> en ese óptimo — y con la hora de IA al precio de la hora humana, la curva se hunde y automatizar te cuesta plata.</p>
   <h3>Extremo C — Servidor propio para una tarea chica → la inversión I</h3>
@@ -1091,10 +1131,11 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="tabla-scroll">
   <table>
     <tr><th>Automatización efectiva</th><th>Lo que promete la cuenta ingenua</th><th>Ahorro real</th><th>Recupero</th><th>IDA</th></tr>
-    <tr class="fila-ok"><td><b>60%</b> — el óptimo</td><td>$6.220</td><td><b>$6.220</b></td><td><b>8 meses</b></td><td>90</td></tr>
+    <tr class="fila-ok"><td><b>60%</b> — el óptimo <span class="hint">de este caso</span></td><td>$6.220</td><td><b>$6.220</b></td><td><b>8 meses</b></td><td>90</td></tr>
     <tr><td>80%</td><td>$8.460</td><td>$5.260</td><td>10 meses</td><td>100</td></tr>
     <tr class="fila-mal"><td>100%</td><td>$10.700</td><td>$4.300</td><td>12 meses</td><td>100</td></tr>
   </table>
+  <p class="nota"><b>Ojo con generalizar este 60%.</b> No es una constante del modelo: es donde cae el óptimo <i>de este caso</i>, que es justo el punto en que la cuenta económica toca el piso de continuidad. Ese punto se corre con la dotación, el sueldo, el costo de la IA, el mantenimiento y las horas mínimas. Lo que sí es general es la <b>forma</b> de la curva: sube hasta que el piso se activa y de ahí en adelante baja, siempre.</p>
   </div>
 
   <p>Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua te promete <b>$10.700 por mes</b> y la realidad te da <b>$4.300</b>. Los $6.400 que faltan son los cuatro sueldos del piso de continuidad, que seguís pagando mientras la IA hace ese trabajo.</p>
@@ -1291,14 +1332,22 @@ window.addEventListener('DOMContentLoaded',function(){
   <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
   <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</div>
 
-  <h3>7 · λ mira la infraestructura, no el modelo que usás</h3>
+  <h3>7 · Convierte horas liberadas en puestos eliminables</h3>
+  <p>Este es el supuesto más fuerte de todo el modelo y conviene decirlo sin vueltas. Cuando la cuenta económica hace <span class="cuenta">⌈P × (1 − a_ef)⌉</span>, está asumiendo que <b>las horas que la IA te saca de encima se traducen en gente que dejás de necesitar</b>. En la farmacia: 38,4% automatizado sobre 10 personas da 7, y las 3 de diferencia se cuentan como sueldos que dejás de pagar.</p>
+  <p>En una organización real eso <b>no es automático</b>. Con el mismo 38,4% de horas liberadas puede pasar cualquiera de estas cosas: reasignás a esas personas a tareas que estaban postergadas, dejás de pagar horas extra en vez de dejar de pagar sueldos, absorbés el crecimiento del año que viene sin contratar a nadie, o directamente no despedís a nadie y la gente trabaja con menos presión. <b>En todos esos casos el ahorro existe, pero no tiene la forma que el modelo le da.</b></p>
+  <div class="ejemplo e-rie"><span class="tit">Cómo leer el resultado, entonces</span>
+  <b><span class="v-res">P'</span> es capacidad laboral que dejás de necesitar, no una orden de despido.</b> El modelo te dice cuántas personas de trabajo te sobran; qué hacés con ellas es una decisión de gestión que el modelo no toma ni debería tomar.<br><br>
+  Y hay una consecuencia práctica: <b>si no vas a reducir dotación, el ahorro que muestra la calculadora no va a aparecer en tu balance.</b> Va a aparecer como más capacidad con la misma gente, que es igual de valioso pero no se contabiliza igual. Si tu caso es ese, mirá el número de <b class="v-res">P'</b> y el <b>IDA</b>, y tomá el ahorro <b class="v-res">S</b> como el techo teórico de lo que <i>podrías</i> ahorrar si decidieras reducir — no como lo que vas a ahorrar.<br><br>
+  Lo que <b>no cambia</b> en ninguno de esos escenarios es el piso de continuidad: aunque no eches a nadie, si automatizaste el 38,4% y mañana la IA no está, seguís necesitando gente que sepa hacerlo a mano.</div>
+
+  <h3>8 · λ mira la infraestructura, no el modelo que usás</h3>
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
   <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
   <p>Y no es hipotético: en <b>junio de 2026</b> el gobierno de Estados Unidos prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic, y después levantó la restricción solo en parte. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube.</p>
   <p class="nota">Se podría agregar como un agravante más de λ, y probablemente sea el próximo. No está todavía por la misma razón que se explica en el límite 6: sumar un coeficiente nuevo sin poder calibrarlo agranda el modelo sin hacerlo más confiable. Mientras tanto, tratalo como un riesgo <b>real y no contemplado</b>: si tu operación depende de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
-  Ninguno de los siete invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
+  Ninguno de los ocho invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
 </section>
 
 <section>
@@ -1898,7 +1947,9 @@ function calc(){
   $('out_aef').textContent=(aef*100).toFixed(0)+'%';
   $('out_lambda').textContent=lambda.toFixed(2).replace('.',',');
   $('out_S').textContent=nf(S);
-  $('out_lib').textContent = liberadas===1?'1 persona liberada':`${liberadas} personas liberadas`;
+  $('out_lib').textContent = liberadas < 0
+    ? `te faltan ${-liberadas} para cubrir el piso`
+    : (liberadas===1?'1 persona liberada':`${liberadas} personas liberadas`);
   const frenoS=$('out_S_freno');
   if(Pecon<Pmin){
     frenoS.style.display='block';

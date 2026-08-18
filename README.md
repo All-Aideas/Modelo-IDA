@@ -258,7 +258,7 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 >
 > | Autom. efectiva | Ahorro "ingenuo" | Ahorro real | IDA |
 > |---|---|---|---|
-> | 60% (óptimo) | $6.220 | **$6.220** | 90 |
+> | 60% (óptimo de este caso) | $6.220 | **$6.220** | 90 |
 > | 80% | $8.460 | $5.260 | 100 |
 > | 100% | $10.700 | $4.300 | 100 |
 >
@@ -502,7 +502,7 @@ Hay una cantidad de gente que **no podés soltar**: el piso de continuidad. Una 
 
 | Automatización efectiva | Promesa ingenua | Ahorro real | Recupero | IDA |
 |---|---|---|---|---|
-| **60% — el óptimo** | $6.220 | **$6.220** | **8 meses** | 90 |
+| **60% — el óptimo de este caso** | $6.220 | **$6.220** | **8 meses** | 90 |
 | 80% | $8.460 | $5.260 | 10 meses | 100 |
 | 100% | $10.700 | $4.300 | 12 meses | 100 |
 
@@ -731,6 +731,14 @@ Qué trae:
 - **Simulación de Montecarlo** con 10.000 escenarios, que toma los datos firmes de la calculadora y te deja definir el rango solo de lo incierto.
 - **Comparador local vs nube** e **informe descargable en PDF** con resumen ejecutivo, análisis de ROI, Montecarlo y gráficos.
 - **Export a CSV** con todos los supuestos, los resultados y la corrida de Montecarlo, para auditar en planilla. Usa `;` y coma decimal: Excel en español lo abre sin asistente de importación.
+
+## Verificación
+
+Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 20 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero.
+
+Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consola del navegador. Detalle completo en [**PRUEBAS.md**](PRUEBAS.md).
+
+Lo que verifica es que **el código haga lo que dicen las fórmulas**. Lo que no puede verificar —y conviene decirlo— es si las fórmulas describen bien la realidad: eso depende de los coeficientes, que son criterio experto declarado en la sección de límites.
 
 ## Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.
