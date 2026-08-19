@@ -224,7 +224,7 @@ P' = MÁXIMO entre:
 
 Con esos dos números en la mano —38,4% de automatización efectiva y un piso de 4 personas—, el modelo hace **dos cuentas distintas y se queda con la más grande**:
 
-1. **Cuenta económica:** si automatizás el 38,4%, te sobra ese 38,4% de la gente → `10 × (1 − 0,384) = 6,16 → 7 personas` (redondeo hacia arriba: no existe 6,16 empleados).
+1. **Cuenta económica:** si automatizás el 38,4%, te "sobra" ese 38,4% de la capacidad de trabajo → `10 × (1 − 0,384) = 6,16 → 7 personas` (redondeo hacia arriba: no existe 6,16 empleados).
 2. **Cuenta de supervivencia:** el `P_min` que acabás de calcular en el módulo Continuidad → 4 personas.
 3. **`MÁXIMO(7 , 4) = 7`.**
 

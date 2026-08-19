@@ -828,7 +828,7 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td>Sin plan de contingencia</td><td>+0,20</td></tr>
     <tr><td>Datos sensibles en nube externa</td><td>+0,15</td></tr>
   </table>
-  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es el costo esperado del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
+  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es la prima que pagás por la exposición del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
   <div class="ejemplo e-rie"><span class="tit">Cuánto da y qué pasa si lo movés</span>
   Una sola nube (+0,30) y sin plan de contingencia (+0,20) suman 0,50 de prima: <span class="cuenta">1 + 0,50 = 1,50</span><br><br>
   <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.843</span> en la evaluación del proyecto.<br><br>
@@ -876,7 +876,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="formula-color">P' &nbsp;=&nbsp; max<b>(</b> &nbsp;⌈ <span class="t t-dato">P</span> · (1 − <span class="t t-aut">a_ef</span>) ⌉ &nbsp;,&nbsp; <span class="t t-con">P_min</span> &nbsp;<b>)</b></div>
   <p>Esta fórmula hace <b>dos cuentas distintas y se queda con la más grande</b>. Paso a paso:</p>
 
-  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>La cuenta económica:</b> si automatizás el 38,4% de las horas, te "sobra" ese 38,4% de la gente. Queda el resto: <span class="cuenta">10 × (1 − 0,384) = 6,16 → ⌈6,16⌉ = 7 personas</span>. Redondeás para arriba porque no podés tener 6,16 empleados.</div></div>
+  <div class="paso"><div class="paso-n">1</div><div class="paso-tx"><b>La cuenta económica:</b> si automatizás el 38,4% de las horas, te "sobra" ese 38,4% de la capacidad de trabajo. <b>Ojo con el entrecomillado:</b> el modelo asume que esa capacidad se puede convertir en menos gente, y eso no siempre pasa — puede terminar en reasignación, menos horas extra o crecer sin contratar (ver <b>Conclusiones → los límites</b>, punto 7). Queda el resto: <span class="cuenta">10 × (1 − 0,384) = 6,16 → ⌈6,16⌉ = 7 personas</span>. Redondeás para arriba porque no podés tener 6,16 empleados.</div></div>
   <div class="paso"><div class="paso-n">2</div><div class="paso-tx"><b>La cuenta de supervivencia:</b> es el <span class="t t-con">P_min</span> que ya calculaste en el módulo Continuidad: <span class="cuenta">4 personas</span>. No sale de automatizar nada — sale de preguntarte cuánta gente necesitás el día que la IA no está.</div></div>
   <div class="paso"><div class="paso-n">3</div><div class="paso-tx"><b>El <span class="cuenta">max( )</span> elige la más grande:</b> <span class="cuenta">max(7 , 4) = 7 personas</span>. Ese es tu P': la respuesta final del modelo.</div></div>
 
@@ -1522,7 +1522,7 @@ const MODULOS={
     produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
     formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
     simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
-    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es el costo esperado del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es la prima que pagás por la exposición del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
     usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
   con:{nom:'Continuidad', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
     datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
@@ -2174,7 +2174,7 @@ function buildInforme(){
   <p><b>Economía.</b> ${veredicto}</p>
   <p><b>Exposición.</b> IDA ${e.IDA.toFixed(0)} sobre 100 (zona ${zonaIDA(e.IDA).toLowerCase()}). ${lecturaIDA}</p>
   ${e.cobertura>0?`<p class="inf-nota"><b>Atención con el respaldo externo.</b> Este IDA de ${e.IDA.toFixed(0)} ya está descontado por las ${e.R} personas de fuera del área declaradas como respaldo, que cubren el ${pc(e.cobertura)} del piso. <b>Sin ese respaldo el índice sería ${e.IDAcrudo.toFixed(0)}.</b> R es el único dato del modelo que baja el riesgo en lugar de subirlo, y el modelo no puede verificarlo: si esas personas no ejecutaron este proceso, no está documentado el modo manual, o nunca se ensayó el traspaso, el número válido es ${e.IDAcrudo.toFixed(0)}.</p>`:''}
-  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el costo esperado de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
+  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es la prima que el modelo cobra por la exposición de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
 }
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
 
