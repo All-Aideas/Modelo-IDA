@@ -1003,7 +1003,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>El punto ciego: la fórmula asume que la IA se paga por hora</h3>
   <p>El modelo te pide el <b>gasto mensual</b> de IA porque es el número que realmente conocés: sale de tu factura o de una proyección. Con eso calcula solo el costo por hora automatizada, que es lo que necesitan los gráficos.</p><p>Pero ojo con lo que ese número esconde: con <b>API</b> el gasto <b>sube y baja con el uso</b> —si automatizás menos, pagás menos—; con <b>servidor propio</b> el gasto es <b>fijo</b> y no baja aunque no lo uses.</p>
-  <p class="nota">Dicho en criollo: con API el costo es una <b>diagonal</b> que sube con el uso; con local es una <b>recta horizontal</b> que no baja nunca. Por eso, si corrés local y después automatizás menos de lo previsto, tu costo por hora se dispara sin que hayas cambiado nada del contrato.</p>
+  <p class="nota">Dicho en criollo: con API el costo es una <b>diagonal</b> que sube con el uso; con local es una <b>recta horizontal</b> que no baja nunca. Por eso, si corrés local y después automatizás menos de lo previsto, tu costo por hora se dispara sin que hayas cambiado nada del contrato. Y eso le cambia la forma a la curva del ahorro, que es de lo que habla la primera conclusión.</p>
 
   <h3>Cuánto cuesta de verdad correr local</h3>
   <p>Y acá está la parte que casi nadie presupuesta. Correr IA en tus servidores <b>no es solo el fierro</b>:</p>
@@ -1168,13 +1168,17 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td>80%</td><td>$8.460</td><td>$5.260</td><td>10 meses</td><td>100</td></tr>
     <tr class="fila-mal"><td>100%</td><td>$10.700</td><td>$4.300</td><td>12 meses</td><td>100</td></tr>
   </table>
-  <p class="nota"><b>Ojo con generalizar este 60%.</b> No es una constante del modelo: es donde cae el óptimo <i>de este caso</i>, que es justo el punto en que la cuenta económica toca el piso de continuidad. Ese punto se corre con la dotación, el sueldo, el costo de la IA, el mantenimiento y las horas mínimas. Lo que sí es general es la <b>forma</b> de la curva: sube hasta que el piso se activa y de ahí en adelante baja, siempre.</p>
+  <p class="nota"><b>Ojo con generalizar este 60%.</b> No es una constante del modelo: es donde cae el óptimo <i>de este caso</i>, que es justo el punto en que la cuenta económica toca el piso de continuidad. Ese punto se corre con la dotación, el sueldo, el costo de la IA, el mantenimiento y las horas mínimas. Lo que sí es general es la <b>forma</b> de la curva, y depende de cómo pagues la IA: con <b>API</b> —costo por hora— sube hasta que el piso se activa y de ahí en adelante baja; con <b>servidor propio</b> —costo fijo— sube hasta el piso y después se aplana, porque la factura ya no se mueve. La tabla es el caso API, que es el más común; el otro está explicado acá abajo.</p>
   </div>
 
   <p>Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua te promete <b>$10.700 por mes</b> y la realidad te da <b>$4.300</b>. Los $6.400 que faltan son los cuatro sueldos del piso de continuidad, que seguís pagando mientras la IA hace ese trabajo.</p>
 
   <div class="ejemplo e-rie"><span class="tit">La frase para llevarse</span>
   Pasado el piso, <b>automatizar de más te deja más pobre y más dependiente al mismo tiempo</b>: el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.</div>
+
+  <div class="ejemplo e-con"><span class="tit">Si tu IA es de costo fijo, cambia una cosa</span>
+  Todo lo de arriba supone que pagás la IA <b>por hora</b>, que es lo que hacés con una API. Si tenés servidor propio la factura es la misma automatices 60% o 100%, así que pasado el piso el ahorro <b>no baja: se queda quieto</b>. Podés comprobarlo acá mismo: poné el asistente de costo en <b>servidor propio</b> y movés el deslizador de automatización — el gasto mensual no se mueve y el ahorro se aplana.<br><br>
+  Eso no te deja sin consecuencia, solo cambia cuál es. Con costo fijo automatizar de más ya no te empobrece, sin embargo el <b>IDA sigue subiendo igual</b>: de 90 a 100 en esa misma tabla. Es decir que estás comprando dependencia a cambio de nada. Con API perdés plata y resiliencia juntas; con costo fijo perdés solo resiliencia, que es más difícil de ver en un balance y más caro de arreglar después.</div>
 
   <p class="nota">La curva completa está en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</p>
 </section>
@@ -1265,7 +1269,7 @@ window.addEventListener('DOMContentLoaded',function(){
   Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, sabés que tenés margen para pedir más alcance o mejor soporte por la misma plata.</details>
 
   <details class="ejemplo e-rie"><summary><span class="tit">La trampa de subir el techo</span></summary>
-  El techo sube si sube <b class="v-res">S</b>, y ahí aparece la tentación de automatizar más para agrandarlo. Ya sabés cómo termina eso: pasado el piso, <b>automatizar de más baja el ahorro</b>, así que el techo <i>baja</i>. Y el óptimo de automatización es el mismo para el techo que para el ahorro: al 60% el techo llega a $111.960, y al 100% se derrumba a $77.400 con un IDA de 100.<br><br>
+  El techo sube si sube <b class="v-res">S</b>, y ahí aparece la tentación de automatizar más para agrandarlo. Ya sabés cómo termina eso: pasado el piso, <b>automatizar de más baja el ahorro</b> si pagás la IA por hora, así que el techo <i>baja</i>. Con costo fijo el techo no baja, solamente deja de subir. Y el óptimo de automatización es el mismo para el techo que para el ahorro: al 60% el techo llega a $111.960, y al 100% se derrumba a $77.400 con un IDA de 100.<br><br>
   La forma sana de subir el techo es la misma que la de todo el modelo: <b>bajar λ</b>. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a <b>$53.070</b> — de golpe la inversión de $50.000 entra. Mismo proyecto, misma gente, y el número dejó de ser un problema.</details>
 
   <h3 class="mod h-hum" style="font-size:1.15rem;">5 · Y una advertencia sobre los números lindos</h3>
@@ -1371,7 +1375,8 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="ejemplo e-rie"><span class="tit">Cómo leer el resultado, entonces</span>
   <b><span class="v-res">P'</span> es capacidad laboral que dejás de necesitar, no una orden de despido.</b> El modelo te dice cuántas personas de trabajo te sobran; qué hacés con ellas es una decisión de gestión que el modelo no toma ni debería tomar.<br><br>
   Y hay una consecuencia práctica: <b>si no vas a reducir dotación, el ahorro que muestra la calculadora no va a aparecer en tu balance.</b> Va a aparecer como más capacidad con la misma gente, que es igual de valioso pero no se contabiliza igual. Si tu caso es ese, mirá el número de <b class="v-res">P'</b> y el <b>IDA</b>, y tomá el ahorro <b class="v-res">S</b> como el techo teórico de lo que <i>podrías</i> ahorrar si decidieras reducir — no como lo que vas a ahorrar.<br><br>
-  Lo que <b>no cambia</b> en ninguno de esos escenarios es el piso de continuidad: aunque no eches a nadie, si automatizaste el 38,4% y mañana la IA no está, seguís necesitando gente que sepa hacerlo a mano.</div>
+  Lo que <b>no cambia</b> en ninguno de esos escenarios es el piso de continuidad: aunque no eches a nadie, si automatizaste el 38,4% y mañana la IA no está, seguís necesitando gente que sepa hacerlo a mano.<br><br>
+  Y conviene leerlo junto a la <b>primera conclusión</b>, la del óptimo de automatización: ese óptimo existe justamente porque el ahorro se mide en personas liberadas. Si en tu caso las horas no se convierten en puestos, el punto donde la curva deja de mejorar sigue siendo el mismo — lo que cambia es que lo que ganás ahí es capacidad, no plata.</div>
 
   <h3>8 · λ mira la infraestructura, no el modelo que usás</h3>
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
@@ -1906,7 +1911,6 @@ function calc(){
   $('aviso-local').style.display = rLocal && rLocal.checked ? 'block' : 'none';
   const H=P*hp, aef=a*(1-r)*eta, Pmin=Math.ceil(Hmin/hp);
   const Pecon=Math.ceil(P*(1-aef)), Pfinal=Math.max(Pecon,Pmin);
-  const Ch=N/H;
   // El ahorro sale de las personas que REALMENTE dejas de pagar, no de las horas
   // automatizadas: si el piso de continuidad te obliga a retener gente, seguis
   // pagando esos sueldos aunque la IA haga el trabajo.

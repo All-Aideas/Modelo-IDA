@@ -272,7 +272,7 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 > | 80% | $8.460 | $5.260 | 100 |
 > | 100% | $10.700 | $4.300 | 100 |
 >
-> El máximo de automatización nunca es el óptimo de automatización.
+> El máximo de automatización nunca es el óptimo de automatización. **Con una salvedad, que vale para todo el modelo:** esto pasa así cuando la IA se paga por hora. Con costo fijo el ahorro no baja, se aplana — y el IDA sube igual (ver 7.1).
 
 **Una aclaración honesta sobre λ:** S es el *ahorro ajustado por riesgo*, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al decidir. Tu contador va a ver un ahorro mayor (el mismo número con λ=1); tu director de riesgo va a querer ver este.
 
@@ -361,7 +361,7 @@ El ahorro no se mueve, el IDA no se mueve. Y está bien: la inversión es un gas
 
 #### El punto ciego: qué esconde el gasto mensual
 
-La calculadora te pide el **gasto mensual** de IA porque es el número que conocés: sale de tu factura o de una proyección. Internamente guarda el **costo por hora automatizada**, para que si después cambiás cuánto automatizás, la factura escale sola. Sin eso el gasto quedaría plano y se perdería el hallazgo central del modelo — que pasado el piso, automatizar de más baja el ahorro.
+La calculadora te pide el **gasto mensual** de IA porque es el número que conocés: sale de tu factura o de una proyección. Internamente guarda el **costo por hora automatizada**, para que si después cambiás cuánto automatizás, la factura escale sola. Eso importa porque la forma de esa curva es el hallazgo central del modelo, y **depende de qué tipo de costo tengas**: con API el gasto sube con la automatización y pasado el piso el ahorro empieza a bajar; con servidor propio el gasto no se mueve y el ahorro se aplana en lugar de caer. Las dos formas son correctas — son estructuras de costo distintas, no una bien y otra mal (ver 7.1).
 
 Pero ojo con lo que ese número esconde: con **API** el gasto **sube y baja con el uso** —si automatizás menos, pagás menos—; con **servidor propio** el gasto es **fijo** y no baja aunque no lo uses. Con API el costo es una *diagonal*; con local, una *recta horizontal*. Por eso, si corrés local y automatizás menos de lo previsto, tu costo por hora se dispara sin que hayas tocado el contrato.
 
@@ -518,7 +518,9 @@ Hay una cantidad de gente que **no podés soltar**: el piso de continuidad. Una 
 
 Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua promete **$10.700/mes** y la realidad da **$4.300**. Los $6.400 que faltan son los cuatro sueldos del piso, que seguís pagando mientras la IA hace ese trabajo.
 
-> **Pasado el piso, automatizar de más te deja más pobre y más dependiente al mismo tiempo:** el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.
+> **Si tu IA es de costo fijo, cambia una cosa.** Todo lo de arriba supone que pagás la IA por hora, que es lo que hacés con una API. Si tenés servidor propio la factura es la misma automatices 60% o 100%, así que pasado el piso el ahorro no baja: se queda quieto. Se comprueba en la calculadora poniendo el asistente de costo en servidor propio y moviendo el deslizador — el gasto mensual no se mueve y el ahorro se aplana. Eso no te deja sin consecuencia, solo cambia cuál es: automatizar de más ya no te empobrece, sin embargo el IDA sigue subiendo igual, de 90 a 100 en la misma tabla. Es decir que comprás dependencia a cambio de nada. Con API perdés plata y resiliencia juntas; con costo fijo perdés solo resiliencia, que es más difícil de ver en un balance y más caro de arreglar después.
+
+> **Pasado el piso, automatizar de más te deja más pobre y más dependiente al mismo tiempo** —con costo por hora—: el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.
 
 ### 7.2 · Lo que salva un proyecto es la arquitectura, no despedir más gente
 
@@ -596,7 +598,7 @@ En el ejemplo, con un ahorro de $2.457/mes, el techo es **$44.222** — y la inv
 
 > **Por qué la vuelta importa.** Las dos frases dicen lo mismo pero abren conversaciones distintas. *"El recupero da 20 meses"* es un veredicto: aprobás o cancelás. *"Este proyecto vale hasta $44.222"* es una posición de negociación — te sentás con un número propio, calculado con tu ahorro y tu riesgo, en vez de discutir contra el presupuesto que te trajeron. Cambia quién pone el precio de referencia. Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, tenés margen para pedir más alcance por la misma plata.
 
-> **La trampa de subir el techo.** El techo sube si sube S, y aparece la tentación de automatizar más. Ya sabés cómo termina: pasado el piso, automatizar de más baja el ahorro, así que el techo *baja*. Al 60% el techo llega a $111.960; al 100% se derrumba a $77.400 con un IDA de 100. La forma sana es la misma de siempre: **bajar λ**. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a **$53.070** — de golpe los $50.000 entran.
+> **La trampa de subir el techo.** El techo sube si sube S, y aparece la tentación de automatizar más. Ya sabés cómo termina: pasado el piso, automatizar de más baja el ahorro si pagás la IA por hora, así que el techo *baja*. Con costo fijo el techo no baja, solamente deja de subir. Al 60% el techo llega a $111.960; al 100% se derrumba a $77.400 con un IDA de 100. La forma sana es la misma de siempre: **bajar λ**. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a **$53.070** — de golpe los $50.000 entran.
 
 ### 7.5 · Cómo se aplica fuera de una oficina: banco y retail
 
@@ -722,6 +724,8 @@ En una organización real eso **no es automático**. Con el mismo 38,4% de horas
 > Y tiene una consecuencia práctica: **si no vas a reducir dotación, el ahorro que muestra la calculadora no va a aparecer en tu balance.** Va a aparecer como más capacidad con la misma gente, que es igual de valioso pero no se contabiliza igual. Si tu caso es ese, mirá `P'` y el IDA, y tomá `S` como el techo teórico de lo que *podrías* ahorrar si decidieras reducir.
 >
 > Lo que **no cambia** en ninguno de esos escenarios es el piso de continuidad: aunque no eches a nadie, si automatizaste el 38,4% y mañana la IA no está, seguís necesitando gente que sepa hacerlo a mano.
+>
+> Y conviene leerlo junto a **7.1**, el óptimo de automatización: ese óptimo existe justamente porque el ahorro se mide en personas liberadas. Si en tu caso las horas no se convierten en puestos, el punto donde la curva deja de mejorar sigue siendo el mismo — lo que cambia es que lo que ganás ahí es capacidad, no plata.
 
 **8 · λ mira la infraestructura, no el modelo que usás.** Los agravantes preguntan **dónde corre** la IA: una nube, varias, tus servidores. Eso cubre que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que **el modelo en sí cambie debajo tuyo**. Un proveedor de frontera puede degradar la calidad entre versiones sin avisar, cambiar políticas de uso o privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria ajena a vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y te rompe la operación igual. **El modelo no lo mide.** Y no es hipotético: en junio de 2026 Estados Unidos prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic, y después levantó la restricción solo en parte. Para quien tenía la operación montada sobre uno de ellos el efecto fue el de una caída total, con el agravante de que ningún plan técnico lo cubría: no había a qué nube conmutar, porque el problema no era la nube. Podría agregarse como un agravante más de λ y probablemente sea el próximo; no está todavía por la misma razón del límite 6. Mientras tanto tratalo como un riesgo **real y no contemplado**: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que muestra el IDA.
 

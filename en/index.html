@@ -1210,7 +1210,6 @@ function calc(){
   $('aviso-local').style.display = rLocal && rLocal.checked ? 'block' : 'none';
   const H=P*hp, aef=a*(1-r)*eta, Pmin=Math.ceil(Hmin/hp);
   const Pecon=Math.ceil(P*(1-aef)), Pfinal=Math.max(Pecon,Pmin);
-  const Ch=N/H;
   // El ahorro sale de las personas que REALMENTE dejas de pagar, no de las horas
   // automatizadas: si el piso de continuidad te obliga a retener gente, seguis
   // pagando esos sueldos aunque la IA haga el trabajo.
