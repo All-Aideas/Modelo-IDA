@@ -247,6 +247,17 @@ window.addEventListener('DOMContentLoaded',function(){
   .mas>summary:hover{text-decoration:underline;}
   .mas .cuerpo{font-size:.78rem; color:var(--gris); line-height:1.5; margin-top:7px;
     padding-left:10px; border-left:2px solid #e6eaf0;}
+  /* Recuadro que se abre: mismo aspecto que .ejemplo, pero plegado por defecto.
+     El titulo hace de resorte, con un signo que indica que hay mas adentro. */
+  details.ejemplo>summary{cursor:pointer; list-style:none; display:flex; align-items:baseline;
+    justify-content:space-between; gap:10px;}
+  details.ejemplo>summary::-webkit-details-marker{display:none;}
+  details.ejemplo>summary::after{content:'+'; font-weight:800; font-size:1rem; opacity:.55;
+    flex:0 0 auto; line-height:1;}
+  details.ejemplo[open]>summary::after{content:'−';}
+  details.ejemplo>summary:hover{text-decoration:underline;}
+  details.ejemplo>summary .tit{margin-bottom:0;}
+  details.ejemplo[open]>summary .tit{margin-bottom:9px;}
   .campo{margin-bottom:16px;}
   .campo label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:5px;}
   .campo .hint{font-weight:400; color:var(--gris); font-size:.76rem;}
@@ -851,21 +862,26 @@ window.addEventListener('DOMContentLoaded',function(){
   <span class="cuenta">P_min = ⌈640 ÷ 160⌉ = ⌈4⌉ = 4 personas</span><br><br>
   Esas 4 personas son tu piso: con menos que eso, el día que la IA no está no podés sostener la operación crítica. Si H_min sube (más operación que no puede parar), el piso sube. Si h_persona sube (doble turno, 320 h), el piso baja a 2: mismas horas cubiertas con menos gente.</div>
 
-  <div class="ejemplo e-con"><span class="tit">Ojo: esto NO es lo mismo que la firma del médico o del escribano</span>
+  <details class="ejemplo e-con"><summary><span class="tit">Ojo: esto NO es lo mismo que la firma del médico o del escribano</span></summary>
   Son dos preguntas distintas, y es donde más se confunde la gente:<br><br>
   <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto no puede por norma?</i> Es la firma del médico, del escribano, del auditor. Eso pasa <b>aunque la IA funcione perfecto</b>: hay tareas que legalmente no se delegan.<br><br>
   <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
   <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo. En la farmacia lo hicieron así: <i>"si la IA no está, los pedidos que ya entraron hay que despacharlos igual — son unas 400 consultas al mes que no pueden quedar sin respuesta, y una persona resuelve 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que seguir validando las recetas electrónicas, 4 horas por día"</i> → 240 horas más. Total ≈ <b>640 horas al mes</b>: ese es su <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona da el piso.<br><br>
-  Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</div>
+  Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</details>
 
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>
-  <p class="nota">El piso <b class="v-con">P_min</b> mira solo hacia adentro del área. Pero una operación de 5 personas dentro de una empresa donde otras 20 saben hacer esa misma tarea <b>no está tan expuesta</b> como un call center de 200 donde nadie más sabe. <b class="v-con">R</b> es esa gente: las personas de <b>fuera del área</b> que podrían cubrir la operación crítica el día que la IA no esté.</p>
+  <p>Volvamos a la farmacia. El piso dice que hacen falta <b>4 personas</b> en el área para sostener la atención si la IA no está, sin embargo eso mira solo hacia adentro. Preguntemos otra cosa: en las sucursales, ¿hay farmacéuticos que antes atendían esas consultas y todavía saben hacerlo? Si hay cuatro, <b>esos cuatro son tu <b class="v-con">R</b></b>.</p>
+  <p class="nota">Sirve para que el índice deje de ser ciego. Un área de una sola persona dentro de una organización donde otras veinte saben hacer la tarea daba antes el mismo IDA que un call center de doscientas donde nadie más sabe, es decir la misma cifra para dos realidades opuestas.</p>
+  <div class="ejemplo e-con"><span class="tit">Lo que más confunde: R no te deja quedarte con menos gente</span>
+  Es la primera pregunta que aparece, así que la contesto de entrada: <b>tener respaldo externo no baja tu piso ni cambia las personas que conservás.</b> En la farmacia seguís quedándote con 7, tengas 0 o 4 de respaldo. Lo único que se mueve es el <b>IDA</b>.<br><br>
+  ¿Por qué? Porque <b>los de afuera tienen su propio trabajo</b>. Si recortás el área confiando en ellos, el día que la IA se caiga no resolvés un problema: rompés dos áreas en vez de una, porque para cubrir acá tienen que dejar tirado lo suyo.<br><br>
+  Es decir que R no reduce <b>cuánta gente necesitás</b>, reduce <b>qué tan expuesto estás</b>. Son dos preguntas distintas y el modelo las mantiene separadas a propósito. Por la misma razón el descuento nunca llega a cero, como se ve en la fórmula del IDA.</div>
   <div class="formula-color">cobertura &nbsp;=&nbsp; mín<b>(</b> <span class="t t-dato">R</span> ÷ <span class="t t-con">P_min</span> &nbsp;,&nbsp; 1 <b>)</b> &nbsp;&nbsp;<span style="font-size:.8em; opacity:.75;">y 0 si <span class="t t-con">P_min</span> = 0</span></div>
   <p class="nota">La aclaración del <span class="cuenta">P_min = 0</span> no es un tecnicismo: si declarás que <b>no tenés operación crítica</b> —que si la IA se cae, no pasa nada urgente—, entonces no hay piso que cubrir y el respaldo externo no tiene nada que descontar. La cobertura vale 0 y el IDA queda sin tocar. Sin esa aclaración la fórmula dividiría por cero.</p>
-  <div class="ejemplo e-con"><span class="tit">El error que hay que evitar: R no es la plantilla de la organización</span>
+  <details class="ejemplo e-con"><summary><span class="tit">El error que hay que evitar: R no es la plantilla de la organización</span></summary>
   Toyota tiene unos 200.000 empleados y eso <b>no significa que R sea 200.000</b>. Si la tarea que automatizás es atender reclamos de garantía, R son las personas que <b>hoy, sin capacitación previa</b>, podrían sentarse a atender esos reclamos: quizás 30 en otras sucursales. Las otras 199.970 no cuentan, por más que estén en la nómina.<br><br>
   La regla es simple: <b>si primero tenés que enseñarle, no cuenta.</b> R es capacidad disponible el día de la caída, no capacidad potencial.<br><br>
-  <b>Y es el número más fácil de inflar de todo el modelo.</b> Es tentador poner un R generoso porque baja el IDA y el tablero queda lindo. Por eso el modelo nunca deja que el respaldo te lleve el índice a cero — ver la fórmula del IDA más abajo— y por eso este número es el primero que hay que auditar cuando alguien te muestra un IDA sospechosamente bajo.</div>
+  <b>Y es el número más fácil de inflar de todo el modelo.</b> Es tentador poner un R generoso porque baja el IDA y el tablero queda lindo. Por eso el modelo nunca deja que el respaldo te lleve el índice a cero — ver la fórmula del IDA más abajo— y por eso este número es el primero que hay que auditar cuando alguien te muestra un IDA sospechosamente bajo.</details>
 </section>
 
 <section>
@@ -971,9 +987,9 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <p>El ahorro no se mueve. El IDA no se mueve. <b>Lo único que se mueve es el recupero.</b> Y está bien que sea así: los $50.000 son un gasto de una sola vez, no cambian cuánta plata te entra por mes ni cuán dependiente quedás de tu proveedor. Cambian solamente <i>cuánto tardás en devolver lo que pusiste</i>.</p>
 
-  <div class="ejemplo e-hum"><span class="tit">La asimetría que conviene tener en la cabeza</span>
+  <details class="ejemplo e-hum"><summary><span class="tit">La asimetría que conviene tener en la cabeza</span></summary>
   Un error en la <b>inversión</b> lo pagás una vez: si te equivocaste $20.000, tu payback se corre unos meses y listo.<br><br>
-  Un error en el <b>costo operativo</b> te acompaña <b>todos los meses para siempre</b>: si subestimaste C_mes, cada mes ahorrás menos de lo que creías, y eso no se termina nunca. Por eso, si tenés poco tiempo para revisar supuestos, <b>revisá C_mes antes que I</b>.</div>
+  Un error en el <b>costo operativo</b> te acompaña <b>todos los meses para siempre</b>: si subestimaste C_mes, cada mes ahorrás menos de lo que creías, y eso no se termina nunca. Por eso, si tenés poco tiempo para revisar supuestos, <b>revisá C_mes antes que I</b>.</details>
 
   <h3>El punto ciego: la fórmula asume que la IA se paga por hora</h3>
   <p>El modelo te pide el <b>gasto mensual</b> de IA porque es el número que realmente conocés: sale de tu factura o de una proyección. Con eso calcula solo el costo por hora automatizada, que es lo que necesitan los gráficos.</p><p>Pero ojo con lo que ese número esconde: con <b>API</b> el gasto <b>sube y baja con el uso</b> —si automatizás menos, pagás menos—; con <b>servidor propio</b> el gasto es <b>fijo</b> y no baja aunque no lo uses.</p>
@@ -992,12 +1008,12 @@ window.addEventListener('DOMContentLoaded',function(){
   </table>
   </div>
 
-  <div class="ejemplo e-rie"><span class="tit">La ironía que hay que decir en voz alta</span>
+  <details class="ejemplo e-rie"><summary><span class="tit">La ironía que hay que decir en voz alta</span></summary>
   Ese sysadmin cuesta <b>1,88 veces el sueldo de la persona que estabas reemplazando</b> ($3.000 contra $1.600). Automatizaste para no pagar un puesto administrativo y terminaste contratando un puesto técnico que sale casi el doble. No es un argumento contra la IA local — es un argumento contra <b>olvidarse de contarla</b>.<br><br>
   Y mueve el punto de equilibrio de manera dramática:<br>
   • Contando <b>solo el servidor</b>: local conviene arriba de <b>154 personas-equivalente</b>.<br>
   • Contando <b>servidor + luz + sysadmin</b>: recién arriba de <b>251 personas-equivalente</b>.<br><br>
-  Si no tenés esa escala, la alternativa honesta no es "no automatizar": es <b>API</b>, o un <b>servicio gestionado tercerizado</b> donde el sysadmin es problema del proveedor y entra como una cuota mensual previsible.</div>
+  Si no tenés esa escala, la alternativa honesta no es "no automatizar": es <b>API</b>, o un <b>servicio gestionado tercerizado</b> donde el sysadmin es problema del proveedor y entra como una cuota mensual previsible.</details>
 
   <p class="nota">Para el proyecto de 10 personas del ejemplo, la diferencia es terminante: con API DeepSeek el ahorro es <b>$4.168/mes</b> y recupera en 12 meses; con servidor propio contando todo, el ahorro es <b>−$4.288/mes</b> y no recupera nunca. Misma tarea, misma automatización, misma gente. Las dos cifras están calculadas con el <b>mismo λ (1,02)</b> a propósito: así la comparación aísla el costo y no mezcla el riesgo. Si a la API le cargaras su λ real de nube única (1,50), su ahorro sería $4.106 — la conclusión no se mueve.</p>
 </section>
@@ -1056,10 +1072,10 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="nota" style="margin-top:-6px;">Ojo, acá cambia el volumen a propósito: los extremos C y D <b>no son la farmacia</b>. La farmacia automatiza unas 614 h por mes; estos dos muestran qué pasa mucho más abajo (una tarea de 60 h) y mucho más arriba (una operación a escala), que es donde la decisión se da vuelta.</p>
   <p>Correr un modelo abierto en tus servidores casi elimina el riesgo (λ ≈ 1), pero el servidor 2× H200 cuesta ~$5.170/mes fijo. Para automatizar emails de 60 h/mes, la API de DeepSeek sale ~$12,60/mes: el local cuesta <b>410× más</b>. La misma tarea con Gemini 3.6 Flash sale ~$270/mes (21× más caro que DeepSeek). Misma tarea, conclusiones opuestas.</p>
 
-  <div class="ejemplo e-rie"><span class="tit">Y el fierro no es el costo completo</span>
+  <details class="ejemplo e-rie"><summary><span class="tit">Y el fierro no es el costo completo</span></summary>
   Esos $5.170 son solo el alquiler. Correr IA propia necesita además <b>electricidad</b> (~$250/mes con 2,1 kW constantes) y sobre todo <b>alguien que la mantenga</b>: un sysadmin o perfil de MLOps, del orden de $3.000/mes. Total real: <b>$8.420/mes</b>, y la brecha contra la API salta de 410× a <b>668×</b>.<br><br>
   La ironía vale la pena decirla: ese sysadmin cuesta <b>casi el doble</b> que la persona administrativa que estabas reemplazando. Automatizaste para no pagar un puesto y contrataste uno más caro.<br><br>
-  <b>Puede ser cero</b>, ojo: si ya tenés a alguien que lo absorbe, o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado. En la <b>Calculadora</b> hay un asistente que te va pidiendo cada componente por separado para que ninguno quede afuera por olvido.</div>
+  <b>Puede ser cero</b>, ojo: si ya tenés a alguien que lo absorbe, o si un líder técnico se hace cargo. Lo que no es válido es no haberlo evaluado. En la <b>Calculadora</b> hay un asistente que te va pidiendo cada componente por separado para que ninguno quede afuera por olvido.</details>
 
   <div class="grafico-svg" id="graf-C"></div>
 
@@ -1225,22 +1241,22 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="formula-color">inversión máxima &nbsp;=&nbsp; <span class="t t-res">S</span> &nbsp;×&nbsp; <span class="t t-dato">plazo de recupero</span></div>
   <p class="nota">El plazo por defecto es <b>18 meses</b>, pero es un campo más de la calculadora, no una ley del modelo. Movelo al horizonte con el que <i>tu</i> organización decide y el techo se recalcula: a 36 meses el mismo ahorro justifica el doble de inversión. Los números que siguen usan 18.</p>
 
-  <div class="ejemplo e-rie"><span class="tit">Por qué el autor no recomienda aprobar arriba de los 18 meses</span>
+  <details class="ejemplo e-rie"><summary><span class="tit">Por qué el autor no recomienda aprobar arriba de los 18 meses</span></summary>
   Es una postura, no un teorema, y conviene decir de dónde sale: <b>no es un criterio financiero, es tecnológico</b>.<br><br>
   Un recupero a 30 o 36 meses es perfectamente normal en una inversión industrial: comprás una máquina, la máquina sigue siendo la misma máquina tres años después y el ahorro que prometía lo sigue dando. <b>Con IA eso no pasa.</b> En un plazo de dos años cambia el precio del token, cambia el modelo que estabas usando —a veces lo discontinúan—, aparece uno que hace lo mismo por una fracción, cambian las condiciones de uso, y a veces cambia hasta quién puede usarlo.<br><br>
   Es decir: <b>estás calculando el recupero de algo que probablemente no exista igual cuando termine de pagarse.</b> Si tu proyecto necesita 36 meses para devolver la inversión, en el mes 20 vas a estar sosteniendo una integración vieja, con un modelo viejo, mientras alguien te muestra que hoy eso se hace por la mitad. El ahorro que justificaba el proyecto se evapora antes de completarse.<br><br>
-  <b>Por eso 18 meses.</b> No porque el dinero valga distinto, sino porque es el plazo dentro del cual los supuestos tecnológicos todavía se parecen a los de hoy. Si tu número solo cierra estirando el horizonte, no estás mejorando el proyecto: estás apostando a que nada cambie en un rubro donde todo cambia.</div>
+  <b>Por eso 18 meses.</b> No porque el dinero valga distinto, sino porque es el plazo dentro del cual los supuestos tecnológicos todavía se parecen a los de hoy. Si tu número solo cierra estirando el horizonte, no estás mejorando el proyecto: estás apostando a que nada cambie en un rubro donde todo cambia.</details>
   <p>En el ejemplo del sitio, con un ahorro de $2.457 por mes, el techo es <b>$44.222</b>. Y la inversión que se estaba evaluando era de $50.000. <b>Ahí está la razón exacta por la que el proyecto no cierra</b>, y expresada de la forma más accionable posible: no "el payback da 20 meses", sino <b>"este proyecto vale $44.222, no $50.000"</b>.</p>
 
-  <div class="ejemplo e-con"><span class="tit">Por qué esta vuelta importa tanto</span>
+  <details class="ejemplo e-con"><summary><span class="tit">Por qué esta vuelta importa tanto</span></summary>
   Las dos frases dicen lo mismo, pero <b>abren conversaciones distintas</b>.<br><br>
   <b>"El recupero da 20 meses"</b> es un veredicto: el proyecto pasa o no pasa, y lo único que podés hacer es aprobarlo igual o cancelarlo.<br><br>
   <b>"Este proyecto vale hasta $44.222"</b> es una posición de negociación. Te sentás con la consultora o con el proveedor y tenés un número propio, calculado con tu ahorro y tu riesgo, en vez de discutir contra el presupuesto que te trajeron. Cambia quién pone el precio de referencia.<br><br>
-  Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, sabés que tenés margen para pedir más alcance o mejor soporte por la misma plata.</div>
+  Y funciona en las dos direcciones: si el presupuesto entra cómodo debajo del techo, sabés que tenés margen para pedir más alcance o mejor soporte por la misma plata.</details>
 
-  <div class="ejemplo e-rie"><span class="tit">La trampa de subir el techo</span>
+  <details class="ejemplo e-rie"><summary><span class="tit">La trampa de subir el techo</span></summary>
   El techo sube si sube <b class="v-res">S</b>, y ahí aparece la tentación de automatizar más para agrandarlo. Ya sabés cómo termina eso: pasado el piso, <b>automatizar de más baja el ahorro</b>, así que el techo <i>baja</i>. Y el óptimo de automatización es el mismo para el techo que para el ahorro: al 60% el techo llega a $111.960, y al 100% se derrumba a $77.400 con un IDA de 100.<br><br>
-  La forma sana de subir el techo es la misma que la de todo el modelo: <b>bajar λ</b>. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a <b>$53.070</b> — de golpe la inversión de $50.000 entra. Mismo proyecto, misma gente, y el número dejó de ser un problema.</div>
+  La forma sana de subir el techo es la misma que la de todo el modelo: <b>bajar λ</b>. Con multi-cloud y plan de contingencia el ahorro sube a $2.948 y el techo pasa a <b>$53.070</b> — de golpe la inversión de $50.000 entra. Mismo proyecto, misma gente, y el número dejó de ser un problema.</details>
 
   <h3 class="mod h-hum" style="font-size:1.15rem;">5 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
@@ -1335,9 +1351,9 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Lo que sí tienen es <b>un orden defendible</b>, que es lo que hace falta para decidir. Depender de un solo proveedor es la fragilidad más grave porque es la única que no tiene salida —si se cae, no hay a dónde ir—, y por eso pesa más que las otras dos. No tener plan de contingencia viene después: no te cae el servicio, pero te deja sin respuesta ensayada cuando cae. Y los datos sensibles afuera pesan menos en continuidad porque no interrumpen la operación: agregan exposición regulatoria y de reputación, que es un riesgo real pero de otra naturaleza.</p>
   <p class="nota">Calibrarlos de verdad exigiría lo mismo que usan las aseguradoras, es decir una base de incidentes por sector con frecuencia, duración y costo de cada caída. Está pendiente. Mientras tanto lo que importa es que el orden de magnitud sirva para <b>comparar dos arquitecturas entre sí</b>, aunque el valor absoluto se pueda discutir.</p>
 
-  <div class="ejemplo e-rie"><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span>
+  <details class="ejemplo e-rie"><summary><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span></summary>
   <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
-  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</div>
+  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</details>
 
   <h3>7 · Convierte horas liberadas en puestos eliminables</h3>
   <p>Este es el supuesto más fuerte de todo el modelo y conviene decirlo sin vueltas. Cuando la cuenta económica hace <span class="cuenta">⌈P × (1 − a_ef)⌉</span>, está asumiendo que <b>las horas que la IA te saca de encima se traducen en gente que dejás de necesitar</b>. En la farmacia: 38,4% automatizado sobre 10 personas da 7, y las 3 de diferencia se cuentan como sueldos que dejás de pagar.</p>

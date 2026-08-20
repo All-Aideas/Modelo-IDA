@@ -247,6 +247,17 @@ window.addEventListener('DOMContentLoaded',function(){
   .mas>summary:hover{text-decoration:underline;}
   .mas .cuerpo{font-size:.78rem; color:var(--gris); line-height:1.5; margin-top:7px;
     padding-left:10px; border-left:2px solid #e6eaf0;}
+  /* Recuadro que se abre: mismo aspecto que .ejemplo, pero plegado por defecto.
+     El titulo hace de resorte, con un signo que indica que hay mas adentro. */
+  details.ejemplo>summary{cursor:pointer; list-style:none; display:flex; align-items:baseline;
+    justify-content:space-between; gap:10px;}
+  details.ejemplo>summary::-webkit-details-marker{display:none;}
+  details.ejemplo>summary::after{content:'+'; font-weight:800; font-size:1rem; opacity:.55;
+    flex:0 0 auto; line-height:1;}
+  details.ejemplo[open]>summary::after{content:'−';}
+  details.ejemplo>summary:hover{text-decoration:underline;}
+  details.ejemplo>summary .tit{margin-bottom:0;}
+  details.ejemplo[open]>summary .tit{margin-bottom:9px;}
   .campo{margin-bottom:16px;}
   .campo label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:5px;}
   .campo .hint{font-weight:400; color:var(--gris); font-size:.76rem;}
