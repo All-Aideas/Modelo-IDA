@@ -68,7 +68,7 @@
     ['19 · jornada doble', { hp: 320, Hmin: 640 }],
   ];
 
-  const money = t => t === '—' ? 0 : +t.replace(/[^0-9-]/g, '') * (t.trim().startsWith('-') ? 1 : 1);
+  const money = t => t === '—' ? 0 : +t.replace(/[^0-9-]/g, '');
   const fallas = [], tabla = [];
 
   casos.forEach(([nombre, ov]) => {
@@ -96,7 +96,34 @@
     tabla.push({ caso: nombre, "P'": got.Pf, ahorro: $('out_S').textContent, recupero: $('out_pb').textContent, IDA: got.IDA, techo: $('out_techo').textContent });
   });
 
+  // ---- Costo fijo: la otra estructura de costo del motor ----
+  // Los casos de arriba corren todos sobre costo variable, porque esperado()
+  // calcula el gasto como ctHora x H x aef. El motor tambien soporta costo
+  // fijo (servidor propio), donde la factura no se mueve aunque cambie la
+  // automatizacion. Esa rama tiene un comportamiento distinto y publicado en
+  // la conclusion 7.1: pasado el piso el ahorro se aplana en vez de bajar, y
+  // el IDA sube igual. Si algun dia deja de ser cierto, esto tiene que fallar.
+  const extra = [];
+  (function () {
+    $('btn-reiniciar').click();
+    put('r', 0); put('eta', 100);
+    $('ct-modo-local').click();
+    put('ctl_srv', 1229); put('ctl_luz', 0); put('ctl_sys', 0); put('ctl_otros', 0);
+    $('ct-usar').click();
+    const leer = a => { put('a', a); return { Ct: +$('CtMes').value, S: money($('out_S').textContent), IDA: +$('out_IDA').textContent }; };
+    const x60 = leer(60), x100 = leer(100);
+    const chequeo = (nombre, ok, detalle) => {
+      extra.push(nombre);
+      tabla.push({ caso: nombre, "P'": '', ahorro: detalle, recupero: '', IDA: '', techo: '' });
+      if (!ok) fallas.push(nombre + ' -> ' + detalle);
+    };
+    chequeo('20 · costo fijo: la factura no se mueve', x60.Ct === x100.Ct, x60.Ct + ' vs ' + x100.Ct);
+    chequeo('21 · costo fijo: el ahorro no baja', x100.S >= x60.S, x60.S + ' vs ' + x100.S);
+    chequeo('22 · costo fijo: el IDA sube igual', x100.IDA > x60.IDA, x60.IDA + ' vs ' + x100.IDA);
+    $('btn-reiniciar').click();
+  })();
+
   $('btn-reiniciar').click();
   console.table(tabla);
-  return { casos: casos.length, fallas: fallas.length ? fallas : 'ninguna' };
+  return { casos: casos.length + extra.length, fallas: fallas.length ? fallas : 'ninguna' };
 })()

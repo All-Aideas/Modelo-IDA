@@ -54,7 +54,7 @@ Si el motor y las fórmulas se separan, la prueba falla. Ese es el punto.
 
 ---
 
-## Los 21 casos
+## Los 24 casos
 
 No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 
@@ -81,6 +81,9 @@ No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 | 17 | Plazo de recupero mínimo (1 mes) | El techo de inversión con el horizonte más corto |
 | 18 | Plazo de recupero largo (120 meses) | Y con el más largo |
 | 19 | Jornada doble (320 h) | Que el piso baje al subir las horas por persona |
+| 20 | **Costo fijo: la factura no se mueve** | Que con servidor propio automatizar más no cambie el gasto mensual |
+| 21 | **Costo fijo: el ahorro no baja** | Que la curva se aplane en vez de caer — la salvedad de 7.1 |
+| 22 | **Costo fijo: el IDA sube igual** | Que automatizar de más siga costando dependencia aunque no cueste plata |
 
 ---
 

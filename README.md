@@ -758,7 +758,7 @@ Qué trae:
 
 ## Verificación
 
-Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 21 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero.
+Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 24 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero, y las dos estructuras de costo de la IA.
 
 Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consola del navegador. Detalle completo en [**PRUEBAS.md**](PRUEBAS.md).
 
