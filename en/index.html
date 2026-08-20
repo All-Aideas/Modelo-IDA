@@ -495,7 +495,14 @@ window.addEventListener('DOMContentLoaded',function(){
       </details>
       <div class="campo">
         <label>People outside the area who <i>know how to do</i> this task <span class="hint">external backup — leave at 0 if there is nobody</span></label>
+        <div class="arq-group" id="aval-R" style="margin-bottom:8px;">
+          <p class="hint" style="margin-bottom:6px;">Before entering the number, all three must be true:</p>
+          <label class="check"><input type="checkbox" id="R1"> They have done it before, <b>with this process</b></label>
+          <label class="check"><input type="checkbox" id="R2"> The manual procedure is <b>documented</b></label>
+          <label class="check"><input type="checkbox" id="R3"> It has been <b>rehearsed</b> that they can leave their post and step in</label>
+        </div>
         <input type="number" id="R" value="0" min="0" step="1">
+        <div class="alerta warn" id="aviso-R-bloq" style="display:none;"></div>
         <details class="mas">
           <summary>What counts and what does not</summary>
           <div class="cuerpo">This is the easiest number to inflate. <b>It is not the company headcount.</b> Toyota has 200,000 employees, and that does not mean 200,000 people can handle warranty claims: count only those who <b>today</b> could sit down and do this specific task in degraded mode. If you have to train someone first, they do not count.</div>
@@ -1229,7 +1236,14 @@ function calc(){
   // center entero donde nadie mas sabe hacerlo. La cobertura descuenta el IDA,
   // pero NUNCA hasta cero: esa gente abandona su propio puesto para venir y no
   // hace esta tarea todos los dias (ver limite del know-how).
-  const R=num('R',0);
+  // R es el unico dato que BAJA el riesgo, asi que es el mas facil de inflar.
+  // Si las tres condiciones de auditoria no estan tildadas, no se toma: el
+  // respaldo declarado y no probado vale lo mismo que no tener respaldo.
+  const avalado = $('R1').checked && $('R2').checked && $('R3').checked;
+  const R = avalado ? num('R',0) : 0;
+  $('R').disabled = !avalado;
+  $('aviso-R-bloq').style.display = avalado ? 'none' : 'block';
+  if(!avalado) $('aviso-R-bloq').innerHTML = 'While any of the three is missing, the backup counts as <b>0</b> and the IDA is computed without the discount. Backup that is declared but never tested is the same piece of paper as a contingency plan nobody rehearsed.';
   const cobertura = Pmin>0 ? Math.min(R/Pmin,1) : 0;
   const DESC_MAX=0.7;                       // tope del descuento por respaldo
   const factorR = 1-cobertura*DESC_MAX;
@@ -1326,6 +1340,7 @@ $('btn-calcular').onclick=()=>{
 
 $('btn-reiniciar').onclick=()=>{
   Object.entries(DEFAULTS).forEach(([k,v])=>{ const el=$(k); if(el) el.value=v; });
+  ['R1','R2','R3'].forEach(id=>{ $(id).checked=false; });
   document.querySelectorAll('#arq input[type=radio]').forEach((r,i)=>r.checked=(i===0));
   document.querySelectorAll('#arq input[type=checkbox]').forEach((c,i)=>c.checked=(i===0));
   modoCt('api');

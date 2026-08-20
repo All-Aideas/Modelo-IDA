@@ -493,7 +493,14 @@ window.addEventListener('DOMContentLoaded',function(){
       </details>
       <div class="campo">
         <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
+        <div class="arq-group" id="aval-R" style="margin-bottom:8px;">
+          <p class="hint" style="margin-bottom:6px;">Antes de cargar el número, las tres tienen que ser verdad:</p>
+          <label class="check"><input type="checkbox" id="R1"> Ya lo hicieron alguna vez, <b>con este proceso</b></label>
+          <label class="check"><input type="checkbox" id="R2"> El modo manual está <b>documentado</b></label>
+          <label class="check"><input type="checkbox" id="R3"> Se <b>ensayó</b> que puedan dejar su puesto y venir</label>
+        </div>
         <input type="number" id="R" value="0" min="0" step="1">
+        <div class="alerta warn" id="aviso-R-bloq" style="display:none;"></div>
         <details class="mas">
           <summary>Qué contar y qué no</summary>
           <div class="cuerpo">Es el número más fácil de inflar. <b>No es la plantilla de la organización.</b> Toyota tiene 200.000 empleados y eso no significa que 200.000 personas puedan atender reclamos de garantía: contá solo a las que <b>hoy</b> podrían sentarse a hacer esta tarea concreta en modo degradado. Si tenés que capacitar a alguien primero, no cuenta.</div>
@@ -749,23 +756,24 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td>¿Cuánto me cuesta el riesgo de mi arquitectura?</td><td>Riesgo</td></tr>
     <tr><td>¿Cuál es mi piso para sobrevivir sin IA?</td><td>Continuidad</td></tr>
   </table>
-    <h3>El precio que pagás hoy no es lo que cuesta</h3>
-  <p>Antes de armar cualquier plan a dos años conviene mirar esto, y es algo que en mi experiencia casi nadie chequea: los proveedores de IA no están cobrando lo que les cuesta atenderte, sino que están comprando mercado, es decir que el precio del token hoy es una decisión comercial y no el reflejo de un costo.</p>
-  <p>Los números públicos lo muestran. Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos <b>US$ 25.000 millones de facturación</b> y una <b>pérdida del orden de US$ 14.000 millones</b>, con lo cual la cuenta sale sola:</p>
-  <div class="formula-color">25.000 de ingresos &nbsp;+&nbsp; 14.000 de pérdida &nbsp;=&nbsp; 39.000 de costo &nbsp;→&nbsp; <b>1,56</b> de costo por cada 1 que factura</div>
-  <p>Es decir, por cada dólar que te cobran gastan alrededor de un dólar con cincuenta, y esa diferencia la ponen los inversores, no vos. Sin embargo no es parejo entre proveedores: Anthropic recorrió el camino inverso, de un margen bruto negativo en 2024 a terreno positivo en 2026 según los mismos reportes, lo cual a mi entender refuerza el punto en lugar de debilitarlo, porque quiere decir que el precio depende de la estrategia de cada empresa y de en qué momento la agarrás, no de una física del costo.</p>
+      <h3>El precio que pagás hoy no está atado a un costo</h3>
+  <p>Antes de armar cualquier plan a dos años conviene mirar esto, y es algo que en mi experiencia casi nadie chequea: el precio del token es una decisión comercial de tu proveedor, es decir que no se mueve por lo que a él le cuesta atenderte sino por dónde quiere estar parado en el mercado.</p>
+  <p>Los números públicos alcanzan para verlo. Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos <b>US$ 25.000 millones de facturación</b> y una <b>pérdida del orden de US$ 14.000 millones</b>, es decir que gasta bastante más de lo que factura y la diferencia la ponen los inversores. Sin embargo Anthropic recorrió el camino inverso, de un margen bruto negativo en 2024 a terreno positivo en 2026 según los mismos reportes.</p>
+  <div class="ejemplo e-rie"><span class="tit">Qué dicen y qué no dicen esos números</span>
+  Quiero ser preciso acá, porque es fácil estirar el argumento más de lo que da. Esas cifras son del <b>resultado total de la empresa</b>, que incluye entrenar modelos nuevos, investigación, sueldos y construcción de infraestructura. <b>No son el costo de atender tu consulta.</b> Con lo publicado no se puede calcular cuánto le cuesta a un proveedor servirte un millón de tokens, y cualquiera que te diga lo contrario está inventando.<br><br>
+  Lo que sí muestran, y alcanza de sobra para lo que nos importa, es que <b>ingresos, costo de infraestructura, inversión y estrategia comercial no se mueven juntos</b>. Es decir que el precio que ves hoy no es un piso técnico: es una posición comercial, y las posiciones comerciales cambian.</p>
+  <p class="nota" style="margin:8px 0 0;">Fuentes: reportes de prensa financiera de 2026 sobre resultados de <a href="https://valueaddvc.com/blog/openai-revenue-2026-25b-arr-a-20-9b-leaked-loss-and-why-anthropic-just-passed-it">OpenAI</a> y sobre los <a href="https://www.forbes.com/sites/paulocarvao/2026/05/21/anthropic-openai-enterprise-ai-profitability/">dos modelos de negocio</a>. No son estados contables auditados y cambian rápido: tomalos como orden de magnitud.</p></div>
 
-  <div class="ejemplo e-rie"><span class="tit">Qué le pasa a tu proyecto si el precio se normaliza</span>
+  <div class="ejemplo e-rie"><span class="tit">Qué le pasa a tu proyecto si el precio se mueve</span>
   Tomemos el ejemplo que trae la calculadora, que paga $1.229 por mes de IA y recupera la inversión en 20 meses. Ahora movemos <b>solo el precio</b>, sin tocar una sola persona ni una sola hora de trabajo:<br><br>
   <span class="cuenta">Precio de hoy: $1.229/mes → ahorro $2.457 → recupera en 20 meses</span><br>
-  <span class="cuenta">Si cubriera su costo (×1,56): $1.917/mes → ahorro $1.425 → 35 meses</span><br>
-  <span class="cuenta">Si además dejara margen (×2): $2.458/mes → ahorro $613 → 82 meses</span><br><br>
+  <span class="cuenta">Si subiera 56%: $1.917/mes → ahorro $1.425 → 35 meses</span><br>
+  <span class="cuenta">Si se duplicara: $2.458/mes → ahorro $613 → 82 meses</span><br><br>
   Es el mismo proyecto, la misma gente y la misma automatización, sin embargo pasa de aprobado a inviable por una decisión que toma otro, en otro país y sin avisarte.</div>
 
   <p>Y acá está el punto, que para mí es el corazón de todo el modelo. Miremos qué cambió y qué no en esas tres filas: el ahorro se derrumbó y el recupero se triplicó, sin embargo el <b>piso de continuidad siguió siendo 4 personas</b> en los tres casos. Es decir que el piso no se calcula con el precio del token sino con las horas que tu operación no puede dejar de cubrir.</p>
   <div class="ejemplo e-con"><span class="tit">La conclusión práctica</span>
-  Automatizá, pero no armes tu dotación sobre un precio que no controlás. Si el número solo cierra con la tarifa de hoy no tenés un proyecto, tenés una apuesta a que el subsidio siga. La dotación mínima es justamente la parte de la decisión que sobrevive a un cambio de precio, y por eso es la que hay que calcular primero.</div>
-  <p class="nota">Aclaro algo, porque me parece importante decirlo: las cifras de facturación y pérdida son de reportes periodísticos de 2026, no de estados contables auditados, y cambian rápido, así que tomalas como orden de magnitud. De todos modos la conclusión no depende del valor exacto, depende de que el precio no esté anclado al costo, y en eso coinciden todas las fuentes.</p>
+  Automatizá, pero no armes tu dotación sobre un precio que no controlás. Si el número solo cierra con la tarifa de hoy no tenés un proyecto, tenés una apuesta a que esa tarifa no cambie. La dotación mínima es justamente la parte de la decisión que sobrevive a un cambio de precio, y por eso es la que hay que calcular primero.</div>
 
 <p class="nota">Seguí en <b>Fórmulas</b> para ver la cuenta completa paso a paso, o pasá a <b>Casos extremos</b> para entenderla con ejemplos.</p>
 </section>
@@ -1114,7 +1122,6 @@ window.addEventListener('DOMContentLoaded',function(){
 <section>
   <h2><svg><use href="#i-bulb"/></svg> Conclusiones</h2>
   <p>Si te llevás cuatro cosas de todo este modelo, que sean las cuatro primeras. Son contraintuitivas, aparecen recién cuando hacés la cuenta honesta, y van en contra de lo que hoy se recomienda en la mayoría de las presentaciones sobre IA: el <b>óptimo de automatización</b>, la <b>arquitectura como palanca</b>, los <b>dos umbrales</b> a partir de los cuales conviene comprar el fierro, y el <b>techo de inversión</b> — la única cifra del modelo que se lleva a una negociación.</p>
-  <p class="nota">Después vienen dos secciones más: cómo llevar el modelo a un <b>canal físico</b> —una caja de supermercado, una ventanilla de banco, una guardia 24/7—, que es donde más sirve; y los <b>límites</b> de todo esto, porque ningún modelo es honesto si no dice qué no hace.</p>
 
   <div class="ejemplo e-hum"><span class="tit">Dónde terminó la farmacia</span>
   Antes de las conclusiones, el cierre del caso que venimos siguiendo. El área arrancó con <b>10 personas</b> atendiendo email, teléfono y WhatsApp, y el proyecto automatiza el 38,4% efectivo del trabajo:<br><br>
@@ -1143,7 +1150,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="ejemplo e-rie"><span class="tit">La frase para llevarse</span>
   Pasado el piso, <b>automatizar de más te deja más pobre y más dependiente al mismo tiempo</b>: el ahorro baja de $6.220 a $4.300, el recupero se estira de 8 a 12 meses y el IDA sube de 90 a 100. Las tres cosas empeoran juntas — y se llega ahí haciendo exactamente lo que todos recomiendan hacer.</div>
 
-  <p class="nota">Podés ver esta curva en vivo en <b>Explorar gráficos → Ahorro vs Riesgo (λ)</b>: la línea gris es la promesa ingenua, la naranja es lo que pasa de verdad, y se separan justo en el punto donde el piso empieza a morder. El punto verde marca tu óptimo.</p>
+  <p class="nota">La curva completa está en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</p>
 </section>
 
 <section>
@@ -1237,7 +1244,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3 class="mod h-hum" style="font-size:1.15rem;">5 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
-  <p>Cuando corrés este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos (pestaña <b>Montecarlo</b>), el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan (y un 7% que directamente no recupera nunca o tarda más de 60 meses).</p>
+  <p>Corriendo este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos, el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan.</p>
   <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
 
 </section>
@@ -1305,11 +1312,11 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Relacionado con lo anterior pero distinto: no alcanza con tener gente disponible, tiene que quedar adentro <b>quién sepa cómo se seguía trabajando antes</b>. Si automatizaste y en el camino se fueron los que conocían el proceso viejo, el piso existe en la planilla y no en la realidad. La documentación del proceso manual es parte del seguro, no un trámite.</p>
   <p><b>Y acá es donde este límite muerde más fuerte: en <span class="v-con">R</span>, el respaldo externo.</b> El piso <b class="v-con">P_min</b> al menos habla de gente que está en el área todos los días. R habla de gente que <i>supuestamente</i> sabe hacer la tarea pero <b>hace tiempo que no la hace</b> —o que quizás nunca la hizo en esta versión del proceso—. El modelo <b>no tiene forma de verificarlo</b>: R es una declaración tuya, y es el único número del modelo que <b>baja</b> el riesgo en lugar de subirlo. Todos los demás castigan; este premia.</p>
   <div class="ejemplo e-con"><span class="tit">Cómo auditar un R antes de creerle</span>
-  Tres preguntas, y si alguna falla el número no vale:<br><br>
+  Estas tres preguntas están en la calculadora como casillas, y no son un consejo sino un <b>candado</b>: mientras falte alguna, el campo queda bloqueado en 0 y el IDA se calcula sin descuento.<br><br>
   <b>1 · ¿Lo hicieron alguna vez, con este proceso?</b> No "algo parecido en otra sucursal hace cinco años". Este proceso, esta versión.<br>
   <b>2 · ¿Está documentado el modo manual?</b> Si la única forma de aprenderlo era mirando a alguien que ya no está, R es cero por más gente que figure.<br>
   <b>3 · ¿Se probó alguna vez que puedan venir?</b> Porque tienen su propio trabajo. Si nadie ensayó el traspaso, no sabés cuántas horas tardan en estar operativos — y las primeras horas de una caída son las que cuentan.<br><br>
-  <b>Si las tres respuestas no son un sí claro, poné R = 0 y quedate con el IDA crudo.</b> Un respaldo declarado y no probado es exactamente el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.</div>
+  <b>Si las tres no son un sí claro, el modelo directamente no te deja usar R.</b> Un respaldo declarado y no probado es el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.</div>
 
   <h3>3 · Mide costo y continuidad, no ingresos</h3>
   <p>El modelo cuenta lo que dejás de gastar, nunca lo que podrías ganar de más. <b>Para operaciones críticas eso es exactamente lo correcto:</b> en una guardia de gas o de energía no hay ingreso que justificar — hay una obligación legal de tener gente disponible 24/7 por si pasa algo. El modelo está pensado justamente para calcular <i>cuánta</i> gente es esa.</p>
@@ -1321,12 +1328,12 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>5 · El recupero es payback simple, no valor presente</h3>
   <p><span class="cuenta">T = I ÷ S</span> divide y listo: <b>no descuenta el dinero en el tiempo</b>. No hay tasa, no hay inflación, no hay costo de oportunidad. Un dólar del mes 20 vale lo mismo que uno de hoy. En finanzas esto se llama <b>payback simple</b>, y es distinto del VPN (valor presente neto) o la TIR que va a pedirte un CFO para aprobar la inversión.</p>
-  <p class="nota">Es deliberado: el payback simple se entiende sin explicación y sirve para <b>descartar</b> proyectos, que es lo que hace este modelo. Pero tiene un sesgo que conviene conocer — al no descontar, el recupero se ve <b>mejor</b> de lo que es. Si tu costo de capital es alto o operás en una economía con inflación en dólares, el recupero real es más largo que el que muestra la calculadora. Tratá los 18 meses como un filtro grueso, no como una aprobación financiera: para eso hay que llevar el ahorro mensual a una planilla de VPN con la tasa de tu organización.</p>
+  <p class="nota">Es deliberado, porque el payback simple se entiende sin explicación y sirve para <b>descartar</b> proyectos, que es lo que hace este modelo. Sin embargo tiene un sesgo que conviene conocer: al no descontar, el recupero se ve mejor de lo que es. Tratá el plazo como un filtro grueso y no como una aprobación financiera, es decir que para eso hay que llevar el ahorro mensual a una planilla de VPN con la tasa de tu organización.</p>
 
   <h3>6 · Los coeficientes de riesgo son criterio experto, no un dataset</h3>
   <p>Los recargos de <b class="v-rie">λ</b> —+30% por nube única, +20% por no tener plan de contingencia, +15% por datos sensibles afuera— <b>salen de experiencia profesional, no de un estudio estadístico</b>. No hay detrás una base de incidentes con miles de casos: hay criterio, y conviene decirlo antes de que lo pregunte otro.</p>
   <p>Lo que sí tienen es <b>un orden defendible</b>, que es lo que hace falta para decidir. Depender de un solo proveedor es la fragilidad más grave porque es la única que no tiene salida —si se cae, no hay a dónde ir—, y por eso pesa más que las otras dos. No tener plan de contingencia viene después: no te cae el servicio, pero te deja sin respuesta ensayada cuando cae. Y los datos sensibles afuera pesan menos en continuidad porque no interrumpen la operación: agregan exposición regulatoria y de reputación, que es un riesgo real pero de otra naturaleza.</p>
-  <p class="nota">Para calibrarlos de verdad haría falta lo mismo que usan las aseguradoras: una base de incidentes por sector con frecuencia, duración y costo de cada caída, y ajustar los coeficientes contra esos datos. Es el próximo paso natural del modelo y está pendiente. <b>Mientras tanto, lo importante es que el orden de magnitud sirva para comparar dos arquitecturas entre sí</b> — que es para lo que se usa λ en la práctica—, aunque el valor absoluto se pueda discutir.</p>
+  <p class="nota">Calibrarlos de verdad exigiría lo mismo que usan las aseguradoras, es decir una base de incidentes por sector con frecuencia, duración y costo de cada caída. Está pendiente. Mientras tanto lo que importa es que el orden de magnitud sirva para <b>comparar dos arquitecturas entre sí</b>, aunque el valor absoluto se pueda discutir.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span>
   <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
@@ -1344,7 +1351,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
   <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
   <p>Y no es hipotético: en <b>junio de 2026</b> el gobierno de Estados Unidos prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic, y después levantó la restricción solo en parte. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube.</p>
-  <p class="nota">Se podría agregar como un agravante más de λ, y probablemente sea el próximo. No está todavía por la misma razón que se explica en el límite 6: sumar un coeficiente nuevo sin poder calibrarlo agranda el modelo sin hacerlo más confiable. Mientras tanto, tratalo como un riesgo <b>real y no contemplado</b>: si tu operación depende de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
+  <p class="nota">Podría agregarse como un agravante más de λ y probablemente sea el próximo, sin embargo no está por la misma razón del límite 6. Mientras tanto tratalo como un riesgo <b>real y no contemplado</b>: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
   Ninguno de los ocho invalida el modelo: los primeros cuatro empujan en la misma dirección, y es <b>hacia arriba</b>. Un piso que no se entrena, un know-how que se fue y una degradación que no se contempla hacen que <b>necesites más gente, no menos</b>. Si el modelo te da un número, tratalo como el <b>mínimo del mínimo</b>.</div>
@@ -1910,7 +1917,14 @@ function calc(){
   // center entero donde nadie mas sabe hacerlo. La cobertura descuenta el IDA,
   // pero NUNCA hasta cero: esa gente abandona su propio puesto para venir y no
   // hace esta tarea todos los dias (ver limite del know-how).
-  const R=num('R',0);
+  // R es el unico dato que BAJA el riesgo, asi que es el mas facil de inflar.
+  // Si las tres condiciones de auditoria no estan tildadas, no se toma: el
+  // respaldo declarado y no probado vale lo mismo que no tener respaldo.
+  const avalado = $('R1').checked && $('R2').checked && $('R3').checked;
+  const R = avalado ? num('R',0) : 0;
+  $('R').disabled = !avalado;
+  $('aviso-R-bloq').style.display = avalado ? 'none' : 'block';
+  if(!avalado) $('aviso-R-bloq').innerHTML = 'Mientras falte alguna de las tres, el respaldo cuenta como <b>0</b> y el IDA se calcula sin descuento. Un respaldo declarado y no probado es el mismo papelito que un plan de contingencia que nadie ensayó.';
   const cobertura = Pmin>0 ? Math.min(R/Pmin,1) : 0;
   const DESC_MAX=0.7;                       // tope del descuento por respaldo
   const factorR = 1-cobertura*DESC_MAX;
@@ -2007,6 +2021,7 @@ $('btn-calcular').onclick=()=>{
 
 $('btn-reiniciar').onclick=()=>{
   Object.entries(DEFAULTS).forEach(([k,v])=>{ const el=$(k); if(el) el.value=v; });
+  ['R1','R2','R3'].forEach(id=>{ $(id).checked=false; });
   document.querySelectorAll('#arq input[type=radio]').forEach((r,i)=>r.checked=(i===0));
   document.querySelectorAll('#arq input[type=checkbox]').forEach((c,i)=>c.checked=(i===0));
   modoCt('api');

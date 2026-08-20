@@ -28,7 +28,7 @@ Estas pruebas responden **la primera**. La segunda se responde con casos reales,
 Devuelve:
 
 ```
-{ casos: 20, fallas: "ninguna" }
+{ casos: 21, fallas: "ninguna" }
 ```
 
 y una tabla con el resultado de cada caso. Si alguna fila no coincide con las fórmulas publicadas, aparece en `fallas` con el valor del motor y el de la fórmula, para que se vea cuál es cuál.
@@ -54,7 +54,7 @@ Si el motor y las fórmulas se separan, la prueba falla. Ese es el punto.
 
 ---
 
-## Los 20 casos
+## Los 21 casos
 
 No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 
@@ -72,6 +72,7 @@ No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 | 09 | Respaldo externo cubre el piso | Cobertura = 100% y el tope del descuento |
 | 10 | Respaldo externo desbordado (`R = 999`) | Que la cobertura no pase de 1 |
 | 11 | Respaldo con piso cero | **División por cero**: sin piso no hay nada que cubrir |
+| 11b | Respaldo declarado pero sin avalar | Que el candado de las tres condiciones lo fuerce a 0 |
 | 12 | Sin inversión inicial | `T = 0` sin romper |
 | 13 | Sin costo de IA ni mantenimiento | El ahorro bruto puro |
 | 14 | Arquitectura más robusta (`λ = 1,02`) | Extremo inferior de λ |
@@ -89,7 +90,7 @@ Se escribió para buscar errores, y encontró uno.
 
 **Caso 05 — piso mayor que la plantilla.** Con `H_min` por encima de lo que la dotación puede cubrir, `P − P'` da negativo y el sitio mostraba **"−10 personas liberadas"**, que no significa nada. El número no estaba mal: significa que **faltan 10 personas para poder operar sin IA**. Ahora lo dice así.
 
-El resto de los 20 casos coincide con las fórmulas.
+El resto de los casos coincide con las fórmulas.
 
 ---
 

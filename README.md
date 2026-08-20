@@ -184,32 +184,29 @@ El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 pers
 
 ---
 
-## 3.bis El precio que pagás hoy no es lo que cuesta
+## 3.bis El precio que pagás hoy no está atado a un costo
 
-Antes de armar cualquier plan a dos años conviene mirar esto: **los proveedores de IA no están cobrando lo que les cuesta atenderte**. Están comprando mercado, y el precio del token es una decisión comercial, no el reflejo de un costo.
+El precio del token es una decisión comercial de tu proveedor, es decir que no se mueve por lo que a él le cuesta atenderte sino por dónde quiere estar parado en el mercado.
 
-Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos **US$ 25.000 millones de facturación** y una **pérdida del orden de US$ 14.000 millones**. La cuenta es directa:
+Los números públicos alcanzan para verlo. Según lo reportado en la prensa financiera durante 2026, OpenAI proyecta cerrar el año con unos **US$ 25.000 millones de facturación** y una **pérdida del orden de US$ 14.000 millones**, es decir que gasta bastante más de lo que factura y la diferencia la ponen los inversores. Sin embargo Anthropic recorrió el camino inverso, de un margen bruto negativo en 2024 a terreno positivo en 2026 según los mismos reportes.
 
-```
-25.000 de ingresos + 14.000 de pérdida = 39.000 de costo
-39.000 ÷ 25.000 = 1,56 de costo por cada 1 que factura
-```
+> **Qué dicen y qué no dicen esos números.** Esas cifras son del **resultado total de la empresa**, que incluye entrenar modelos nuevos, investigación, sueldos y construcción de infraestructura. **No son el costo de atender tu consulta.** Con lo publicado no se puede calcular cuánto le cuesta a un proveedor servirte un millón de tokens, y cualquiera que diga lo contrario está inventando.
+>
+> Lo que sí muestran, y alcanza de sobra, es que **ingresos, costo de infraestructura, inversión y estrategia comercial no se mueven juntos**. Es decir que el precio que ves hoy no es un piso técnico: es una posición comercial, y las posiciones comerciales cambian.
+>
+> Fuentes: reportes de prensa financiera de 2026 sobre resultados de [OpenAI](https://valueaddvc.com/blog/openai-revenue-2026-25b-arr-a-20-9b-leaked-loss-and-why-anthropic-just-passed-it) y sobre los [dos modelos de negocio](https://www.forbes.com/sites/paulocarvao/2026/05/21/anthropic-openai-enterprise-ai-profitability/). No son estados contables auditados y cambian rápido: tomalos como orden de magnitud.
 
-Por cada dólar que te cobran, gastan alrededor de un dólar con cincuenta. La diferencia la ponen los inversores, no vos. Y no es parejo entre proveedores: Anthropic recorrió el camino inverso —de un margen bruto negativo en 2024 a terreno positivo en 2026, según los mismos reportes—, lo cual **refuerza** el punto: el precio depende de la estrategia de cada empresa y de en qué momento la agarrás, no de una física del costo.
-
-**Qué le pasa a la farmacia si el precio se normaliza.** Mismo proyecto, misma gente, misma automatización; se mueve **solo el precio**:
+**Qué le pasa a la farmacia si el precio se mueve.** Mismo proyecto, misma gente, misma automatización; se mueve **solo el precio**:
 
 | Escenario | Gasto de IA | Ahorro | Recupero |
 |---|---|---|---|
 | Precio de hoy | $1.229/mes | $2.457 | **20 meses** |
-| Si cubriera su costo (×1,56) | $1.917/mes | $1.425 | **35 meses** |
-| Si además dejara margen (×2) | $2.458/mes | $613 | **82 meses** |
+| Si subiera 56% | $1.917/mes | $1.425 | **35 meses** |
+| Si se duplicara | $2.458/mes | $613 | **82 meses** |
 
-Pasa de aprobado a inviable por una decisión que toma otro, en otro país, sin avisarte. **Pero mirá qué no cambió: el piso de continuidad sigue siendo 4 personas en los tres casos.** Porque el piso no se calcula con el precio del token, sino con las horas que la operación no puede dejar de cubrir.
+Pasa de aprobado a inviable por una decisión que toma otro, en otro país y sin avisarte. Sin embargo mirá qué no cambió: **el piso de continuidad sigue siendo 4 personas en los tres casos**, porque el piso no se calcula con el precio del token sino con las horas que la operación no puede dejar de cubrir.
 
-> **La conclusión práctica: automatizá, pero no armes tu dotación sobre un precio que no controlás.** Si el número solo cierra con la tarifa de hoy, no tenés un proyecto: tenés una apuesta a que el subsidio siga. La dotación mínima es la parte de la decisión que **sobrevive a un cambio de precio**, y por eso es la que hay que calcular primero.
-
-*Las cifras de facturación y pérdida son de reportes periodísticos de 2026, no de estados contables auditados, y cambian rápido: tomalas como orden de magnitud. La conclusión no depende del valor exacto — depende de que el precio no esté anclado al costo, y en eso coinciden todas las fuentes.*
+> **La conclusión práctica: automatizá, pero no armes tu dotación sobre un precio que no controlás.** Si el número solo cierra con la tarifa de hoy no tenés un proyecto, tenés una apuesta a que esa tarifa no cambie. La dotación mínima es la parte de la decisión que **sobrevive a un cambio de precio**, y por eso es la que hay que calcular primero.
 
 ---
 
@@ -682,12 +679,12 @@ Ningún modelo es honesto si no dice qué *no* hace.
 
 Y **acá es donde este límite muerde más fuerte: en R, el respaldo externo.** El piso `P_min` al menos habla de gente que está en el área todos los días. R habla de gente que *supuestamente* sabe hacer la tarea pero **hace tiempo que no la hace** —o que quizás nunca la hizo en esta versión del proceso—. El modelo **no tiene forma de verificarlo**: R es una declaración, y es el único número que **baja** el riesgo en lugar de subirlo. Todos los demás castigan; este premia.
 
-> **Cómo auditar un R antes de creerle.** Tres preguntas, y si alguna falla el número no vale:
+> **Cómo auditar un R antes de creerle.** Estas tres preguntas están en la calculadora como casillas, y **no son un consejo: son un candado**. Mientras falte alguna, el campo de R queda bloqueado en 0 y el IDA se calcula sin descuento.
 > 1. **¿Lo hicieron alguna vez, con este proceso?** No "algo parecido en otra sucursal hace cinco años". Este proceso, esta versión.
 > 2. **¿Está documentado el modo manual?** Si la única forma de aprenderlo era mirando a alguien que ya no está, R es cero por más gente que figure.
 > 3. **¿Se probó alguna vez que puedan venir?** Tienen su propio trabajo. Si nadie ensayó el traspaso, no sabés cuántas horas tardan en estar operativos — y las primeras horas de una caída son las que cuentan.
 >
-> **Si las tres respuestas no son un sí claro, poné R = 0 y quedate con el IDA crudo.** Un respaldo declarado y no probado es el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.
+> **Si las tres no son un sí claro, el modelo no te deja usar R.** Un respaldo declarado y no probado es el mismo papelito que un plan de contingencia que nadie ensayó: tranquiliza al directorio y no sirve el día que hace falta.
 
 **3 · Mide costo y continuidad, no ingresos.** Para operaciones críticas eso es lo correcto: en una guardia de gas o energía no hay ingreso que justificar, hay una obligación legal de tener gente 24/7 — y el modelo sirve justamente para calcular cuánta. Pero si tu caso es comercial y automatizar genera ventas nuevas (atención 24/7, más capacidad en pico), ese ingreso **no entra acá** y hay que sumarlo por afuera.
 
@@ -734,7 +731,7 @@ Qué trae:
 
 ## Verificación
 
-Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 20 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero.
+Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 21 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero.
 
 Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consola del navegador. Detalle completo en [**PRUEBAS.md**](PRUEBAS.md).
 

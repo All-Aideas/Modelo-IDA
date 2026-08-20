@@ -33,7 +33,8 @@
     const Pf = Math.max(Math.ceil(c.P * (1 - aef)), Pmin);
     const lib = c.P - Pf;
     const S = lib * (c.N / c.P) - (c.ctHora * H * aef) * c.lam - c.M;
-    const cob = Pmin > 0 ? Math.min(c.R / Pmin, 1) : 0;
+    const Rreal = c.avalar === false ? 0 : c.R;
+    const cob = Pmin > 0 ? Math.min(Rreal / Pmin, 1) : 0;
     return {
       Pf, lib, S,
       pb: S > 0 ? c.I / S : Infinity,
@@ -56,6 +57,7 @@
     ['09 · respaldo externo cubre el piso', { R: 4 }],
     ['10 · respaldo externo desbordado', { R: 999 }],
     ['11 · respaldo con piso cero', { Hmin: 0, R: 50 }],
+    ['11b · respaldo sin avalar (no cuenta)', { R: 4, avalar: false }],
     ['12 · sin inversion inicial', { I: 0 }],
     ['13 · sin costo de IA ni mantenimiento', { ctHora: 0, M: 0 }],
     ['14 · arquitectura mas robusta', { lam: 1.02 }],
@@ -73,6 +75,10 @@
     const c = { ...base, ...ov };
     $('btn-reiniciar').click();
     setLam(c.lam);
+    // R solo cuenta si las tres condiciones de auditoria estan tildadas: los
+    // casos que cargan respaldo tienen que pasar por ese candado, igual que
+    // un usuario real.
+    ['R1', 'R2', 'R3'].forEach(id => { const e = $(id); e.checked = c.R > 0 && c.avalar !== false; e.dispatchEvent(new Event('change', { bubbles: true })); });
     ['P', 'N', 'hp', 'Hmin', 'R', 'I', 'M', 'Tmax'].forEach(k => put(k, c[k]));
     ['a', 'r', 'eta'].forEach(k => put(k, c[k]));
     // ctHora se deriva de C_mes, asi que se carga ULTIMO: si no, el motor lo
