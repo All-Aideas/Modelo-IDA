@@ -857,7 +857,7 @@ const MODULOS={
     produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
     formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
     simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
-    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es la prima que pagás por la exposición del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: is what it el multiplicador te cobra por la exposición del día que el servicio se cae. Se aplica como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
     usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
   con:{nom:'Continuity', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
     datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
@@ -1521,7 +1521,7 @@ function buildInforme(){
   <p><b>Economía.</b> ${veredicto}</p>
   <p><b>Exposición.</b> IDA ${e.IDA.toFixed(0)} sobre 100 (zona ${zonaIDA(e.IDA).toLowerCase()}). ${lecturaIDA}</p>
   ${e.cobertura>0?`<p class="inf-nota"><b>Atención con el respaldo externo.</b> Este IDA de ${e.IDA.toFixed(0)} ya está descontado por las ${e.R} personas de fuera del área declaradas como respaldo, que cubren el ${pc(e.cobertura)} del piso. <b>Sin ese respaldo el índice sería ${e.IDAcrudo.toFixed(0)}.</b> R es el único dato del modelo que baja el riesgo en lugar de subirlo, y el modelo no puede verificarlo: si esas personas no ejecutaron este proceso, no está documentado el modo manual, o nunca se ensayó el traspaso, el número válido es ${e.IDAcrudo.toFixed(0)}.</p>`:''}
-  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es la prima que el modelo cobra por la exposición de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
+  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el multiplicador de riesgo que el modelo aplica por la exposición de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
 }
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
 
@@ -1600,7 +1600,7 @@ function buildCSV(){
 
   sec('"SUPUESTOS DEL MODELO"');
   fila('El ahorro cuenta sueldos liberados', 'no horas automatizadas');
-  fila('lambda ajusta el gasto de IA', 'no es un pago real: es prima de riesgo');
+  fila('lambda ajusta el gasto de IA', 'no es un pago real: es el multiplicador de riesgo');
   fila('El recupero es payback simple', 'sin descuento por valor tiempo del dinero');
   fila('Los coeficientes de riesgo', 'criterio experto, no dataset calibrado');
   fila('El respaldo externo (R) es declarado', 'el modelo no puede verificarlo');

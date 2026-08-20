@@ -138,7 +138,7 @@ Esas dos decisiones tienen precio, aunque no aparezcan en la factura. **Dónde c
 
 Tu caso: nube única (+30%) y sin plan de contingencia (+20%) → λ = 1 + 0,30 + 0,20 = **1,50**.
 
-El costo real de tu proyecto, para decidir si conviene, no es $1.229: es 1,50 × $1.229 ≈ **$1.843 por mes** (el modelo trabaja con el valor exacto, $1.228,80, antes de redondear para mostrarlo). La factura no cambia —seguís pagando $1.229—, pero el modelo te cobra $614 extra en la evaluación: es la prima de seguro por la arquitectura frágil que elegiste. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara *cuando todavía estás a tiempo de cambiarla*.
+El costo real de tu proyecto, para decidir si conviene, no es $1.229: es 1,50 × $1.229 ≈ **$1.843 por mes** (el modelo trabaja con el valor exacto, $1.228,80, antes de redondear para mostrarlo). La factura no cambia —seguís pagando $1.229—, pero el modelo te cobra $614 extra en la evaluación: es lo que te cobra el multiplicador de riesgo por la arquitectura frágil que elegiste. Ese costo no aparece en ninguna factura mensual — aparece entero, una sola vez, el peor día. El multiplicador lo reparte en cuotas para que una arquitectura frágil se vea cara *cuando todavía estás a tiempo de cambiarla*.
 
 Es la lógica del seguro del auto: manejar sin seguro no sale más barato, sale igual hasta que chocás.
 
@@ -274,7 +274,7 @@ Ya sabés que de tu equipo de 10 te quedan 7. Ahora la pregunta es cuánto ahorr
 >
 > El máximo de automatización nunca es el óptimo de automatización. **Con una salvedad, que vale para todo el modelo:** esto pasa así cuando la IA se paga por hora. Con costo fijo el ahorro no baja, se aplana — y el IDA sube igual (ver 7.1).
 
-**Una aclaración honesta sobre λ:** S es el *ahorro ajustado por riesgo*, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al decidir. Tu contador va a ver un ahorro mayor (el mismo número con λ=1); tu director de riesgo va a querer ver este.
+**Una aclaración honesta sobre λ:** S es el *ahorro ajustado por riesgo*, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor: es el multiplicador de riesgo, un recargo implícito que el modelo aplica para castigar arquitecturas frágiles al decidir. Tu contador va a ver un ahorro mayor (el mismo número con λ=1); tu director de riesgo va a querer ver este.
 
 ### Resultado 3 — Índice de Dependencia de IA (IDA)
 ```
@@ -713,7 +713,7 @@ Y **acá es donde este límite muerde más fuerte: en R, el respaldo externo.** 
 >
 > *¿Por qué λ no toca el mantenimiento (M)?* Crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que M también debería subir con el riesgo. No lo hace, y el efecto es que **el modelo subestima el costo de una arquitectura mala**. Preferimos ese error al inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.
 >
-> *¿Por qué λ multiplica el gasto en IA y no el daño de la caída?* Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: comparando arquitecturas de costo muy distinto, la prima en dólares puede quedar al revés — correr local, que es más seguro, tiene una factura mucho mayor, así que su 2% de recargo puede superar en pesos al 50% de una API barata. **Dentro de una misma arquitectura la comparación es válida**, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante.
+> *¿Por qué λ multiplica el gasto en IA y no el daño de la caída?* Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: comparando arquitecturas de costo muy distinto, el recargo en dólares puede quedar al revés — correr local, que es más seguro, tiene una factura mucho mayor, así que su 2% de recargo puede superar en pesos al 50% de una API barata. **Dentro de una misma arquitectura la comparación es válida**, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no el recargo en plata. Anclar el multiplicador al costo por hora de no-operación es la mejora pendiente más importante.
 
 **7 · Convierte horas liberadas en puestos eliminables.** Este es el supuesto más fuerte de todo el modelo. Cuando la cuenta económica hace `⌈P × (1 − a_ef)⌉` está asumiendo que **las horas que la IA te saca de encima se traducen en gente que dejás de necesitar**: en la farmacia, 38,4% sobre 10 personas da 7, y las 3 de diferencia se cuentan como sueldos que dejás de pagar.
 

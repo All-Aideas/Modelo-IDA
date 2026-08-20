@@ -847,7 +847,7 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td>Sin plan de contingencia</td><td>+0,20</td></tr>
     <tr><td>Datos sensibles en nube externa</td><td>+0,15</td></tr>
   </table>
-  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es la prima que pagás por la exposición del día que se cae. Por eso el modelo lo cobra como un recargo sobre la factura de IA.</p>
+  <p class="nota"><b class="v-rie">ρ</b> (rho) son primas de riesgo: cada casillero que marcás suma la suya. <b class="v-rie">λ</b> (lambda) arranca en 1 —sin riesgo— y crece con cada fragilidad. No es plata que pagás todos los meses: es lo que el multiplicador te cobra por la exposición del día que se cae. Por eso se aplica como un recargo sobre la factura de IA.</p>
   <div class="ejemplo e-rie"><span class="tit">Cuánto da y qué pasa si lo movés</span>
   Una sola nube (+0,30) y sin plan de contingencia (+0,20) suman 0,50 de prima: <span class="cuenta">1 + 0,50 = 1,50</span><br><br>
   <b>Qué significa ese 1,50.</b> Tu proveedor te factura <span class="cuenta">$1.229</span> por mes y eso es lo que sale de tu cuenta bancaria: ese número no cambia. Lo que el modelo hace es <b>cobrarte un 50% extra al momento de decidir</b>, y anotar <span class="cuenta">$1.843</span> en la evaluación del proyecto.<br><br>
@@ -935,7 +935,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="ejemplo e-aut" style="margin-top:14px;"><span class="tit">El corolario incómodo: existe un óptimo</span>
   Una vez que chocaste el piso, cada punto extra de automatización <b>suma factura de IA pero no libera a nadie más</b>. Desde ahí, automatizar más te <b>baja</b> el ahorro y te <b>sube</b> el IDA: quedás más pobre y más dependiente al mismo tiempo. En el ejemplo, el óptimo está en el 60% de automatización efectiva ($6.220/mes); al 100% caés a $4.300. Mirá la curva en <b>Explorar gráficos → Ahorro vs Riesgo</b>.</div>
 
-  <p class="nota" style="margin-top:14px;"><b>Una aclaración honesta sobre λ:</b> S es el <i>ahorro ajustado por riesgo</i>, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor todos los meses: es una prima de riesgo implícita que el modelo cobra para castigar arquitecturas frágiles al momento de decidir. Tu contador va a ver un ahorro mayor —el mismo número con λ=1—; tu director de riesgo va a querer ver este.</p>
+  <p class="nota" style="margin-top:14px;"><b>Una aclaración honesta sobre λ:</b> S es el <i>ahorro ajustado por riesgo</i>, no el flujo de caja contable. λ no es un cheque que le firmás a tu proveedor todos los meses: es el multiplicador de riesgo, un recargo implícito que el modelo aplica para castigar arquitecturas frágiles al momento de decidir. Tu contador va a ver un ahorro mayor —el mismo número con λ=1—; tu director de riesgo va a querer ver este.</p>
 
   <h3 class="res-h">Resultado 3 — Cuán expuesto quedás (IDA)</h3>
   <p class="res-usa">Se alimenta de: <span class="t t-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Automatización</span> <span class="t t-rie"><svg class="ic-mod"><use href="#i-mod-rie"/></svg> Riesgo</span> <span class="t t-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Continuidad</span> <span style="color:var(--gris)">— nunca dinero</span></p>
@@ -1367,7 +1367,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <details class="ejemplo e-rie"><summary><span class="tit">Dos preguntas incómodas sobre λ, contestadas de antemano</span></summary>
   <b>¿Por qué λ no toca el mantenimiento (M)?</b> Es una crítica válida: una arquitectura frágil consume más horas de apagar incendios, así que en la realidad M también debería subir con el riesgo. No lo hace, y el efecto es que <b>el modelo subestima el costo de una arquitectura mala</b>. Preferimos ese error antes que el inverso: si el número ya no cierra con λ tocando solo la factura de IA, con M ajustado cerraría todavía menos.<br><br>
-  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, la prima en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no la prima en plata. Anclar la prima al costo por hora de no-operación es la mejora pendiente más importante del modelo.</details>
+  <b>¿Por qué λ multiplica el gasto en IA y no el daño de la caída?</b> Porque el gasto es un dato que tenés y el daño no. La consecuencia rara hay que decirla: si comparás dos arquitecturas con costos muy distintos, el recargo en dólares puede quedar al revés —correr local, que es más seguro, tiene una factura mucho más grande, así que su 2% de recargo puede superar en pesos al 50% de una API barata—. <b>Dentro de una misma arquitectura la comparación es válida</b>, que es como se usa; cruzando arquitecturas hay que mirar el IDA, no el recargo en plata. Anclar el multiplicador al costo por hora de no-operación es la mejora pendiente más importante del modelo.</details>
 
   <h3>7 · Convierte horas liberadas en puestos eliminables</h3>
   <p>Este es el supuesto más fuerte de todo el modelo y conviene decirlo sin vueltas. Cuando la cuenta económica hace <span class="cuenta">⌈P × (1 − a_ef)⌉</span>, está asumiendo que <b>las horas que la IA te saca de encima se traducen en gente que dejás de necesitar</b>. En la farmacia: 38,4% automatizado sobre 10 personas da 7, y las 3 de diferencia se cuentan como sueldos que dejás de pagar.</p>
@@ -1560,7 +1560,7 @@ const MODULOS={
     produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
     formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
     simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
-    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es la prima que pagás por la exposición del día que el servicio se cae. El modelo lo cobra como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es lo que el multiplicador te cobra por la exposición del día que el servicio se cae. Se aplica como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
     usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
   con:{nom:'Continuidad', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
     datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
@@ -2222,7 +2222,7 @@ function buildInforme(){
   <p><b>Economía.</b> ${veredicto}</p>
   <p><b>Exposición.</b> IDA ${e.IDA.toFixed(0)} sobre 100 (zona ${zonaIDA(e.IDA).toLowerCase()}). ${lecturaIDA}</p>
   ${e.cobertura>0?`<p class="inf-nota"><b>Atención con el respaldo externo.</b> Este IDA de ${e.IDA.toFixed(0)} ya está descontado por las ${e.R} personas de fuera del área declaradas como respaldo, que cubren el ${pc(e.cobertura)} del piso. <b>Sin ese respaldo el índice sería ${e.IDAcrudo.toFixed(0)}.</b> R es el único dato del modelo que baja el riesgo en lugar de subirlo, y el modelo no puede verificarlo: si esas personas no ejecutaron este proceso, no está documentado el modo manual, o nunca se ensayó el traspaso, el número válido es ${e.IDAcrudo.toFixed(0)}.</p>`:''}
-  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es la prima que el modelo cobra por la exposición de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
+  <p class="inf-nota"><b>Cómo leer estos números.</b> El ahorro es <i>ajustado por riesgo</i>: λ no es una factura que se paga cada mes, es el multiplicador de riesgo que el modelo aplica por la exposición de una arquitectura frágil. El modelo mide costo y continuidad, no ingresos, y supone que las personas conservadas mantienen entrenamiento y conocimiento del proceso manual. Si no hay simulacros periódicos, el piso real es mayor que el calculado.</p>`;
 }
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
 
@@ -2301,7 +2301,7 @@ function buildCSV(){
 
   sec('"SUPUESTOS DEL MODELO"');
   fila('El ahorro cuenta sueldos liberados', 'no horas automatizadas');
-  fila('lambda ajusta el gasto de IA', 'no es un pago real: es prima de riesgo');
+  fila('lambda ajusta el gasto de IA', 'no es un pago real: es el multiplicador de riesgo');
   fila('El recupero es payback simple', 'sin descuento por valor tiempo del dinero');
   fila('Los coeficientes de riesgo', 'criterio experto, no dataset calibrado');
   fila('El respaldo externo (R) es declarado', 'el modelo no puede verificarlo');
