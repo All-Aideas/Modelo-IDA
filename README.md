@@ -179,6 +179,10 @@ El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 pers
 >
 > La regla es simple: **si primero tenés que enseñarle, no cuenta.** R es capacidad disponible el día de la caída, no capacidad potencial.
 >
+> **Lo que R NO hace: bajarte la dotación.** Tener respaldo externo no cambia `P_min` ni `P'`. En la farmacia seguís conservando 7 personas, tengas 0 o 4 de respaldo; lo único que se mueve es el IDA. La razón es que los de afuera tienen su propio trabajo: si recortás el área confiando en ellos, el día que la IA se caiga rompés dos áreas en vez de una. **R reduce cuán expuesto estás, no cuánta gente necesitás.** Por eso mismo el descuento se topea en 0,7 y nunca llega a cero.
+>
+> **Y cómo se carga:** en la calculadora, antes del campo hay tres casillas con las preguntas de abajo. **Esas casillas no aportan ningún valor**, son una condición de todo o nada: si falta una sola, `R = 0` aunque escribas un número. El valor de R son personas — cuántas hay afuera que puedan cubrir — y de ahí sale `cobertura = R ÷ P_min`.
+>
 > **Y es el número más fácil de inflar de todo el modelo,** porque es el único que *baja* el índice. Por eso el modelo nunca deja que el respaldo lleve el IDA a cero, y por eso este número es el primero que hay que auditar cuando alguien muestra un IDA sospechosamente bajo (ver §9.2).
 
 
