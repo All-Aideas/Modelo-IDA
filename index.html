@@ -872,6 +872,15 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3 class="mod h-con"><svg class="ic-mod"><use href="#i-mod-con"/></svg> Y una pregunta más: ¿hay respaldo fuera del área? → produce R</h3>
   <p>Volvamos a la farmacia. El piso dice que hacen falta <b>4 personas</b> en el área para sostener la atención si la IA no está, sin embargo eso mira solo hacia adentro. Preguntemos otra cosa: en las sucursales, ¿hay farmacéuticos que antes atendían esas consultas y todavía saben hacerlo? Si hay cuatro, <b>esos cuatro son tu <b class="v-con">R</b></b>.</p>
   <p class="nota">Sirve para que el índice deje de ser ciego. Un área de una sola persona dentro de una organización donde otras veinte saben hacer la tarea daba antes el mismo IDA que un call center de doscientas donde nadie más sabe, es decir la misma cifra para dos realidades opuestas.</p>
+  <div class="ejemplo e-con"><span class="tit">La cuenta, con números</span>
+  La farmacia tiene un piso de <b>4 personas</b>. Supongamos que en las sucursales hay cuatro farmacéuticos que atendían estas consultas y todavía saben hacerlo, es decir que cargás <b>R = 4</b>:<br><br>
+  <span class="cuenta">cobertura = 4 ÷ 4 = 100%</span><br>
+  <span class="cuenta">IDA = 58 × (1 − 1,00 × 0,7) = 17</span><br><br>
+  Ahora supongamos que son solo dos, o sea <b>R = 2</b>:<br><br>
+  <span class="cuenta">cobertura = 2 ÷ 4 = 50%</span><br>
+  <span class="cuenta">IDA = 58 × (1 − 0,50 × 0,7) = 37</span><br><br>
+  Es decir que <b>lo que entra son personas</b>, no un porcentaje ni un puntaje, y que media cobertura descuenta la mitad. Con más respaldo del que necesitás la cuenta se topea sola: si cargás 8 sobre un piso de 4, la cobertura sigue siendo 100% y el IDA sigue siendo 17, porque cubrir dos veces el piso no te cubre el doble.</div>
+
   <div class="ejemplo e-con"><span class="tit">Lo que más confunde: R no te deja quedarte con menos gente</span>
   Es la primera pregunta que aparece, así que la contesto de entrada: <b>tener respaldo externo no baja tu piso ni cambia las personas que conservás.</b> En la farmacia seguís quedándote con 7, tengas 0 o 4 de respaldo. Lo único que se mueve es el <b>IDA</b>.<br><br>
   ¿Por qué? Porque <b>los de afuera tienen su propio trabajo</b>. Si recortás el área confiando en ellos, el día que la IA se caiga no resolvés un problema: rompés dos áreas en vez de una, porque para cubrir acá tienen que dejar tirado lo suyo.<br><br>

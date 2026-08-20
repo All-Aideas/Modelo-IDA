@@ -179,6 +179,15 @@ El piso `P_min` mira solo hacia adentro del área. Pero una operación de 5 pers
 >
 > La regla es simple: **si primero tenés que enseñarle, no cuenta.** R es capacidad disponible el día de la caída, no capacidad potencial.
 >
+> **La cuenta, con números.** La farmacia tiene un piso de 4 personas. Si en las sucursales hay cuatro farmacéuticos que todavía saben atender estas consultas, cargás `R = 4`:
+>
+> ```
+> cobertura = 4 ÷ 4 = 100%     →   IDA = 58 × (1 − 1,00 × 0,7) = 17
+> cobertura = 2 ÷ 4 =  50%     →   IDA = 58 × (1 − 0,50 × 0,7) = 37
+> ```
+>
+> Lo que entra son **personas**, no un porcentaje ni un puntaje, y media cobertura descuenta la mitad. Con más respaldo del que necesitás la cuenta se topea sola: 8 sobre un piso de 4 sigue dando 100% y el mismo IDA 17, porque cubrir dos veces el piso no te cubre el doble.
+>
 > **Lo que R NO hace: bajarte la dotación.** Tener respaldo externo no cambia `P_min` ni `P'`. En la farmacia seguís conservando 7 personas, tengas 0 o 4 de respaldo; lo único que se mueve es el IDA. La razón es que los de afuera tienen su propio trabajo: si recortás el área confiando en ellos, el día que la IA se caiga rompés dos áreas en vez de una. **R reduce cuán expuesto estás, no cuánta gente necesitás.** Por eso mismo el descuento se topea en 0,7 y nunca llega a cero.
 >
 > **Y cómo se carga:** en la calculadora, antes del campo hay tres casillas con las preguntas de abajo. **Esas casillas no aportan ningún valor**, son una condición de todo o nada: si falta una sola, `R = 0` aunque escribas un número. El valor de R son personas — cuántas hay afuera que puedan cubrir — y de ahí sale `cobertura = R ÷ P_min`.
