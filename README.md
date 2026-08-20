@@ -22,7 +22,7 @@ En la escuela, `P` son los docentes del área, `H_min` son las horas de clase y 
 | **Si conviene** | ¿Cuánto ahorrás de verdad y en cuántos meses se paga? | `S` y `T` — más el techo de inversión |
 | **Cuán expuesto** | ¿Qué tan rehén quedás de tu proveedor? | `IDA` — de 0 a 100 |
 
-**[Probá la calculadora interactiva](https://modelo-ida.web.app)** · [Read this in English](https://modelo-ida.web.app/en/) · Autor: [César Riat](https://cesarriat.com)
+**[Probá la calculadora interactiva](https://modelo-ida.web.app)** · [Read this in English](https://modelo-ida.web.app/en) · Autor: [César Riat](https://cesarriat.com)
 
 ---
 
