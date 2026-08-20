@@ -505,7 +505,7 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="campo">
         <label>Personas de fuera del área que <i>saben hacer</i> esta tarea <span class="hint">respaldo externo — dejalo en 0 si no hay nadie</span></label>
         <div class="arq-group" id="aval-R" style="margin-bottom:8px;">
-          <p class="hint" style="margin-bottom:6px;">Antes de cargar el número, las tres tienen que ser verdad:</p>
+          <p class="hint" style="margin-bottom:6px;">Estas casillas <b>no suman ningún valor</b>: son una condición. Si falta una sola, el respaldo cuenta 0 aunque escribas un número. Las tres tienen que ser verdad:</p>
           <label class="check"><input type="checkbox" id="R1"> Ya lo hicieron alguna vez, <b>con este proceso</b></label>
           <label class="check"><input type="checkbox" id="R2"> El modo manual está <b>documentado</b></label>
           <label class="check"><input type="checkbox" id="R3"> Se <b>ensayó</b> que puedan dejar su puesto y venir</label>
@@ -684,7 +684,7 @@ window.addEventListener('DOMContentLoaded',function(){
     <tr><td><b>Calculadoras de ROI de IA</b></td><td>Cuánto ahorrás automatizando: horas por costo, payback simple.</td><td>Asumen riesgo cero y continuidad gratis. Te dicen a cuánta gente podés <i>bajar</i>; nunca cuánta tenés que <i>conservar</i>.</td></tr>
     <tr><td><b>Índices académicos de dependencia de IA</b></td><td>Miden cuánto depende de la IA una economía o un sector, a nivel macro.</td><td>No bajan al gerente: no te dicen cuántas personas necesita tu área el lunes si el proveedor no responde.</td></tr>
     <tr><td><b>Normas de gestión (ISO/IEC 42001, ISO 22301)</b></td><td>Te exigen plan de contingencia y evaluación de riesgos: definen el <i>qué</i>.</td><td>Son marcos, no calculadoras: piden el plan pero no dan el número — ni la dotación mínima, ni el costo del riesgo, ni el tope de inversión.</td></tr>
-    <tr><td><b>Plataformas de riesgo y seguridad de IA</b></td><td>Protegen el software: prompts maliciosos, fuga de datos, sesgos, cumplimiento.</td><td>Cuidan a la IA de que la ataquen. No cuidan a tu operación de quedarse <i>sin</i> IA.</td></tr>
+    <tr><td><b>Marcos de riesgo y seguridad de IA</b> <span class="hint">NIST AI RMF, MITRE ATLAS</span></td><td>Cubren el riesgo del sistema: inyección de prompts, fuga de datos, sesgo algorítmico, pérdida de propiedad intelectual.</td><td>Cuidan a la IA de que la ataquen o se comporte mal. No cuidan a tu operación de quedarse <i>sin</i> IA, ni te dicen con cuánta gente seguís funcionando.</td></tr>
     <tr><td><b>Plataformas de IAOps y GRC corporativo</b></td><td>Operan en producción: monitorean, desvían tráfico entre proveedores y ejecutan el failover en tiempo real sobre datos reales.</td><td>Te dicen <i>cómo</i> reaccionar cuando falla. No te dicen <b>si convenía invertir</b> ni cuánta gente conservar — y llegan después de la decisión que este modelo ayuda a tomar.</td></tr>
   </table>
   </div>
@@ -1962,10 +1962,13 @@ function calc(){
       ? `Tu inversión de ${nf(I)} <b>supera ese techo</b>: por eso el recupero se estira más allá de tu plazo de ${Tmax}.`
       : `Es el máximo que este ahorro devuelve en tu plazo de ${Tmax}. Tu inversión de ${nf(I)} entra dentro, así que hay margen.`);
   const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
-  $('aviso-R').style.display = R>0 ? 'block' : 'none';
-  if(R>0) $('aviso-R').innerHTML = cobertura>=1
-    ? `Con ${R===1?'esa persona':'esas '+R+' personas'} cubrís entero tu piso de ${Pmin}. El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, pero no a cero: esa gente deja su propio puesto para venir, y no hace esta tarea todos los días.`
-    : `Cubrís ${R} de las ${Pmin} personas de tu piso desde afuera (${(cobertura*100).toFixed(0)}%). El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
+  // Con las tres tildadas y el campo todavia en 0 la pantalla quedaba muda,
+  // que es justo cuando el usuario no sabe que numero corresponde.
+  $('aviso-R').style.display = (avalado && R===0) || R>0 ? 'block' : 'none';
+  if(avalado && R===0) $('aviso-R').innerHTML = `Ahora cargá el número: <b>cuántas personas de fuera del área</b> podrían cubrir la operación. No es un porcentaje ni un puntaje, es gente. Tu piso es de ${Pmin}, así que con ${Pmin} de respaldo cubrís el 100%.`;
+  else if(R>0) $('aviso-R').innerHTML = cobertura>=1
+    ? `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = 100%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, y no a cero porque esa gente deja su propio puesto para venir y no hace esta tarea todos los días.`
+    : `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = ${(cobertura*100).toFixed(0)}%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
   $('out_P').textContent=Pfinal;
   // Pmin > P no es un error: significa que la empresa YA esta por debajo
   // del minimo para operar sin IA. Es un hallazgo, no un caso borde.

@@ -507,7 +507,7 @@ window.addEventListener('DOMContentLoaded',function(){
       <div class="campo">
         <label>People outside the area who <i>know how to do</i> this task <span class="hint">external backup — leave at 0 if there is nobody</span></label>
         <div class="arq-group" id="aval-R" style="margin-bottom:8px;">
-          <p class="hint" style="margin-bottom:6px;">Before entering the number, all three must be true:</p>
+          <p class="hint" style="margin-bottom:6px;">These boxes <b>add no value</b>: they are a condition. If even one is missing, the backup counts as 0 no matter what number you type. All three must be true:</p>
           <label class="check"><input type="checkbox" id="R1"> They have done it before, <b>with this process</b></label>
           <label class="check"><input type="checkbox" id="R2"> The manual procedure is <b>documented</b></label>
           <label class="check"><input type="checkbox" id="R3"> It has been <b>rehearsed</b> that they can leave their post and step in</label>
@@ -1276,10 +1276,13 @@ function calc(){
       ? `Your investment of ${nf(I)} <b>exceeds that ceiling</b>: that is why payback stretches beyond your horizon of ${Tmax}.`
       : `This is the most this saving returns within your horizon of ${Tmax}. Your investment of ${nf(I)} fits within it, so there is room.`);
   const bt=$('mc-base-txt'); if(bt) bt.innerHTML=textoBaseMC();
-  $('aviso-R').style.display = R>0 ? 'block' : 'none';
-  if(R>0) $('aviso-R').innerHTML = cobertura>=1
-    ? `Con ${R===1?'esa persona':'esas '+R+' personas'} cubrís entero tu piso de ${Pmin}. El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, pero no a cero: esa gente deja su propio puesto para venir, y no hace esta tarea todos los días.`
-    : `Cubrís ${R} de las ${Pmin} personas de tu piso desde afuera (${(cobertura*100).toFixed(0)}%). El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
+  // Con las tres tildadas y el campo todavia en 0 la pantalla quedaba muda,
+  // que es justo cuando el usuario no sabe que numero corresponde.
+  $('aviso-R').style.display = (avalado && R===0) || R>0 ? 'block' : 'none';
+  if(avalado && R===0) $('aviso-R').innerHTML = `Ahora cargá el número: <b>cuántas personas de fuera del área</b> podrían cubrir la operación. No es un porcentaje ni un puntaje, es gente. Tu piso es de ${Pmin}, así que con ${Pmin} de respaldo cubrís el 100%.`;
+  else if(R>0) $('aviso-R').innerHTML = cobertura>=1
+    ? `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = 100%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, y no a cero porque esa gente deja su propio puesto para venir y no hace esta tarea todos los días.`
+    : `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = ${(cobertura*100).toFixed(0)}%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
   $('out_P').textContent=Pfinal;
   // Pmin > P no es un error: significa que la empresa YA esta por debajo
   // del minimo para operar sin IA. Es un hallazgo, no un caso borde.
