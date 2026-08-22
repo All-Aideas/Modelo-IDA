@@ -8,7 +8,8 @@
 
 <!-- Idiomas: la edicion inglesa se genera desde este mismo archivo. Los dos
      documentos declaran el mismo juego de alternates, que es lo correcto. -->
-<link rel="alternate" hreflang="es" href="https://modelo-ida.web.app/">
+<link rel="canonical" href="https://modelo-ida.web.app/">
+  <link rel="alternate" hreflang="es" href="https://modelo-ida.web.app/">
 <link rel="alternate" hreflang="en" href="https://modelo-ida.web.app/en">
 <link rel="alternate" hreflang="x-default" href="https://modelo-ida.web.app/">
 
@@ -42,7 +43,17 @@
     "name": "César Riat",
     "url": "https://cesarriat.com"
   },
-  "codeRepository": "https://github.com/All-Aideas/Modelo-IDA"
+  "codeRepository": "https://github.com/All-Aideas/Modelo-IDA",
+  "softwareVersion": "2026.08",
+  "hasPart": {
+    "@type": "SoftwareSourceCode",
+    "name": "Modelo IDA — código y batería de pruebas",
+    "codeRepository": "https://github.com/All-Aideas/Modelo-IDA",
+    "programmingLanguage": "JavaScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "runtimePlatform": "Navegador web",
+    "author": { "@type": "Person", "name": "César Riat" }
+  }
 }
 </script>
 <meta name="author" content="César Riat">
@@ -693,7 +704,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
   <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas organizaciones resultó no tener gente suficiente que supiera ejecutarlo.</p>
-  <p><b>Y no hace falta que se caiga nada.</b> En junio de 2026 el gobierno de Estados Unidos <b>prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic</b>, y después levantó la restricción solo en parte, dejando el acceso limitado a una lista corta de empresas. Los servidores nunca dejaron de funcionar: simplemente, de un día para otro, había gente que ya no podía usar el modelo sobre el que había montado su operación.</p>
+  <p><b>Y no hace falta que se caiga nada.</b> El 12 de junio de 2026 una orden del gobierno de Estados Unidos obligó a Anthropic a <b>restringir dos de sus modelos más avanzados a cualquier ciudadano extranjero</b>, dentro o fuera del país. Como no había forma de verificar la nacionalidad de cada usuario en tiempo real, la empresa terminó <b>apagándolos para todos los clientes del mundo</b> hasta que los controles se levantaron el 30 de junio. Los servidores nunca dejaron de funcionar: simplemente, durante casi tres semanas, nadie pudo usar el modelo sobre el que había montado su operación.</p>
   <p class="nota">Ese caso es incómodo porque <b>no lo cubre ningún plan técnico</b>. Podés tener multi-cloud, failover automático y todos los backups del mundo: si la decisión es regulatoria o geopolítica, tu arquitectura no te salva. Lo único que te sostiene es la gente que todavía sabe hacer el trabajo sin esa herramienta — que es exactamente lo que este modelo te obliga a contar antes de que pase.</p>
   <p><b>El plan de contingencia se escribe sin número.</b> La norma exige "volver a operación manual", y el documento lo promete — con una dotación que ya no alcanza para operar manualmente. El papel cumple; la operación no.</p>
   <p><b>El directorio no tiene métrica de exposición.</b> Se discute cuánto ahorra la IA — nunca cuán rehén queda la organización del proveedor. Sin un número comparable entre áreas y entre organizaciones, la dependencia no entra en la agenda hasta que se corta.</p>
@@ -1381,7 +1392,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3>8 · λ mira la infraestructura, no el modelo que usás</h3>
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
   <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
-  <p>Y no es hipotético: en <b>junio de 2026</b> el gobierno de Estados Unidos prohibió a los usuarios de fuera del país usar dos de los modelos más avanzados de Anthropic, y después levantó la restricción solo en parte. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube.</p>
+  <p>Y no es hipotético: el <b>12 de junio de 2026</b> una orden del gobierno de Estados Unidos obligó a Anthropic a restringir dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no podía verificar la nacionalidad en tiempo real, los apagó para todo el mundo hasta el 30 de junio. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube.</p>
   <p class="nota">Podría agregarse como un agravante más de λ y probablemente sea el próximo, sin embargo no está por la misma razón del límite 6. Mientras tanto tratalo como un riesgo <b>real y no contemplado</b>: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>

@@ -1,0 +1,37 @@
+# Modelo IDA — https://modelo-ida.web.app
+# Todo el contenido es publico y esta en el HTML: no hace falta ejecutar
+# JavaScript para leerlo. Codigo y formulas bajo licencia MIT.
+
+User-agent: *
+Allow: /
+
+# Los crawlers de los buscadores generativos son bienvenidos: la idea es
+# justamente que el modelo se pueda citar.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://modelo-ida.web.app/sitemap.xml
