@@ -1,0 +1,41 @@
+{
+  "upload_type": "software",
+  "title": "Modelo IDA — Índice de Dependencia de IA",
+  "description": "<p>Modelo cuantitativo y calculadora abierta que estiman la dotación mínima que una organización debe conservar para seguir operando si su proveedor de inteligencia artificial deja de estar disponible.</p><p>A partir de seis datos operativos que cualquier responsable ya tiene —dotación, nómina, horas por persona, porcentaje de trabajo automatizable, porcentaje que exige firma humana y rendimiento de la IA— devuelve cuatro salidas en una misma cuenta: la dotación a conservar, definida como el máximo entre la dotación económicamente justificada y un piso de continuidad derivado de las horas que la operación no puede detener; el ahorro mensual ajustado por un multiplicador de riesgo que penaliza la fragilidad de la arquitectura; el techo de inversión justificable, obtenido invirtiendo el recupero contra el horizonte de aprobación de la organización; y el Índice de Dependencia de IA (IDA), una escala acotada de 0 a 100 que resume la exposición.</p><p>Incluye simulación de Montecarlo sobre 10.000 escenarios y una batería de 24 casos de borde que verifican el motor contra las fórmulas publicadas, de modo que cualquiera pueda reproducir o refutar los resultados. Corre íntegramente en el navegador, en JavaScript, sin servidor ni envío de datos. Los coeficientes de riesgo están declarados como criterio experto y no como coeficientes calibrados contra un conjunto de incidentes: esa limitación se publica junto al modelo.</p>",
+  "creators": [
+    {
+      "name": "Riat, César",
+      "affiliation": "All AIdeas SAS, Argentina"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "language": "spa",
+  "keywords": [
+    "continuidad operativa",
+    "resiliencia operacional",
+    "dependencia de proveedores de IA",
+    "adopción de inteligencia artificial",
+    "dotación mínima",
+    "gestión de riesgo",
+    "business continuity",
+    "operational resilience",
+    "AI dependency",
+    "vendor concentration",
+    "workforce planning",
+    "decision support system"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://modelo-ida.web.app",
+      "relation": "isDocumentedBy",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/All-Aideas/Modelo-IDA",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

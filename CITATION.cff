@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "Si usás el Modelo IDA en un trabajo, citalo así."
+title: "Modelo IDA — Índice de Dependencia de IA"
+abstract: >-
+  Modelo cuantitativo y calculadora abierta que estiman la dotación mínima que
+  una organización debe conservar para seguir operando si su proveedor de
+  inteligencia artificial deja de estar disponible. A partir de seis datos
+  operativos devuelve cuatro salidas: la dotación a conservar, el ahorro
+  mensual ajustado por la fragilidad de la arquitectura, el techo de inversión
+  justificable y el Índice de Dependencia de IA (IDA), una escala de 0 a 100
+  que resume la exposición de la operación. Incluye simulación de Montecarlo y
+  una batería de 24 casos de borde que verifican el motor contra las fórmulas
+  publicadas. Corre íntegramente en el navegador, sin servidor.
+type: software
+authors:
+  - family-names: Riat
+    given-names: César
+    affiliation: "All AIdeas SAS, Argentina"
+    email: criat@allaideas.com
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # completar cuando exista
+repository-code: "https://github.com/All-Aideas/Modelo-IDA"
+url: "https://modelo-ida.web.app"
+license: MIT
+version: "1.0.0"
+date-released: "2026-08-22"
+keywords:
+  - continuidad operativa
+  - resiliencia operacional
+  - dependencia de proveedores de IA
+  - adopción de inteligencia artificial
+  - dotación mínima
+  - gestión de riesgo
+  - business continuity
+  - AI dependency
+  - operational resilience
+  - vendor concentration
+  - workforce planning
+  - decision support system

@@ -764,8 +764,33 @@ Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consol
 
 Lo que verifica es que **el código haga lo que dicen las fórmulas**. Lo que no puede verificar —y conviene decirlo— es si las fórmulas describen bien la realidad: eso depende de los coeficientes, que son criterio experto declarado en la sección de límites.
 
+## Cómo citar
+
+Cada versión publicada queda depositada en Zenodo con su propio DOI, así que el modelo se puede citar por un identificador permanente y no por un enlace que mañana puede cambiar.
+
+```
+Riat, C. (2026). Modelo IDA — Índice de Dependencia de IA (v1.0.0).
+All AIdeas SAS. https://doi.org/10.5281/zenodo.XXXXXXX
+```
+
+```bibtex
+@software{riat_modelo_ida_2026,
+  author    = {Riat, César},
+  title     = {Modelo IDA — Índice de Dependencia de IA},
+  version   = {1.0.0},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.XXXXXXX},
+  url       = {https://modelo-ida.web.app}
+}
+```
+
+> Reemplazar `XXXXXXX` por el DOI que devuelve Zenodo al publicar el primer release. El archivo `CITATION.cff` de este repositorio tiene los mismos datos en formato legible por máquina: GitHub lo usa para mostrar el botón **Cite this repository**.
+
+**Qué se está citando.** El depósito incluye el modelo completo, las fórmulas publicadas, la batería de 24 casos de borde y el código que las corre. Todo se ejecuta en el navegador, en JavaScript, sin servidor: cualquiera puede reproducir los resultados abriendo el archivo, sin instalar nada ni pedir credenciales.
+
 ## Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.
 
 ## Autor
-**César Riat** — Consultor en IA · [cesarriat.com](https://cesarriat.com)
+**César Riat** — Consultor en IA · [cesarriat.com](https://cesarriat.com) · [All AIdeas](https://allaideas.com)
