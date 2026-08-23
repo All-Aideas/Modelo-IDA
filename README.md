@@ -1,6 +1,6 @@
 # Modelo IDA — ¿Cuánta gente necesita tu organización el día que la IA no esté?
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22070416.svg)](https://doi.org/10.5281/zenodo.22070416)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22070415.svg)](https://doi.org/10.5281/zenodo.22070415)
 
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible.
 
@@ -772,7 +772,7 @@ Cada versión publicada queda depositada en Zenodo con su propio DOI, así que e
 
 ```
 Riat, C. (2026). Modelo IDA — Índice de Dependencia de IA (v1.0.0).
-All AIdeas SAS. https://doi.org/10.5281/zenodo.22070416
+All AIdeas SAS. https://doi.org/10.5281/zenodo.22070415
 ```
 
 ```bibtex
@@ -782,11 +782,13 @@ All AIdeas SAS. https://doi.org/10.5281/zenodo.22070416
   version   = {1.0.0},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.22070416},
+  doi       = {10.5281/zenodo.22070415},
   url       = {https://modelo-ida.web.app}
 }
 ```
 
+> **Hay dos DOI y conviene saber cuál usar.** El de arriba, `10.5281/zenodo.22070415`, es el **DOI de concepto**: siempre resuelve a la última versión publicada, y es el que hay que citar cuando se cita *el modelo*. Cada versión tiene además el suyo propio —esta es `10.5281/zenodo.22070416`— y ese se usa cuando hace falta reproducir exactamente esta versión y ninguna otra.
+>
 > El archivo `CITATION.cff` de este repositorio tiene los mismos datos en formato legible por máquina: GitHub lo usa para mostrar el botón **Cite this repository**.
 
 **Qué se está citando.** El depósito incluye el modelo completo, las fórmulas publicadas, la batería de 24 casos de borde y el código que las corre. Todo se ejecuta en el navegador, en JavaScript, sin servidor: cualquiera puede reproducir los resultados abriendo el archivo, sin instalar nada ni pedir credenciales.
