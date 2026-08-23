@@ -17,7 +17,7 @@ authors:
     given-names: César
     affiliation: "All AIdeas SAS, Argentina"
     email: criat@allaideas.com
-    # orcid: "https://orcid.org/0000-0000-0000-0000"   # completar cuando exista
+    orcid: "https://orcid.org/0009-0000-6851-5295"
 repository-code: "https://github.com/All-Aideas/Modelo-IDA"
 url: "https://modelo-ida.web.app"
 license: MIT
