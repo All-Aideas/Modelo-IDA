@@ -15,9 +15,10 @@ type: software
 authors:
   - family-names: Riat
     given-names: César
-    affiliation: "All AIdeas SAS, Argentina"
+    affiliation: "All AIdeas SAS, Ciudad Autónoma de Buenos Aires, Argentina"
     email: criat@allaideas.com
     orcid: "https://orcid.org/0009-0000-6851-5295"
+doi: "10.5281/zenodo.22070416"
 repository-code: "https://github.com/All-Aideas/Modelo-IDA"
 url: "https://modelo-ida.web.app"
 license: MIT

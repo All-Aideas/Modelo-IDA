@@ -1,5 +1,7 @@
 # Modelo IDA — ¿Cuánta gente necesita tu organización el día que la IA no esté?
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22070416.svg)](https://doi.org/10.5281/zenodo.22070416)
+
 > Una fórmula para calcular tu **dotación mínima de continuidad** y un **Índice de Dependencia de IA (IDA)** para medir cuán expuesta está tu organización si la IA deja de estar disponible.
 
 **No hace falta que sea una empresa.** El modelo pregunta por un área, unas horas de trabajo y una operación que no puede parar — eso existe en cualquier organización. Sirve para un call center, un banco, un retail o una transportadora de gas, y sirve igual para las que no venden nada:
@@ -770,7 +772,7 @@ Cada versión publicada queda depositada en Zenodo con su propio DOI, así que e
 
 ```
 Riat, C. (2026). Modelo IDA — Índice de Dependencia de IA (v1.0.0).
-All AIdeas SAS. https://doi.org/10.5281/zenodo.XXXXXXX
+All AIdeas SAS. https://doi.org/10.5281/zenodo.22070416
 ```
 
 ```bibtex
@@ -780,12 +782,12 @@ All AIdeas SAS. https://doi.org/10.5281/zenodo.XXXXXXX
   version   = {1.0.0},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.XXXXXXX},
+  doi       = {10.5281/zenodo.22070416},
   url       = {https://modelo-ida.web.app}
 }
 ```
 
-> Reemplazar `XXXXXXX` por el DOI que devuelve Zenodo al publicar el primer release. El archivo `CITATION.cff` de este repositorio tiene los mismos datos en formato legible por máquina: GitHub lo usa para mostrar el botón **Cite this repository**.
+> El archivo `CITATION.cff` de este repositorio tiene los mismos datos en formato legible por máquina: GitHub lo usa para mostrar el botón **Cite this repository**.
 
 **Qué se está citando.** El depósito incluye el modelo completo, las fórmulas publicadas, la batería de 24 casos de borde y el código que las corre. Todo se ejecuta en el navegador, en JavaScript, sin servidor: cualquiera puede reproducir los resultados abriendo el archivo, sin instalar nada ni pedir credenciales.
 
