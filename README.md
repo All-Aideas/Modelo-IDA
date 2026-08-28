@@ -773,6 +773,8 @@ El modelo está descrito en un preprint abierto, con las fórmulas, el caso de r
 > **The AI Dependency Index (IDA): Quantifying Minimum Workforce Continuity in AI-Dependent Organizations**
 > César Riat (2026) · SSRN · [ssrn.com/abstract=7341479](https://ssrn.com/abstract=7341479) · DOI [10.2139/ssrn.7341479](https://doi.org/10.2139/ssrn.7341479) · licencia CC BY 4.0
 
+Los PDF de las dos ediciones están en [`paper/`](paper/), depositados junto al código para que el archivo de Zenodo los cubra.
+
 ## Cómo citar
 
 **Hay dos cosas distintas que se pueden citar, y no son intercambiables.** Si citás el trabajo y su argumento, va el paper. Si citás la herramienta, las fórmulas o la batería de pruebas —por ejemplo porque reprodujiste un resultado—, va el depósito de Zenodo.
