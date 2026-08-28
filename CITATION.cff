@@ -22,8 +22,8 @@ doi: "10.5281/zenodo.22070415"   # DOI de concepto: siempre apunta a la ultima v
 repository-code: "https://github.com/All-Aideas/Modelo-IDA"
 url: "https://modelo-ida.web.app"
 license: MIT
-version: "1.0.1"
-date-released: "2026-08-23"
+version: "1.0.2"
+date-released: "2026-08-28"
 keywords:
   - continuidad operativa
   - resiliencia operacional
