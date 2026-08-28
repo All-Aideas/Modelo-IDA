@@ -766,7 +766,33 @@ Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consol
 
 Lo que verifica es que **el código haga lo que dicen las fórmulas**. Lo que no puede verificar —y conviene decirlo— es si las fórmulas describen bien la realidad: eso depende de los coeficientes, que son criterio experto declarado en la sección de límites.
 
+## El paper
+
+El modelo está descrito en un preprint abierto, con las fórmulas, el caso de referencia y las limitaciones declaradas:
+
+> **The AI Dependency Index (IDA): Quantifying Minimum Workforce Continuity in AI-Dependent Organizations**
+> César Riat (2026) · SSRN · [ssrn.com/abstract=7341479](https://ssrn.com/abstract=7341479) · DOI [10.2139/ssrn.7341479](https://doi.org/10.2139/ssrn.7341479) · licencia CC BY 4.0
+
 ## Cómo citar
+
+**Hay dos cosas distintas que se pueden citar, y no son intercambiables.** Si citás el trabajo y su argumento, va el paper. Si citás la herramienta, las fórmulas o la batería de pruebas —por ejemplo porque reprodujiste un resultado—, va el depósito de Zenodo.
+
+```
+Riat, C. (2026). The AI Dependency Index (IDA): Quantifying Minimum Workforce
+Continuity in AI-Dependent Organizations. SSRN. https://doi.org/10.2139/ssrn.7341479
+```
+
+```bibtex
+@article{riat_ida_paper_2026,
+  author = {Riat, César},
+  title  = {The AI Dependency Index (IDA): Quantifying Minimum Workforce Continuity in AI-Dependent Organizations},
+  year   = {2026},
+  doi    = {10.2139/ssrn.7341479},
+  note   = {SSRN preprint}
+}
+```
+
+### Citar el modelo y el código
 
 Cada versión publicada queda depositada en Zenodo con su propio DOI, así que el modelo se puede citar por un identificador permanente y no por un enlace que mañana puede cambiar.
 
