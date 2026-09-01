@@ -157,7 +157,7 @@ Pensalo en modo degradado y calculá a ojo, no hace falta un estudio: *"¿cuánt
 
 Piso de continuidad = 640 horas ÷ 160 horas por persona = **4 personas**
 
-Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a bajar de 4 en este equipo. Son las horas de la operación crítica en modo degradado —si esa IA corriera en tus propios servidores te recuperarías más rápido y este piso bajaría; si dependés de una sola nube externa, recuperarte tarda más y el piso sube.
+Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a bajar de 4 en este equipo. Son las horas de la operación crítica en modo degradado, y **no dependen de la arquitectura**: la fórmula es `⌈H_min ÷ h_p⌉` y ahí no entra ni el proveedor ni λ. Correr la IA en tus propios servidores baja λ y acorta la caída, pero **no baja el piso** — mientras dure, seguís necesitando esas 4 personas. La arquitectura cambia el riesgo y el costo; el piso, nunca. Ese es justamente el punto del modelo.
 
 > **Ojo: esto NO es lo mismo que la firma del médico o del escribano.** Son dos preguntas distintas y es donde más se confunde la gente.
 >
