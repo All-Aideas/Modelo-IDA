@@ -44,11 +44,11 @@ El máximo es interior mientras el sueldo marginal liberado supere al costo
 marginal de IA:
 
 ```
-λ < N / (Ct · P · h_p) = 4,999
+λ < C_h / c = 10 / 2 = 5
 ```
 
 El λ máximo que el modelo admite es **1,65** (tope por diseño). El óptimo
-sigue existiendo hasta **3,03×** ese peor caso. Para que el hallazgo central
+sigue existiendo hasta **3,0×** ese peor caso. Para que el hallazgo central
 desapareciera, los ρ tendrían que estar subestimados en un factor de tres,
 no en un 50%.
 
@@ -76,6 +76,47 @@ Acá el resultado **no es limpio y conviene decirlo así.**
 > A igual par de flags, ¿se mantiene `local ≤ multi-cloud ≤ nube única`?
 > **100,0% de 20.000 sorteos.**
 
+### P4 · A qué perturbación la inversión se vuelve posible
+
+**Corregido el 01/09 tras una revisión externa.** Reportar «100% de los sorteos»
+a ±50% **sobreestimaba el resultado**: a esa magnitud los intervalos de dos
+premios no se solapan, así que la inversión es imposible por construcción, no
+improbable. Lo informativo es el umbral.
+
+Dos primas ρᵢ > ρⱼ pueden invertirse solo cuando `f > (ρᵢ − ρⱼ)/(ρᵢ + ρⱼ)`:
+
+| Par | ρ | Umbral |
+|---|---|---|
+| nube única / multi-cloud | 0,30 vs 0,10 | **f > 50,0%** |
+| multi-cloud / local | 0,10 vs 0,02 | f > 66,7% |
+| nube única / local | 0,30 vs 0,02 | f > 87,5% |
+
+**±50% es exactamente el borde, no un margen holgado.** Pero el barrido matiza
+en la otra dirección: la inversión se vuelve *posible* en f = 0,50 y recién es
+*material* mucho después, porque exige la esquina extrema de dos sorteos a la vez.
+
+| f | orden intacto |
+|---|---|
+| ±40% | 100,0% |
+| ±50% | 100,0% |
+| ±51% | 100,0% |
+| ±60% | 97,7% |
+| ±75% | 91,7% |
+| ±100% | 73,9% |
+
+**El enunciado correcto:** la elección de arquitectura es robusta a cualquier
+error de estimación menor a **un factor de tres** entre nube única y
+multi-cloud, que es su cociente nominal.
+
+### Una afirmación de la Tabla 2 que conviene decir en voz alta
+
+`ρ(nube única) − ρ(multi-cloud) = 0,20 = ρ(sin plan de contingencia)`
+
+**El modelo sostiene que un plan de contingencia ensayado vale exactamente lo
+mismo que un segundo proveedor.** Eso es una elección de coeficiente, no un
+hallazgo, y es de las primeras cosas que el panel de calibración debería
+someter a prueba.
+
 ### Por qué el ranking completo se desarma
 
 No es inestabilidad: **son empates.** En el orden nominal hay dos pares con λ
@@ -95,8 +136,9 @@ configuraciones colapsan al mismo valor y quedan indistinguibles.
 
 - La ubicación del óptimo de automatización **no depende de los coeficientes**.
 - La existencia del óptimo aguanta que los ρ estén subestimados hasta 3×.
-- La elección de arquitectura —el uso principal del modelo— **es invariante a
-  ±50% en cada ρ**.
+- La elección de arquitectura —el uso principal del modelo— **resiste ±50% en
+  cada ρ**, y ese margen equivale a un error de estimación de hasta un factor
+  de tres entre nube única y multi-cloud (ver P4).
 
 **No se puede afirmar:**
 
@@ -116,6 +158,8 @@ está medido qué conclusiones dependen de ellos —el ranking fino— y cuáles
 ```bash
 python analisis/robustez_ordinal.py
 ```
+
+Las cuatro pruebas (P1 a P4) corren juntas. P4 se agrega llamando a `p4()`.
 
 Determinista: semilla fija 7. Cualquier cambio en `calc()` de `index.html`
 debe replicarse en `modelo()` del script, o los dos motores divergen.

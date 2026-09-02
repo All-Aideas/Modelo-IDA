@@ -65,12 +65,17 @@
 <meta property="og:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
 <meta property="og:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA). Calculadora interactiva, gratis y sin registro.">
 <meta property="og:url" content="https://modelo-ida.web.app/">
-<meta property="og:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
-<meta property="og:image:alt" content="Gráfico del piso de continuidad: la dotación cae con la automatización hasta chocar con un mínimo.">
+<!-- La imagen social apunta al Montecarlo y no al piso de continuidad porque
+     g1_piso_continuidad.png quedo de la formula VIEJA. El grafico vigente del
+     piso es g1_piso_continuidad.svg, y og:image no admite SVG en la mayoria de
+     las plataformas. g3_montecarlo.png se regenera desde el mismo motor con la
+     misma semilla que runMC, asi que no puede divergir del sitio. -->
+<meta property="og:image" content="https://modelo-ida.web.app/assets/g3_montecarlo.png">
+<meta property="og:image:alt" content="Histograma de 10.000 simulaciones: solo el 25% de los escenarios recupera la inversión en menos de 18 meses.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="¿Cuánta gente necesitás para operar el día que la IA no esté?">
 <meta name="twitter:description" content="Calculá tu dotación mínima de continuidad y tu Índice de Dependencia de IA (IDA).">
-<meta name="twitter:image" content="https://modelo-ida.web.app/assets/g1_piso_continuidad.png">
+<meta name="twitter:image" content="https://modelo-ida.web.app/assets/g3_montecarlo.png">
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -705,10 +710,10 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3>Qué pasa hoy porque esta cuenta no se hace</h3>
   <p><b>Se despide con el Excel del ROI.</b> La dotación queda por debajo del piso de continuidad y nadie lo sabe, porque el piso nunca se calculó. Se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas organizaciones resultó no tener gente suficiente que supiera ejecutarlo.</p>
   <p><b>Y no hace falta que se caiga nada.</b> El 12 de junio de 2026 una orden del gobierno de Estados Unidos obligó a Anthropic a <b>prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero</b>, dentro o fuera del país. Como no había forma de verificar la nacionalidad de cada usuario en tiempo real, la empresa terminó <b>apagándolos para todos los clientes del mundo</b> hasta que los controles se levantaron el 30 de junio. Los servidores nunca dejaron de funcionar: simplemente, durante casi tres semanas, nadie pudo usar el modelo sobre el que había montado su operación. <span style="font-size:.82rem; opacity:.8;">Fuentes: <a href="https://www.anthropic.com/news/fable-mythos-access" target="_blank" rel="noopener">Anthropic, 12/06/2026</a> · <a href="https://www.aljazeera.com/news/2026/6/13/us-orders-anthropic-to-disable-ai-models-for-all-foreign-nationals" target="_blank" rel="noopener">Al Jazeera, 13/06/2026</a> · <a href="https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html" target="_blank" rel="noopener">CNBC, 30/06/2026</a>.</span></p>
-  <p class="nota">Ese caso es incómodo porque <b>no lo cubre ningún plan técnico</b>. Podés tener multi-cloud, failover automático y todos los backups del mundo: si la decisión es regulatoria o geopolítica, tu arquitectura no te salva. Lo único que te sostiene es la gente que todavía sabe hacer el trabajo sin esa herramienta — que es exactamente lo que este modelo te obliga a contar antes de que pase.</p>
+  <p class="nota">Ese caso es incómodo porque <b>la redundancia de infraestructura no lo cubre</b>. Podés tener multi-cloud, failover automático y todos los backups del mundo: si la decisión es regulatoria o geopolítica, conmutar de nube no te salva, porque el problema no era la nube. Los otros modelos del proveedor siguieron disponibles, pero <b>eso no es una contingencia</b>: si el modelo está fijo en el código, cambiarlo exige que alguien se entere —monitoreo—, que alguien toque el código —un developer— y que ese cambio ya esté ensayado. <b>Nada de eso pasa solo.</b> Sin esas tres cosas la caída ocurre igual y dura lo que tarde una persona en arreglarla. Y ahí volvés al mismo lugar: lo que te sostiene mientras tanto son horas de gente — que es exactamente lo que este modelo te obliga a contar antes de que pase.</p>
   <p><b>El plan de contingencia se escribe sin número.</b> La norma exige "volver a operación manual", y el documento lo promete — con una dotación que ya no alcanza para operar manualmente. El papel cumple; la operación no.</p>
   <p><b>El directorio no tiene métrica de exposición.</b> Se discute cuánto ahorra la IA — nunca cuán rehén queda la organización del proveedor. Sin un número comparable entre áreas y entre organizaciones, la dependencia no entra en la agenda hasta que se corta.</p>
-  <p><b>La inversión se aprueba con el escenario promedio.</b> "Recuperás en 20 meses" suena a plan. Corrido 10.000 veces con rangos realistas, solo el 26% de los futuros recupera en menos de 18 — eso es una apuesta, y conviene saberlo antes de firmar.</p>
+  <p><b>La inversión se aprueba con el escenario promedio.</b> "Recuperás en 20 meses" suena a plan. Corrido 10.000 veces con rangos realistas, solo el 25% de los futuros recupera en menos de 18 — eso es una apuesta, y conviene saberlo antes de firmar.</p>
 
   <h3>Qué hace distinto este modelo</h3>
   <div class="tabla-scroll">
@@ -1285,8 +1290,8 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3 class="mod h-hum" style="font-size:1.15rem;">5 · Y una advertencia sobre los números lindos</h3>
   <p>Todo lo de arriba usa números fijos. La realidad no los tiene: el precio del token cambió 10 veces en dos años y tu eficiencia real no la vas a conocer hasta el tercer mes.</p>
-  <p>Corriendo este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos, el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 26% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan.</p>
-  <p>Ese 26% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
+  <p>Corriendo este mismo proyecto <b>10.000 veces</b> con rangos en lugar de valores exactos, el resultado deja de ser una promesa y pasa a ser una probabilidad: <b>solo el 25% de los escenarios recupera la inversión en menos de 18 meses</b>, con una mediana de 22 meses entre los que sí recuperan.</p>
+  <p>Ese 25% es incómodo, y por eso vale la pena mirarlo: dice que con esos rangos el proyecto es <b>más una apuesta que un plan</b>. Y otra vez, la palanca para moverlo no es automatizar más — es bajar λ o bajar la inversión inicial.</p>
 
 </section>
 
@@ -1392,7 +1397,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <h3>8 · λ mira la infraestructura, no el modelo que usás</h3>
   <p>Los agravantes de <b class="v-rie">λ</b> preguntan <b>dónde corre</b> la IA: una nube, varias, tus servidores. Eso cubre el riesgo de que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que <b>el modelo en sí cambie debajo tuyo</b>.</p>
   <p>Un proveedor de frontera puede degradar la calidad de una versión a otra sin avisar, cambiar sus políticas de uso o de privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria que no tiene nada que ver con vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y sin embargo te rompe la operación igual. <b>El modelo no lo mide.</b></p>
-  <p>Y no es hipotético: el <b>12 de junio de 2026</b> una orden del gobierno de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no podía verificar la nacionalidad en tiempo real, los apagó para todo el mundo hasta el 30 de junio. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia técnico lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube. <span style="font-size:.82rem; opacity:.8;">Fuentes: <a href="https://www.anthropic.com/news/fable-mythos-access" target="_blank" rel="noopener">Anthropic, 12/06/2026</a> · <a href="https://www.aljazeera.com/news/2026/6/13/us-orders-anthropic-to-disable-ai-models-for-all-foreign-nationals" target="_blank" rel="noopener">Al Jazeera, 13/06/2026</a> · <a href="https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html" target="_blank" rel="noopener">CNBC, 30/06/2026</a>.</span></p>
+  <p>Y no es hipotético: el <b>12 de junio de 2026</b> una orden del gobierno de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no podía verificar la nacionalidad en tiempo real, los apagó para todo el mundo hasta el 30 de junio. Para quien tenía su operación montada sobre uno de esos modelos, el resultado fue el mismo que una caída total — con el agravante de que <b>ningún plan de contingencia de infraestructura lo cubría</b>: no había a qué nube conmutar, porque el problema no era la nube. Los demás modelos de Anthropic no se vieron afectados, así que <b>tener ensayada la conmutación a otro modelo</b> habría servido. Pero conviene no leer eso como una salida barata: conmutar de modelo no es automático. Hace falta <b>monitoreo</b> que avise, un <b>developer</b> que toque el código si el modelo está fijo ahí, y que el cambio esté <b>ensayado</b> antes. Si falta cualquiera de las tres, la caída sucede igual y dura lo que tarde la gente en resolverla — o sea que también se mide en horas de personas. Esa capacidad de conmutación es la dimensión que λ todavía no mide. <span style="font-size:.82rem; opacity:.8;">Fuentes: <a href="https://www.anthropic.com/news/fable-mythos-access" target="_blank" rel="noopener">Anthropic, 12/06/2026</a> · <a href="https://www.aljazeera.com/news/2026/6/13/us-orders-anthropic-to-disable-ai-models-for-all-foreign-nationals" target="_blank" rel="noopener">Al Jazeera, 13/06/2026</a> · <a href="https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html" target="_blank" rel="noopener">CNBC, 30/06/2026</a>.</span></p>
   <p class="nota">Podría agregarse como un agravante más de λ y probablemente sea el próximo, sin embargo no está por la misma razón del límite 6. Mientras tanto tratalo como un riesgo <b>real y no contemplado</b>: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que te muestra el IDA.</p>
 
   <div class="ejemplo e-rie"><span class="tit">Cómo leer estos límites</span>
@@ -2532,8 +2537,24 @@ function renderMC(){
     $(d.id+'_hi').addEventListener('input',()=>$(d.id+'_hi_v').textContent=d.fmt(+$(d.id+'_hi').value));
   });
 }
-function rnd(lo,hi){return lo+Math.random()*(hi-lo);}
+// Generador con SEMILLA. Antes era Math.random(): la simulacion daba un numero
+// distinto en cada corrida y el resultado publicado no era reproducible. Con
+// semilla fija, cualquiera que abra el sitio con los mismos rangos obtiene
+// EXACTAMENTE el mismo porcentaje, que es lo que exige citarlo en un paper.
+// mulberry32: 32 bits, periodo 2^32, suficiente para 10.000 sorteos de 4 variables.
+const MC_SEMILLA=7;
+let _mcEstado=MC_SEMILLA;
+function mcReiniciar(){_mcEstado=MC_SEMILLA;}
+function mcAzar(){
+  _mcEstado=(_mcEstado+0x6D2B79F5)|0;
+  let t=_mcEstado;
+  t=Math.imul(t^(t>>>15),t|1);
+  t^=t+Math.imul(t^(t>>>7),t|61);
+  return ((t^(t>>>14))>>>0)/4294967296;
+}
+function rnd(lo,hi){return lo+mcAzar()*(hi-lo);}
 function runMC(){
+  mcReiniciar();   // misma semilla en cada corrida => mismo resultado
   const A=[+$('mcA_lo').value/100,+$('mcA_hi').value/100];
   const E=[+$('mcEta_lo').value/100,+$('mcEta_hi').value/100];
   const C=[+$('mcCt_lo').value,+$('mcCt_hi').value];

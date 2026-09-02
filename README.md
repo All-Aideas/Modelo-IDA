@@ -492,9 +492,9 @@ Montecarlo es, en el fondo, una idea simple: en vez de correr la cuenta una sola
 
 ![Montecarlo](assets/g3_montecarlo.png)
 
-El resultado deja de ser *"recuperás en 20 meses"* y pasa a ser *"26% de probabilidad de recuperar en menos de 18 meses; mediana 22 entre los que sí recuperan"*. Los porcentajes se calculan sobre las 10.000 corridas completas — incluyendo el ~7% de escenarios donde el ahorro es negativo o el recupero pasa de 60 meses, que serían fáciles de barrer bajo la alfombra. Montecarlo no reemplaza la fórmula: la alimenta.
+El resultado deja de ser *"recuperás en 20 meses"* y pasa a ser *"25% de probabilidad de recuperar en menos de 18 meses; mediana 22 entre los que sí recuperan"*. Los porcentajes se calculan sobre las 10.000 corridas completas — incluyendo el ~7% de escenarios donde el ahorro es negativo o el recupero pasa de 60 meses, que serían fáciles de barrer bajo la alfombra. Montecarlo no reemplaza la fórmula: la alimenta.
 
-Ese 26% es incómodo y por eso vale la pena: dice que con estos rangos el proyecto es más una apuesta que un plan. La palanca para moverlo casi nunca es automatizar más — es bajar λ o bajar la inversión inicial.
+Ese 25% es incómodo y por eso vale la pena: dice que con estos rangos el proyecto es más una apuesta que un plan. La palanca para moverlo casi nunca es automatizar más — es bajar λ o bajar la inversión inicial.
 
 ---
 
@@ -676,9 +676,29 @@ Cada pieza existe por separado. Lo que no existía es la **unión**: personas + 
 
 **Qué pasa hoy porque esta cuenta no se hace.** Se despide con el Excel del ROI y el piso de continuidad se descubre el día de la primera caída — como en el apagón global de CrowdStrike, cuando el "plan manual" de muchas organizaciones resultó no tener gente suficiente que supiera ejecutarlo.
 
-Y **no hace falta que se caiga nada**: el 12 de junio de 2026 una orden del gobierno de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no había forma de verificar la nacionalidad en tiempo real, terminó apagándolos para todos los clientes del mundo hasta el 30 de junio. Los servidores nunca dejaron de funcionar — simplemente, durante casi tres semanas, nadie pudo usar el modelo sobre el que había montado su operación. Ese caso es incómodo porque **no lo cubre ningún plan técnico**: podés tener multi-cloud, failover automático y todos los backups del mundo, que si la decisión es regulatoria o geopolítica tu arquitectura no te salva. Lo único que te sostiene es la gente que todavía sabe hacer el trabajo sin esa herramienta. El plan de contingencia que exige la norma se escribe sin número: promete "volver a operación manual" con una dotación que ya no alcanza para operar manualmente. El directorio discute cuánto ahorra la IA, nunca cuán rehén queda del proveedor. Y la inversión se aprueba con el escenario promedio: "recuperás en 20 meses" suena a plan, hasta que lo corrés 10.000 veces y solo el 26% de los futuros recupera en menos de 18.
+Y **no hace falta que se caiga nada**: el 12 de junio de 2026 una orden del gobierno de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no había forma de verificar la nacionalidad en tiempo real, terminó apagándolos para todos los clientes del mundo hasta el 30 de junio. Los servidores nunca dejaron de funcionar — simplemente, durante casi tres semanas, nadie pudo usar el modelo sobre el que había montado su operación. Ese caso es incómodo porque **la redundancia de infraestructura no lo cubre**: podés tener multi-cloud, failover automático y todos los backups del mundo, que si la decisión es regulatoria o geopolítica conmutar de nube no te salva, porque el problema no era la nube. Los otros modelos del proveedor siguieron disponibles, pero **eso no es una contingencia**: si el modelo está fijo en el código, cambiarlo exige que alguien se entere —monitoreo—, que alguien toque el código —un developer— y que ese cambio ya esté ensayado. **Nada de eso pasa solo.** Sin esas tres cosas la caída ocurre igual y dura lo que tarde una persona en arreglarla. Y ahí volvés al mismo lugar: lo que te sostiene mientras tanto son horas de gente, que es lo que este modelo te obliga a contar. El plan de contingencia que exige la norma se escribe sin número: promete "volver a operación manual" con una dotación que ya no alcanza para operar manualmente. El directorio discute cuánto ahorra la IA, nunca cuán rehén queda del proveedor. Y la inversión se aprueba con el escenario promedio: "recuperás en 20 meses" suena a plan, hasta que lo corrés 10.000 veces y solo el 25% de los futuros recupera en menos de 18.
 
 **Qué hace distinto este modelo.** Tres cosas: cuantifica la dotación mínima de continuidad (P') que ningún software de RRHH ni de ROI calcula; traduce la fragilidad de arquitectura a plata (λ), convirtiendo "una sola nube sin plan B" en un costo económico directo; y es preventivo y probabilístico — avisa antes de la caída, con porcentajes calculados sobre las 10.000 corridas completas, incluyendo los escenarios donde el proyecto no cierra.
+
+### El regulador ya lo está midiendo
+
+Esto dejó de ser una preocupación teórica, y conviene decirlo con la fuente en la mano.
+
+En la **encuesta de 2024 del Banco de Inglaterra y la FCA** sobre servicios financieros británicos, un tercio de los casos de uso de IA ya eran implementaciones de terceros, contra el 17% de dos años antes. Y los tres principales proveedores concentraban el **73%, 44% y 33%** de todos los proveedores informados de nube, modelo y datos.
+
+**El dato que más importa es la tendencia, no el nivel:** la concentración de nube *bajó* respecto de 2022, mientras que la de modelo subió **del 18% al 44%**. La concentración se está mudando de la capa de infraestructura a la capa de modelo — que es exactamente la capa que λ todavía no cobra.
+
+En **abril de 2025**, catorce meses antes del episodio de junio, el Comité de Política Financiera ya había planteado el escenario textual: *"una caída generalizada de uno o varios modelos clave podría dejar a muchas firmas sin poder entregar servicios vitales como los pagos con plazos críticos"*. Y en enero de 2026 el comité del Tesoro británico recomendó designar a los grandes proveedores de IA como terceros críticos antes de fin de 2026.
+
+**Ninguno de esos instrumentos dice cuánta gente hay que conservar** para operar a través de ese escenario. Ese es el hueco.
+
+| Fuente | Qué aporta |
+|---|---|
+| [BoE/FCA, *AI in UK financial services 2024*](https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024) | los 73/44/33 y el salto de 18% a 44% en modelo |
+| [BoE FPC, *Financial Stability in Focus*, 9/4/2025](https://www.bankofengland.co.uk/financial-stability-in-focus/2025/april-2025) | el escenario de caída de modelos clave |
+| House of Commons Treasury Committee, *AI in Financial Services*, HC 684, 20/1/2026 | designar proveedores de IA como terceros críticos |
+
+---
 
 **Lo que este modelo todavía no tiene.** Los coeficientes de λ salen de criterio experto e incidentes públicos, no de un dataset calibrado por sector: son un punto de partida razonable, no una verdad revelada. Y todavía no publica casos reales con métricas de antes y después. Las dos cosas están en la hoja de ruta; mientras tanto, todas las fórmulas están a la vista y podés desafiarlas con tus propios números.
 
@@ -729,7 +749,7 @@ En una organización real eso **no es automático**. Con el mismo 38,4% de horas
 >
 > Y conviene leerlo junto a **7.1**, el óptimo de automatización: ese óptimo existe justamente porque el ahorro se mide en personas liberadas. Si en tu caso las horas no se convierten en puestos, el punto donde la curva deja de mejorar sigue siendo el mismo — lo que cambia es que lo que ganás ahí es capacidad, no plata.
 
-**8 · λ mira la infraestructura, no el modelo que usás.** Los agravantes preguntan **dónde corre** la IA: una nube, varias, tus servidores. Eso cubre que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que **el modelo en sí cambie debajo tuyo**. Un proveedor de frontera puede degradar la calidad entre versiones sin avisar, cambiar políticas de uso o privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria ajena a vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y te rompe la operación igual. **El modelo no lo mide.** Y no es hipotético: el 12 de junio de 2026 una orden de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no podía verificar la nacionalidad en tiempo real, los apagó para todo el mundo hasta el 30 de junio. Para quien tenía la operación montada sobre uno de ellos el efecto fue el de una caída total, con el agravante de que ningún plan técnico lo cubría: no había a qué nube conmutar, porque el problema no era la nube. Podría agregarse como un agravante más de λ y probablemente sea el próximo; no está todavía por la misma razón del límite 6. Mientras tanto tratalo como un riesgo **real y no contemplado**: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que muestra el IDA.
+**8 · λ mira la infraestructura, no el modelo que usás.** Los agravantes preguntan **dónde corre** la IA: una nube, varias, tus servidores. Eso cubre que se caiga la infraestructura. Pero en 2026 el riesgo ya no es solo ese: es que **el modelo en sí cambie debajo tuyo**. Un proveedor de frontera puede degradar la calidad entre versiones sin avisar, cambiar políticas de uso o privacidad, subir el precio de golpe, discontinuar el modelo sobre el que armaste todo, o quedar bloqueado por una decisión regulatoria ajena a vos. Nada de eso es una caída de infraestructura —el servicio sigue en línea— y te rompe la operación igual. **El modelo no lo mide.** Y no es hipotético: el 12 de junio de 2026 una orden de Estados Unidos obligó a Anthropic a prohibir el acceso a dos de sus modelos más avanzados a cualquier ciudadano extranjero, dentro o fuera del país; como no podía verificar la nacionalidad en tiempo real, los apagó para todo el mundo hasta el 30 de junio. Para quien tenía la operación montada sobre uno de ellos el efecto fue el de una caída total, con el agravante de que ningún plan de contingencia de **infraestructura** lo cubría: no había a qué nube conmutar, porque el problema no era la nube. Los demás modelos de Anthropic no se vieron afectados, así que **tener ensayada la conmutación a otro modelo** habría servido. Pero no es una salida barata: conmutar de modelo no es automático. Hace falta **monitoreo** que avise, un **developer** que toque el código si el modelo está fijo ahí, y que el cambio esté **ensayado** antes. Si falta cualquiera de las tres, la caída sucede igual y se mide otra vez en horas de gente. Esa capacidad de conmutación es la dimensión que λ no mide. Podría agregarse como un agravante más y probablemente sea el próximo; no está todavía por la misma razón del límite 6, y porque **no hay con qué calibrar su valor**: los datos del Banco de Inglaterra acotan su orden de magnitud, no su tamaño. Mientras tanto tratalo como un riesgo **real y no contemplado**: si dependés de un solo modelo de un solo proveedor de frontera, tu exposición es mayor que la que muestra el IDA.
 
 > **Cómo leer estos límites:** ninguno de los ocho invalida el modelo, y los primeros cuatro empujan en la misma dirección — **hacia arriba**. Un piso que no se entrena, un know-how que se fue y una degradación no contemplada hacen que necesites **más** gente, no menos. Si el modelo te da un número, tratalo como el **mínimo del mínimo**.
 
@@ -766,6 +786,23 @@ Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consol
 
 Lo que verifica es que **el código haga lo que dicen las fórmulas**. Lo que no puede verificar —y conviene decirlo— es si las fórmulas describen bien la realidad: eso depende de los coeficientes, que son criterio experto declarado en la sección de límites.
 
+### Robustez de los coeficientes
+
+Los coeficientes ρ no están calibrados, y eso es la objeción principal al modelo. No se puede responder acá con datos, pero sí **acotar**: [`analisis/robustez_ordinal.py`](analisis/robustez_ordinal.py) perturba cada ρ un ±50% —en los 243 vértices extremos y sobre 20.000 sorteos— y mide qué conclusiones se caen y cuáles no.
+
+| Propiedad | Resultado |
+|---|---|
+| Ubicación del óptimo `a* = 1 − P_min/P` | **invariante** — no contiene ningún ρ |
+| Existencia del óptimo | vale hasta `λ < C_h/c = 5`, o sea 3× el máximo alcanzable |
+| Orden de las arquitecturas | **100,0%** de los sorteos, pero ±50% es el umbral exacto donde la inversión se vuelve posible |
+| Orden completo de las 12 configuraciones | idéntico en solo el **2,9%** — y se informa igual |
+
+**La conclusión honesta es partida:** lo estructural —dónde está el óptimo, qué arquitectura conviene— es robusto; el veredicto sobre un proyecto concreto **no lo es**, y por eso el techo de inversión debería leerse como banda y no como punto. Resultados completos en [`analisis/RESULTADOS.md`](analisis/RESULTADOS.md).
+
+### El Montecarlo tiene semilla
+
+Desde el 01/09/2026 el generador usa **semilla fija (`MC_SEMILLA = 7`)**. Antes era `Math.random()`: el número cambiaba entre corridas y un resultado publicado no se podía verificar, solo volver a correr. El valor real es **25,4%** y caía justo en el borde del redondeo —corridas distintas devolvían 25 o 26—. Ahora cualquiera que abra el sitio con los mismos rangos obtiene **exactamente 25%**.
+
 ## El paper
 
 El modelo está descrito en un preprint abierto, con las fórmulas, el caso de referencia y las limitaciones declaradas:
@@ -773,7 +810,25 @@ El modelo está descrito en un preprint abierto, con las fórmulas, el caso de r
 > **The AI Dependency Index (IDA): Quantifying Minimum Workforce Continuity in AI-Dependent Organizations**
 > César Riat (2026) · SSRN · [ssrn.com/abstract=7341479](https://ssrn.com/abstract=7341479) · DOI [10.2139/ssrn.7341479](https://doi.org/10.2139/ssrn.7341479) · licencia CC BY 4.0
 
-Los PDF de las dos ediciones están en [`paper/`](paper/), depositados junto al código para que el archivo de Zenodo los cubra.
+**Hay una segunda versión, todavía no depositada en SSRN.** La v2 agrega:
+
+- el **óptimo como proposición** con demostración: `a* = 1 − P_min/P`, una expresión que no contiene ningún coeficiente de riesgo
+- el techo de inversión **como banda con su umbral** (`λ < 1,24`) en lugar de como veredicto
+- el análisis de robustez de arriba, con su resultado negativo incluido
+- el Montecarlo **especificado por completo y con semilla**
+- **siete límites** en lugar de cuatro — entre ellos que el episodio de junio fue **de un modelo y no de un proveedor**, algo que la Tabla 2 todavía no cobra
+- la distinción entre **incertidumbre de parámetro e incertidumbre de forma funcional**: perturbar los ρ no demuestra que la composición multiplicativa sea la correcta
+- el **margen de continuidad** `CM = (P′ − P_min)/P′` como la dimensión que falta, propuesta pero **no implementada** — el índice publicado no cambia
+- de 8 a **15 referencias**, con la evidencia de concentración del Banco de Inglaterra
+
+Los PDF de las cuatro ediciones están en [`paper/`](paper/), depositados junto al código para que el archivo de Zenodo los cubra:
+
+| Archivo | Edición |
+|---|---|
+| `IDA-preprint-v1.pdf` | inglés, **la depositada en SSRN** |
+| `IDA-preprint-v1-es.pdf` | castellano |
+| `IDA-preprint-v2.pdf` | inglés, revisada — pendiente de subir |
+| `IDA-preprint-v2-es.pdf` | castellano, revisada |
 
 ## Cómo citar
 

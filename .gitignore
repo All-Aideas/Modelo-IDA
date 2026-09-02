@@ -12,3 +12,7 @@ para-medium/
 .firebase/
 firebase-debug.log
 srv.js
+
+# artefactos de Python del analisis
+__pycache__/
+*.pyc

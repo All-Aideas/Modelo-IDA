@@ -16,6 +16,8 @@ mal. Tres pruebas:
   P2. La EXISTENCIA de ese optimo (que el maximo sea interior, no en a=1).
   P3. El ORDEN de las arquitecturas por ahorro, bajo perturbacion de +/-50%
       en cada rho: en los 3^5 vertices extremos y en Monte Carlo.
+  P4. A QUE MAGNITUD de perturbacion la inversion del orden se vuelve posible
+      (la cota ajustada; sin esto, el 100% de P3 sobreestima el resultado).
 
 Motor identico al de calc() en index.html. Si divergen, manda index.html.
 
@@ -117,10 +119,15 @@ def p1_p2():
     print("P2 - EXISTENCIA DEL OPTIMO (interior, no en a=1)")
     # El maximo es interior mientras el sueldo marginal supere al costo marginal:
     #   N > Ct_hora * P * hp * lambda   ->   lambda < N / (Ct_hora*P*hp)
-    umbral = BASE["N"] / (BASE["Ct_hora"] * BASE["P"] * BASE["hp"])
-    print("  Condicion: lambda < N / (Ct*P*hp) = {:.3f}".format(umbral))
+    # C_h = costo de la hora humana; c = costo de la hora automatizada.
+    # Ojo: usar Ct_hora derivado del gasto REDONDEADO (1229) da 4.999 y sugiere
+    # una precision que no existe. El valor exacto es C_h/c = 10/2 = 5.
+    C_h = BASE["N"] / (BASE["P"] * BASE["hp"])
+    c = round(BASE["Ct_hora"], 2)
+    umbral = C_h / c
+    print("  Condicion: lambda < C_h/c = {:g}/{:g} = {:g}".format(C_h, c, umbral))
     print("  Lambda maximo que el modelo admite: {}".format(LAMBDA_MAX))
-    print("  Margen: el optimo sigue existiendo hasta {:.2f}x el peor lambda posible.".format(
+    print("  Margen: el optimo sigue existiendo hasta {:.1f}x el peor lambda posible.".format(
         umbral / LAMBDA_MAX))
     return a_teo, umbral
 
@@ -200,6 +207,54 @@ def p3(factor=0.5, n_mc=20000, semilla=7):
     return 100 * ok / n_mc, 100 * firme / n_mc
 
 
+# ==================================================================== P4
+def p4(n_mc=20000, semilla=7):
+    """A que magnitud de perturbacion la inversion se vuelve POSIBLE.
+
+    Reportar "100% de los sorteos" a +/-50% sobreestima el resultado: a esa
+    magnitud los intervalos de dos premios no se solapan, asi que la inversion
+    es imposible por construccion, no improbable. Lo informativo es el umbral.
+
+    Dos premios rho_i > rho_j se pueden invertir cuando
+        rho_i (1 - f) < rho_j (1 + f)   =>   f > (rho_i - rho_j) / (rho_i + rho_j)
+    """
+    print("")
+    print("P4 - UMBRAL DE PERTURBACION AL QUE LA INVERSION SE VUELVE POSIBLE")
+    pares = [("nube_unica", "multicloud"), ("multicloud", "local"), ("nube_unica", "local")]
+    umbrales = []
+    for hi, lo in pares:
+        a, b = RHO[hi], RHO[lo]
+        f = (a - b) / (a + b)
+        umbrales.append((f, hi, lo))
+        print("  {:<12} vs {:<12} rho {:.2f} vs {:.2f}  ->  se invierte solo si f > {:.1%}".format(
+            hi, lo, a, b, f))
+    fmin = min(umbrales)
+    print("  Cota ajustada: el orden de arquitecturas resiste hasta f = {:.1%},".format(fmin[0]))
+    print("  y el par que primero cede es {} / {}.".format(fmin[1], fmin[2]))
+    print("  => el 100% a +/-50% NO es holgura: +/-50% es exactamente el borde.")
+
+    print("")
+    print("  Verificacion por barrido de f:")
+    random.seed(semilla)
+    for f in [0.40, 0.49, 0.50, 0.51, 0.60, 0.75, 1.00]:
+        ok = 0
+        for _ in range(n_mc // 4):
+            rho = {k: v * (1 + random.uniform(-f, f)) for k, v in RHO.items()}
+            bien = all(rho["local"] <= rho["multicloud"] <= rho["nube_unica"]
+                       for _ in (0,))
+            ok += bien
+        print("    f = {:>5.0%}  ->  orden de arquitecturas intacto en {:5.1f}% de los sorteos".format(
+            f, 100 * ok / (n_mc // 4)))
+
+    print("")
+    print("  Consecuencia de la Tabla 2 que conviene decir en voz alta:")
+    print("    rho(nube_unica) - rho(multicloud) = {:.2f} = rho(sin_plan) = {:.2f}".format(
+        RHO["nube_unica"] - RHO["multicloud"], RHO["sin_plan"]))
+    print("    El modelo afirma que un plan de contingencia vale exactamente")
+    print("    lo mismo que pasar de una nube a dos. Es una afirmacion, no un hecho.")
+    return fmin[0]
+
+
 if __name__ == "__main__":
     print("=" * 72)
     print("ROBUSTEZ ORDINAL DEL MODELO IDA - caso de referencia")
@@ -210,5 +265,6 @@ if __name__ == "__main__":
     print("")
     a_teo, umbral = p1_p2()
     ok, firme = p3()
+    p4()
     print("")
     print("=" * 72)
