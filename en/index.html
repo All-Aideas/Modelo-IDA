@@ -1283,7 +1283,10 @@ function calc(){
   // OJO: se declara ANTES de armar `estado`. Al reves cae en zona muerta y el
   // script entero se corta en silencio (es la trampa TDZ de la skill).
   const techoMax = S>0 ? S*Tmax : 0;
-  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax};
+  // ctFijo viaja en el estado porque el grafico del informe lo necesita: sin
+  // esto svgAhorro dibujaba SIEMPRE costo variable y el PDF contradecia a la
+  // pantalla cuando el usuario tenia servidor propio.
+  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax,ctFijo};
   $('out_techo').textContent = S>0 ? nf(techoMax) : '—';
   $('out_techo_lab').textContent = `How much you can invest (over ${Tmax} ${Tmax===1?'mes':'meses'})`;
   $('out_techo_sub').innerHTML = S<=0
@@ -1396,9 +1399,16 @@ function svgIDA(ida){
   </svg>`;
 }
 function svgAhorro(e){
+  // Las DOS estructuras de costo del modelo, igual que en calc():
+  //  - variable (API): el gasto escala con las horas automatizadas, asi que el
+  //    ahorro CAE pasado el piso -- el hallazgo central del modelo;
+  //  - fijo (servidor propio): la factura no se mueve, asi que el ahorro se APLANA.
+  // Dibujar siempre la variable hacia que el informe descargable contradijera a
+  // la pantalla y a la conclusion 7.1 para todo usuario con servidor propio.
   const pts=[]; for(let i=0;i<=100;i++){ const aef=i/100;
     const Pf=Math.max(Math.ceil(e.P*(1-aef)),e.Pmin);
-    pts.push((e.P-Pf)*e.sueldo - e.H*aef*e.lambda*e.Ct - e.M); }
+    const costoIA = e.ctFijo ? e.CtMesEf*e.lambda : e.H*aef*e.lambda*e.Ct;
+    pts.push((e.P-Pf)*e.sueldo - costoIA - e.M); }
   const w=300,h=108,pl=40,pr=6,pt=8,pb=20,iw=w-pl-pr,ih=h-pt-pb;
   const mx=Math.max(...pts,0), mn=Math.min(...pts,0), rango=(mx-mn)||1;
   const X=i=>pl+i/100*iw, Y=v=>pt+ih-(v-mn)/rango*ih;
@@ -1854,6 +1864,11 @@ function mcAzar(){
 function rnd(lo,hi){return lo+mcAzar()*(hi-lo);}
 function runMC(){
   mcReiniciar();   // misma semilla en cada corrida => mismo resultado
+  // El Montecarlo sortea un costo POR HORA, o sea que trata el gasto como
+  // variable. Si el usuario declaro servidor propio corresponde avisarlo, no
+  // cambiarle el regimen de costo sin decir nada.
+  const avMC=$('mc-aviso-fijo');
+  if(avMC) avMC.style.display = ctFijo ? 'block' : 'none';
   const A=[+$('mcA_lo').value/100,+$('mcA_hi').value/100];
   const E=[+$('mcEta_lo').value/100,+$('mcEta_hi').value/100];
   const C=[+$('mcCt_lo').value,+$('mcCt_hi').value];
