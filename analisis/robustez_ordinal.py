@@ -15,7 +15,7 @@ mal. Tres pruebas:
   P1. La UBICACION del optimo de automatizacion, a* = 1 - P_min/P.
   P2. La EXISTENCIA de ese optimo (que el maximo sea interior, no en a=1).
   P3. El ORDEN de las arquitecturas por ahorro, bajo perturbacion de +/-50%
-      en cada rho: en los 3^5 vertices extremos y en Monte Carlo.
+      en cada rho: en las 3^5 combinaciones de una grilla de tres niveles y en Monte Carlo.
   P4. A QUE MAGNITUD de perturbacion la inversion del orden se vuelve posible
       (la cota ajustada; sin esto, el 100% de P3 sobreestima el resultado).
 
@@ -143,7 +143,8 @@ def p3(factor=0.5, n_mc=20000, semilla=7):
 
     n_pares = 12 * 11 // 2
 
-    # --- vertices extremos: cada rho a -50%, nominal, o +50% (3^5 = 243)
+    # --- grilla factorial de tres niveles: cada rho a -50%, nominal, o +50% (3^5 = 243).
+    #     No son "vertices": los vertices del hipercubo serian solo los extremos, 2^5 = 32.
     iguales = distintos = 0
     peor = None
     for combo in itertools.product([-1, 0, 1], repeat=len(RHO)):
@@ -159,7 +160,7 @@ def p3(factor=0.5, n_mc=20000, semilla=7):
                 peor = (inv, combo, o)
     tot = iguales + distintos
     print("")
-    print("  Vertices extremos (3^{} = {} combinaciones):".format(len(RHO), tot))
+    print("  Grilla de tres niveles (3^{} = {} combinaciones):".format(len(RHO), tot))
     print("    orden identico:  {}/{}  ({:.1f}%)".format(iguales, tot, 100 * iguales / tot))
     if peor:
         print("    peor caso: {} inversiones sobre {} pares ({:.1f}%)".format(

@@ -472,24 +472,36 @@ window.addEventListener('DOMContentLoaded',function(){
         </details>
       </div>
       <div class="campo">
-        <label>% de esas horas con firma humana obligatoria <span class="hint">r — médico, escribano, auditor</span></label>
-        <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas con firma humana obligatoria"><span class="val" id="r_v">20%</span></div>
+        <label>% de esas horas que se quedan en manos de una persona <span class="hint">r — por norma o por política propia</span></label>
+        <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas que quedan en manos de una persona"><span class="val" id="r_v">20%</span></div>
         <details class="mas">
           <summary>Ejemplo: los emails de la gasífera</summary>
-          <div class="cuerpo">De esos mismos emails, hay algunos que <b>no se pueden contestar con un robot aunque técnicamente se pudiera</b>: el que dice "siento olor a gas", el que anuncia una acción legal, el que reclama por un corte de servicio con deuda de por medio. Ahí tiene que intervenir una persona habilitada, y queda registro de quién respondió.<br><br>Si eso es <b>1 de cada 5</b>, tu <b>r = 20%</b>.<br><br><b>Ojo con la diferencia:</b> <i>a</i> es lo que la IA <b>puede</b> hacer; <i>r</i> es lo que <b>no tiene permitido</b> hacer. En un banco o en salud, <i>r</i> no lo estimás: lo leés de la normativa.</div>
+          <div class="cuerpo">De esos mismos emails, hay algunos que <b>no se pueden contestar con un robot aunque técnicamente se pudiera</b>: el que dice "siento olor a gas", el que anuncia una acción legal, el que reclama por un corte de servicio con deuda de por medio. Ahí tiene que intervenir una persona habilitada, y queda registro de quién respondió.<br><br>Si eso es <b>1 de cada 5</b>, tu <b>r = 20%</b>.<br><br><b>No siempre lo prohibe una norma.</b> A veces lo decide la propia organización: la IA clasifica el reclamo, pero si el cliente amenaza con acciones legales contesta una persona. Ninguna ley lo obliga y descuenta igual. En banca o salud, en cambio, <i>r</i> no lo estimás: lo leés de la normativa.<br><br><b>Y ojo cómo se cuenta:</b> <i>r</i> son <b>horas que se queda la persona</b>, no tareas que la persona toca. Si la IA redacta la respuesta en 30 minutos y alguien la aprueba en 30 segundos, esa tarea aporta <b>los 30 segundos</b>, no los 30 minutos. Contar la tarea entera infla <i>r</i> y te hace conservar más gente de la que el modelo realmente pide.</div>
         </details>
       </div>
       <div class="campo">
-        <label>Eficiencia real de la IA <span class="hint">η — de todo lo que le das, cuánto sale listo sin retocar</span></label>
+        <label>De ese r, &#191;cu&#225;nto es por norma? <span class="hint">r<sub>norma</sub> &#8212; no cambia ning&#250;n resultado: cambia c&#243;mo se lee</span></label>
+        <div class="slider-row"><input type="range" id="rn" min="0" max="100" value="50" aria-label="Porcentaje de r que viene de una norma"><span class="val" id="rn_v">50%</span></div>
+        <details class="mas">
+          <summary>Por qu&#233; se pregunta si no entra en la cuenta</summary>
+          <div class="cuerpo">Las dos mitades de <i>r</i> descuentan igual en la f&#243;rmula, pero <b>no duran lo mismo</b>.<br><br>
+          <b>Por norma</b> es de afuera: la empresa no lo eligi&#243; y no lo puede sacar. Un call center de salud o de una fuerza de seguridad tiene horas que una persona retiene porque la ley lo dice. Un call center de un retail, con los mismos emails, puede tener <b>r<sub>norma</sub> = 0</b>: no hay nada que aprobar.<br><br>
+          <b>Por pol&#237;tica</b> lo puso la empresa: se decidi&#243; que si el mensaje trae insultos, o si habla de una falla en la promoci&#243;n, lo atiende una persona. Ninguna ley lo obliga. Y lo que la empresa decidi&#243;, la empresa lo puede deshacer &#8212; y las ganas de deshacerlo aparecen justo cuando aprietan los costos.<br><br>
+          Por eso dos organizaciones con el mismo IDA no est&#225;n igual de firmes: la que tiene todo su <i>r</i> por pol&#237;tica tiene horas humanas retenidas que pueden evaporarse en una reuni&#243;n de directorio.<br><br>
+          <b>Ojo con una confusi&#243;n frecuente:</b> esto <b>no depende de qu&#233; tan bueno sea el modelo</b>. Aunque la IA rindiera al 100%, esas horas siguen siendo humanas. <i>r</i> y <span style="white-space:nowrap">&#951;</span> son independientes: mejorar el modelo sube &#951; y no mueve <i>r</i> ni un punto.</div>
+        </details>
+      </div>
+      <div class="campo">
+        <label>Eficiencia real de la IA <span class="hint">η — de las horas que le pasás, cuántas dejan de ser humanas</span></label>
         <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Eficiencia real de la IA"><span class="val" id="eta_v">80%</span></div>
         <details class="mas">
           <summary>Ejemplo: los emails de la gasífera</summary>
-          <div class="cuerpo"><b>No es qué tan inteligente es la IA: es cuánto trabajo terminado entrega.</b><br><br>Seguimos con los emails. Le pasás 10 reclamos de los que sí puede contestar. Vuelve con las 10 respuestas escritas, pero al revisarlas ves que <b>2 hay que rehacerlas</b>: una cita mal el número de cuenta, otra promete una visita para un día que no corresponde. Alguien tuvo que leerlas, detectarlas y corregirlas.<br><br>Entonces no rindió como una persona: rindió como <b>8 de cada 10</b> → <b>η = 80%</b>.<br><br>Por eso nunca es 100%: siempre queda alguien revisando. Si nadie revisa, η no subió — lo que subió es el riesgo de mandar algo mal a un cliente.</div>
+          <div class="cuerpo"><b>No es la exactitud del modelo: es qué fracción de las horas que le pasaste dejan de ser humanas.</b> Un sistema que acierta 8 de cada 10 puede rendir bastante menos de 80%, porque para encontrar las 2 malas hay que revisar las 10.<br><br>Seguimos con los emails. Le pasás 10 reclamos de los que sí puede contestar. Vuelve con las 10 respuestas escritas, pero al revisarlas ves que <b>2 hay que rehacerlas</b>: una cita mal el número de cuenta, otra promete una visita para un día que no corresponde. Alguien tuvo que leerlas, detectarlas y corregirlas.<br><br>Entonces no rindió como una persona: rindió como <b>8 de cada 10</b> → <b>η = 80%</b>.<br><br>Por eso nunca es 100%: siempre queda alguien revisando. Si nadie revisa, η no subió — lo que subió es el riesgo de mandar algo mal a un cliente.</div>
         </details>
       </div>
       <details class="mas" style="margin-top:2px;">
         <summary>Los tres juntos, en el mismo caso</summary>
-        <div class="cuerpo">La gasífera arrancó pensando que automatizaba el 60% del trabajo. Pero de ese 60%, un 20% necesita firma humana, y de lo que queda la IA rinde 8 de cada 10:<br><br>
+        <div class="cuerpo">La gasífera arrancó pensando que automatizaba el 60% del trabajo. Pero de ese 60%, un 20% se lo sigue quedando una persona, y de lo que queda la IA rinde 8 de cada 10:<br><br>
         <span class="cuenta">0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
         <b>Ese 38,4% es el número real con el que hay que hacer las cuentas</b>, no el 60% de la promesa inicial.</div>
       </details>
@@ -842,7 +854,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <h3 class="mod h-aut"><svg class="ic-mod"><use href="#i-mod-aut"/></svg> Módulo Automatización → produce a_ef</h3>
   <div class="formula f-aut">$$a_{ef} = a \cdot (1-r) \cdot \eta$$</div>
-  <p class="nota"><b>a</b> = % de las horas del área que técnicamente puede hacer la IA. <b>r</b> = % de esas horas que exige firma humana obligatoria (médico, escribano, auditor): la IA no las reemplaza aunque técnicamente pudiera hacer la tarea. <b>η</b> (eta) = eficiencia real de la IA frente a una persona; nunca 100%, siempre hay reprocesos y supervisión. <b class="v-aut">a_ef</b> es la automatización <i>efectiva</i>: el % de horas que realmente sacás de la carga humana.</p>
+  <p class="nota"><b>a</b> = % de las horas del área que técnicamente puede hacer la IA. <b>r</b> = % de esas horas que igual se queda una persona, sea porque una norma lo exige (médico, escribano, auditor) o porque la organización decidió no delegarlo. Se cuenta en <i>horas retenidas</i>, no en tareas tocadas: si la persona solo aprueba, entra el minuto de la aprobación, no la hora entera de la tarea. <b>η</b> (eta) = de las horas que sí se delegaron, qué fracción deja de ser humana. No es la exactitud del modelo: un sistema que acierta 8 de cada 10 puede rendir bastante menos de 80%, porque para encontrar las 2 malas hay que revisar las 10. <b class="v-aut">a_ef</b> es la automatización <i>efectiva</i>: el % de horas que realmente sacás de la carga humana.</p>
   <div class="ejemplo e-aut"><span class="tit">Un ejemplo concreto: los emails de la farmacia</span>
   Técnicamente <b>se pueden contestar el 100%</b> con IA: leer, entender, redactar y responder. Ese es tu <b class="v-aut">a</b> = 100%.<br><br>
   Pero hay correos que <b>tienen que pasar por una persona sí o sí</b>: los que preguntan por dosis o interacciones entre medicamentos, los que llegan con una receta que hay que validar, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales o de una obra social. Si eso es 1 de cada 5, tu <b class="v-aut">r</b> = 20%.<br><br>
@@ -880,7 +892,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
   <details class="ejemplo e-con"><summary><span class="tit">Ojo: esto NO es lo mismo que la firma del médico o del escribano</span></summary>
   Son dos preguntas distintas, y es donde más se confunde la gente:<br><br>
-  <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto no puede por norma?</i> Es la firma del médico, del escribano, del auditor. Eso pasa <b>aunque la IA funcione perfecto</b>: hay tareas que legalmente no se delegan.<br><br>
+  <b class="v-aut">r</b>, en el módulo Automatización, pregunta: <i>del trabajo que la IA podría hacer, ¿cuánto se queda igual una persona?</i> Es la firma del médico, del escribano, del auditor — y también lo que la organización decide no delegar aunque nadie se lo exija. Eso pasa <b>aunque la IA funcione perfecto</b>.<br><br>
   <b class="v-con">P_min</b>, acá, pregunta otra cosa: <i>si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?</i> No importa la firma: importa la <b>capacidad operativa</b>.<br><br>
   <b>Cómo estimarlo en la práctica.</b> No hace falta un estudio, alcanza con pensarlo en modo degradado y calcular a ojo. En la farmacia lo hicieron así: <i>"si la IA no está, los pedidos que ya entraron hay que despacharlos igual — son unas 400 consultas al mes que no pueden quedar sin respuesta, y una persona resuelve 2 por hora"</i> → 200 horas. <i>"Y alguien tiene que seguir validando las recetas electrónicas, 4 horas por día"</i> → 240 horas más. Total ≈ <b>640 horas al mes</b>: ese es su <b class="v-con">H_min</b>, y dividido por lo que trabaja una persona da el piso.<br><br>
   Puede pasar que las dos cosas coincidan —el médico que firma es también el que sostiene la guardia— pero son cuentas separadas y conviene hacerlas por separado.</details>
@@ -1371,7 +1383,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p class="nota">Pero si tu caso es comercial y automatizar te genera ventas nuevas —atención a las 3 AM, más capacidad en hora pico—, ese ingreso <b>no entra acá</b> y hay que sumarlo por afuera. El modelo es deliberadamente conservador: te dice el piso de la decisión, no el techo.</p>
 
   <h3>4 · Modela la convivencia permanente, no la degradación temporal</h3>
-  <p>La convivencia entre humano e IA <b>sí está en el modelo</b>, y vive en la variable <b>r</b>. Si de 1.000 horas hay 200 que necesitan la firma de un abogado, un ingeniero o un arquitecto, cargás <span class="cuenta">r = 20%</span> y el modelo entiende que esas 200 horas <b>nunca</b> se automatizan: la IA hace el trabajo, el profesional firma. Es convivencia estructural y permanente, y está bien representada.</p>
+  <p>La convivencia entre humano e IA <b>sí está en el modelo</b>, y vive en la variable <b>r</b>. Si de 1.000 horas hay 200 que se sigue quedando un abogado, un ingeniero o un arquitecto, cargás <span class="cuenta">r = 20%</span> y el modelo entiende que esas 200 horas <b>nunca</b> se automatizan. Es convivencia estructural y permanente.<br><br><b>Pero cargá las horas que de verdad se queda.</b> Si la IA hace el trabajo y el profesional solo firma, lo que se retiene es la firma, no el trabajo: son minutos, no las 200 horas. Ponerle 200 ahí sobreestima <i>r</i>, hunde la automatización efectiva y te deja conservando gente que el modelo no está pidiendo.</p>
   <p>Lo que el modelo <b>no</b> sabe representar es la degradación <i>temporal</i>: que la IA no se caiga del todo pero funcione peor durante dos semanas —más lenta, con más errores, con límite de consultas—. El modelo es binario: la IA está o no está. En la realidad, la falla más común es ese estado intermedio, donde tenés que poner gente a corregir sin haber perdido el servicio.</p>
 
   <h3>5 · El recupero es payback simple, no valor presente</h3>
@@ -1922,6 +1934,10 @@ function calc(){
   const Tmax=num('Tmax',1);
   $('a_v').textContent=$('a').value+'%';
   $('r_v').textContent=$('r').value+'%';
+  // rn es SOLO reporte: parte r en norma/politica para el informe. No entra
+  // en aef ni en nada aguas abajo -- las dos mitades descuentan igual.
+  const rn=+$('rn').value/100;
+  $('rn_v').textContent=$('rn').value+'%';
   $('eta_v').textContent=$('eta').value+'%';
   let lambda=1;
   document.querySelectorAll('#arq input:checked').forEach(c=>lambda+=+c.dataset.rho);
@@ -1989,7 +2005,7 @@ function calc(){
   // ctFijo viaja en el estado porque el grafico del informe lo necesita: sin
   // esto svgAhorro dibujaba SIEMPRE costo variable y el PDF contradecia a la
   // pantalla cuando el usuario tenia servidor propio.
-  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax,ctFijo};
+  estado={P,N,hp,a,r,rn,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax,ctFijo};
   $('out_techo').textContent = S>0 ? nf(techoMax) : '—';
   $('out_techo_lab').textContent = `Hasta cuánto podés invertir (a ${Tmax} ${Tmax===1?'mes':'meses'})`;
   $('out_techo_sub').innerHTML = S<=0
@@ -2063,7 +2079,7 @@ $('ct-fijo-soltar').onclick=(ev)=>{ ev.preventDefault(); ctFijo=false; ctEditado
 $('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
 
 // ---- Botones de accion ----
-const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,Tmax:18,
+const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,rn:50,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,Tmax:18,
   ctp_precio:0.21,ctp_mes:614,ctl_srv:5170,ctl_luz:250,ctl_sys:3000,ctl_otros:0,
   hm_puestos:2,hm_oper:176};
 
@@ -2188,7 +2204,8 @@ function buildInforme(){
     <tr><td>Horas por persona al mes</td><td class="num">${e.hp} h</td></tr>
     <tr><td>Horas totales del área</td><td class="num">${Math.round(e.H).toLocaleString('es-AR')} h</td></tr>
     <tr><td>Costo de la hora humana</td><td class="num">${nf(e.N/e.H)}</td></tr>
-    <tr><td>% automatizable / con firma humana / eficiencia IA</td><td class="num">${pc(e.a)} · ${pc(e.r)} · ${pc(e.eta)}</td></tr>
+    <tr><td>% automatizable / retenido por una persona / eficiencia IA</td><td class="num">${pc(e.a)} · ${pc(e.r)} · ${pc(e.eta)}</td></tr>
+    <tr><td>De lo retenido: por norma / por política propia</td><td class="num">${pc(e.r*e.rn)} · ${pc(e.r*(1-e.rn))}</td></tr>
     <tr><td>Gasto de IA por mes</td><td class="num">${nf(e.CtMesEf)}</td></tr>
     <tr><td>Equivale por hora automatizada</td><td class="num">${nfd(e.Ct)}</td></tr>
     <tr><td>Inversión inicial · mantenimiento mensual</td><td class="num">${nf(e.I)} · ${nf(e.M)}</td></tr>
@@ -2278,7 +2295,9 @@ function buildCSV(){
   fila('Horas totales del area (H)', n(e.H), 'h/mes');
   fila('Costo de la hora humana (C_h)', n(e.N/e.H), 'USD/h');
   fila('Automatizable (a)', n(e.a*100), '%');
-  fila('Con firma humana obligatoria (r)', n(e.r*100), '%');
+  fila('Horas retenidas por una persona (r)', n(e.r*100), '%');
+  fila('  de eso, por norma (r_norma)', n(e.r*e.rn*100), '%');
+  fila('  de eso, por politica propia (revocable)', n(e.r*(1-e.rn)*100), '%');
   fila('Eficiencia real de la IA (eta)', n(e.eta*100), '%');
   fila('Gasto de IA por mes (C_mes)', n(e.CtMesEf), 'USD/mes');
   fila('Equivale por hora automatizada', n(e.Ct), 'USD/h');
@@ -2536,7 +2555,7 @@ function textoBaseMC(){
 function renderMC(){
   const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Lo demás se toma <b>de lo que cargaste en la calculadora</b>: <span id="mc-base-txt">'+
     textoBaseMC()+
-    '</span>.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es un dato duro de tu industria —lo que exige firma humana por normativa—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
+    '</span>.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es una decisión tomada —lo que la normativa exige retener, más lo que la organización decidió no delegar—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
   mcDefs.forEach(d=>{
     const div=document.createElement('div'); div.className='campo';
     div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>

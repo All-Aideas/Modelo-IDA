@@ -54,7 +54,7 @@ Si el motor y las fórmulas se separan, la prueba falla. Ese es el punto.
 
 ---
 
-## Los 24 casos
+## Los 25 casos
 
 No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 
@@ -62,7 +62,7 @@ No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 |---|---|---|
 | 00 | Valores por defecto | Que el caso documentado siga dando lo publicado |
 | 01 | Sin automatización (`a = 0`) | Que sin IA no haya ahorro y el IDA sea 0 |
-| 02 | Todo requiere firma humana (`r = 100%`) | Que `r` pueda anular por completo la automatización |
+| 02 | Una persona retiene todas las horas (`r = 100%`) | Que `r` pueda anular por completo la automatización |
 | 03 | Automatización total sin piso | El techo del IDA y el caso de dotación cero |
 | 04 | Piso igual a la plantilla | Que el piso bloquee toda liberación |
 | 05 | **Piso mayor que la plantilla** | Dotación insuficiente: el modelo tiene que decirlo, no romperse |
@@ -84,6 +84,7 @@ No son variaciones cosméticas: son los bordes donde los modelos se rompen.
 | 20 | **Costo fijo: la factura no se mueve** | Que con servidor propio automatizar más no cambie el gasto mensual |
 | 21 | **Costo fijo: el ahorro no baja** | Que la curva se aplane en vez de caer — la salvedad de 7.1 |
 | 22 | **Costo fijo: el IDA sube igual** | Que automatizar de más siga costando dependencia aunque no cueste plata |
+| 23 | `r_norma` no toca ningún resultado | Que la partición norma/política sea solo reporte y no entre en ninguna fórmula |
 
 ---
 

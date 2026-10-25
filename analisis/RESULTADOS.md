@@ -60,7 +60,7 @@ Acá el resultado **no es limpio y conviene decirlo así.**
 
 | Prueba | Orden idéntico al nominal |
 |---|---|
-| 243 vértices extremos (cada ρ a −50% / nominal / +50%) | **2,9%** (7/243) |
+| Grilla de tres niveles, 243 combinaciones (cada ρ a −50% / nominal / +50%) | **2,9%** (7/243) |
 | Monte Carlo, 20.000 sorteos, ρ ~ U(±50%), semilla 7 | **7,1%** |
 
 **Pero el desorden es local, no global:**

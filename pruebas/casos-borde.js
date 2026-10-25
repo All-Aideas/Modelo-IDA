@@ -47,7 +47,7 @@
   const casos = [
     ['00 · valores por defecto', {}],
     ['01 · sin automatizacion', { a: 0 }],
-    ['02 · todo requiere firma humana', { r: 100 }],
+    ['02 · todas las horas las retiene una persona', { r: 100 }],
     ['03 · automatizacion total sin piso', { a: 100, r: 0, eta: 100, Hmin: 0 }],
     ['04 · piso igual a la plantilla', { Hmin: 1600 }],
     ['05 · piso MAYOR que la plantilla', { Hmin: 3200 }],
@@ -120,6 +120,24 @@
     chequeo('20 · costo fijo: la factura no se mueve', x60.Ct === x100.Ct, x60.Ct + ' vs ' + x100.Ct);
     chequeo('21 · costo fijo: el ahorro no baja', x100.S >= x60.S, x60.S + ' vs ' + x100.S);
     chequeo('22 · costo fijo: el IDA sube igual', x100.IDA > x60.IDA, x60.IDA + ' vs ' + x100.IDA);
+    $('btn-reiniciar').click();
+  })();
+
+  // ---- r_norma es SOLO reporte ----
+  // La calculadora pregunta que parte de r viene de una norma y que parte es
+  // politica propia. Esa particion se informa, pero NO entra en ninguna cuenta:
+  // r = r_norma + r_politica suma igual, asi que a_ef, P', S e IDA no la ven.
+  // Si alguna vez alguien la mete en una formula, este caso falla.
+  (function () {
+    $('btn-reiniciar').click();
+    const foto = () => [$('out_P').textContent, $('out_S').textContent,
+                        $('out_IDA').textContent, $('out_techo').textContent].join(' | ');
+    const vistas = new Set();
+    [0, 25, 50, 75, 100].forEach(v => { put('rn', v); vistas.add(foto()); });
+    const ok = vistas.size === 1;
+    extra.push('23 · r_norma no toca ningun resultado');
+    tabla.push({ caso: '23 · r_norma no toca ningun resultado', "P'": '', ahorro: [...vistas].join(' // '), recupero: '', IDA: '', techo: '' });
+    if (!ok) fallas.push('23 -> r_norma ALTERO un resultado: ' + [...vistas].join(' // '));
     $('btn-reiniciar').click();
   })();
 

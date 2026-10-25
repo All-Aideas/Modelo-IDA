@@ -14,7 +14,7 @@
 <link rel="alternate" hreflang="x-default" href="https://modelo-ida.web.app/">
 
 <!-- Ficha estructurada: describe la calculadora, no el articulo. Se declara
-     como herramienta gratuita que corre en el navegador, que is what it es. -->
+     como herramienta gratuita que corre en el navegador, que es lo que es. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -61,10 +61,10 @@
 <!-- EDITAR: si cambiás el dominio, actualizá estas 3 líneas (deben ser URLs absolutas) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="IDA Model">
-<meta property="og:locale" content="es_AR">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="How many people do you need to keep operating the day the AI is gone?">
 <meta property="og:description" content="Calculate your minimum continuity headcount and your AI Dependency Index (IDA). Calculator interactiva, gratis y sin registro.">
-<meta property="og:url" content="https://modelo-ida.web.app/">
+<meta property="og:url" content="https://modelo-ida.web.app/en">
 <!-- La imagen social apunta al Montecarlo y no al piso de continuidad porque
      g1_piso_continuidad.png quedo de la formula VIEJA. El grafico vigente del
      piso es g1_piso_continuidad.svg, y og:image no admite SVG en la mayoria de
@@ -432,7 +432,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <p>The calculator below is the complete model: same engine, same formulas, same numbers as the Spanish site. What is not here is the long-form material — the four modules explained one by one, the extreme cases, the on-premise versus cloud comparison, the Monte Carlo simulation and the conclusions.</p>
   <p class="nota">Those sections exist only in Spanish for now, and they are worth reading: <a href="../">go to the full Spanish site</a>. Translating them half-way would be worse than leaving them out — you would not know what you were missing.</p>
   <h3 style="margin-top:16px;">The model in four lines</h3>
-  <p><b>Effective automation</b> = what AI can technically do, minus what legally needs a human signature, times how well the AI actually performs. Always less than the brochure promises.</p>
+  <p><b>Effective automation</b> = what AI can technically do, minus the hours a person keeps anyway, times how well the AI actually performs. Always less than the brochure promises.</p>
   <p><b>Continuity floor (P′)</b> = the number of people you must keep to run the critical operation the day the AI is unavailable. You never go below it, no matter how much you automate — and that is the point most business cases miss.</p>
   <p><b>Monthly saving (S)</b> = the salaries you genuinely stop paying, minus the AI bill adjusted by architecture risk (λ), minus maintenance. It counts released salaries, not automated hours: automating 3.84 people-equivalents when you can only release 3 saves you 3 salaries, not 3.84.</p>
   <p><b>IDA</b> = how much you delegated, times how fragile the thing holding it up is, discounted by whoever outside the area could actually cover for you. Zero to 100. It deliberately contains no money: if savings entered the index, a big saving would mask the risk exactly when you are most exposed.</p>
@@ -442,7 +442,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ========== CALCULADORA ========== -->
 <div class="panel active" id="calc">
 <section>
-  <h2><svg><use href="#i-calc"/></svg> Calculá tu organización</h2>
+  <h2><svg><use href="#i-calc"/></svg> Run your own numbers</h2>
   <p class="nota">Move the values and watch your results change. Everything is computed in your browser — nothing is sent anywhere.</p>
   <div class="calc-grid">
     <div>
@@ -456,7 +456,7 @@ window.addEventListener('DOMContentLoaded',function(){
         <input type="number" id="N" value="16000" min="0" step="500">
         <details class="mas">
           <summary>Which salaries go here?</summary>
-          <div class="cuerpo">Only those of the people you entered above. If the area has <b>10 people</b>, va la suma de esos <b>10 sueldos</b> — no la nómina de toda la organización.<br><br>Including employer costs: what the person costs you, not what they take home. The model divides this figure by the number of people to know how much you save for each one released, so mixing areas breaks the saving.</div>
+          <div class="cuerpo">Only those of the people you entered above. If the area has <b>10 people</b>, add up those <b>10 salaries</b> — not the payroll of the whole organization.<br><br>Including employer costs: what the person costs you, not what they take home. The model divides this figure by the number of people to know how much you save for each one released, so mixing areas breaks the saving.</div>
         </details>
       </div>
       <div class="campo">
@@ -474,24 +474,36 @@ window.addEventListener('DOMContentLoaded',function(){
         </details>
       </div>
       <div class="campo">
-        <label>% of those hours requiring a human signature <span class="hint">r — médico, escribano, auditor</span></label>
-        <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Porcentaje de horas con firma humana obligatoria"><span class="val" id="r_v">20%</span></div>
+        <label>% of those hours a person keeps anyway <span class="hint">r — by regulation or by your own policy</span></label>
+        <div class="slider-row"><input type="range" id="r" min="0" max="100" value="20" aria-label="Percentage of hours a person keeps anyway"><span class="val" id="r_v">20%</span></div>
         <details class="mas">
           <summary>Example: the gas utility's emails</summary>
-          <div class="cuerpo">Among those same emails, there are some that <b>cannot be answered by a machine even if technically they could</b>: the one saying "I smell gas", the one announcing legal action, the one disputing a disconnection with debt involved. A qualified person has to step in, and there is a record of who answered.<br><br>Si eso es <b>1 de cada 5</b>, tu <b>r = 20%</b>.<br><br><b>Mind the difference:</b> <i>a</i> is what the AI <b>puede</b> do; <i>r</i> is what it <b>is not allowed to</b> do. In banking or healthcare, <i>r</i> is not estimated: you read it from the regulation.</div>
+          <div class="cuerpo">Among those same emails, there are some that <b>cannot be answered by a machine even if technically they could</b>: the one saying "I smell gas", the one announcing legal action, the one disputing a disconnection with debt involved. A qualified person has to step in, and there is a record of who answered.<br><br>If that is <b>1 in 5</b>, your <b>r = 20%</b>.<br><br><b>A regulation is not the only reason.</b> Sometimes the organization decides it: the AI triages the complaint, but if the customer threatens legal action a person answers. No law requires it and it discounts just the same. In banking or healthcare, by contrast, <i>r</i> is not estimated: you read it from the regulation.<br><br><b>Mind how it is counted:</b> <i>r</i> is <b>hours a person keeps</b>, not tasks a person touches. If the AI drafts the reply in 30 minutes and someone approves it in 30 seconds, that task contributes <b>the 30 seconds</b>, not the 30 minutes. Counting the whole task inflates <i>r</i> and makes you retain more people than the model is actually asking for.</div>
         </details>
       </div>
       <div class="campo">
-        <label>Real AI efficiency <span class="hint">η — of everything you hand it, how much comes back ready to send</span></label>
+        <label>Of that r, how much is required by regulation? <span class="hint">r<sub>reg</sub> &#8212; changes no result: it changes how the result reads</span></label>
+        <div class="slider-row"><input type="range" id="rn" min="0" max="100" value="50" aria-label="Percentage of r that comes from regulation"><span class="val" id="rn_v">50%</span></div>
+        <details class="mas">
+          <summary>Why it is asked if it does not enter the calculation</summary>
+          <div class="cuerpo">Both halves of <i>r</i> discount identically in the formula, but <b>they do not last the same</b>.<br><br>
+          <b>By regulation</b> comes from outside: the company did not choose it and cannot remove it. A call centre in healthcare or in a police force has hours a person retains because the law says so. A retailer&#8217;s call centre, handling the same emails, may have <b>r<sub>reg</sub> = 0</b>: there is nothing to approve.<br><br>
+          <b>By policy</b> the company put it there: it decided that if the message carries abuse, or mentions a failure in the promotion, a person handles it. No law requires it. And what the company decided, the company can undo &#8212; and the urge to undo it turns up exactly when costs bite.<br><br>
+          So two organizations with the same IDA are not equally solid: the one whose <i>r</i> is entirely policy holds retained human hours that can evaporate in a board meeting.<br><br>
+          <b>Mind a common confusion:</b> this <b>does not depend on how good the model is</b>. Even if the AI performed at 100%, those hours remain human. <i>r</i> and <span style="white-space:nowrap">&#951;</span> are independent: improving the model raises &#951; and does not move <i>r</i> by a single point.</div>
+        </details>
+      </div>
+      <div class="campo">
+        <label>Real AI efficiency <span class="hint">η — of the hours you hand it, how many stop being human</span></label>
         <div class="slider-row"><input type="range" id="eta" min="50" max="100" value="80" aria-label="Real AI efficiency"><span class="val" id="eta_v">80%</span></div>
         <details class="mas">
           <summary>Example: the gas utility's emails</summary>
-          <div class="cuerpo"><b>It is not how clever the AI is: it is how much finished work it delivers.</b><br><br>Still with the emails. You hand it 10 complaints it is allowed to answer. It comes back with all 10 replies written, but on review you see that <b>2 have to be redone</b>: one quotes the wrong account number, another promises a visit on the wrong day. Someone had to read them, spot it and fix it.<br><br>So it did not perform like a person: it performed like <b>8 de cada 10</b> → <b>η = 80%</b>.<br><br>That is why it is never 100%: someone is always reviewing. If nobody reviews, η did not go up — what went up is the risk of sending a customer something wrong.</div>
+          <div class="cuerpo"><b>It is not the model’s accuracy: it is what fraction of the hours you handed it stop being human.</b> A system that gets 8 out of 10 right can deliver well under 80%, because finding the 2 bad ones means reviewing all 10.<br><br>Still with the emails. You hand it 10 complaints it is allowed to answer. It comes back with all 10 replies written, but on review you see that <b>2 have to be redone</b>: one quotes the wrong account number, another promises a visit on the wrong day. Someone had to read them, spot it and fix it.<br><br>So it did not perform like a person: it performed like <b>8 out of 10</b> → <b>η = 80%</b>.<br><br>That is why it is never 100%: someone is always reviewing. If nobody reviews, η did not go up — what went up is the risk of sending a customer something wrong.</div>
         </details>
       </div>
       <details class="mas" style="margin-top:2px;">
         <summary>All three together, same case</summary>
-        <div class="cuerpo">The gas utility started out thinking it was automating 60% of the work. But of that 60%, 20% needs a human signature, and of what is left the AI delivers 8 out of 10:<br><br>
+        <div class="cuerpo">The gas utility started out thinking it was automating 60% of the work. But of that 60%, 20% stays with a person anyway, and of what is left the AI delivers 8 out of 10:<br><br>
         <span class="cuenta">0,60 × (1 − 0,20) × 0,80 = 0,384 → 38,4%</span><br><br>
         <b>That 38.4% is the real number to do the maths with</b>, not the 60% of the initial promise.</div>
       </details>
@@ -543,14 +555,14 @@ window.addEventListener('DOMContentLoaded',function(){
         <label>Monthly AI cost (USD)</label>
         <input type="number" id="CtMes" value="1229" min="0" step="50">
         <p class="hint" id="ct-fijo-aviso" style="display:none; background:var(--m-con-claro); border-left:3px solid var(--m-con); padding:8px 10px; border-radius:6px; margin-top:6px;">
-          Este monto quedó <b>fijo</b> (own server): it does not move when you change automation — the hourly cost adjusts instead, which is what really happens with a rented server.
-          <a href="#" id="ct-fijo-soltar" style="color:var(--m-con); font-weight:700;">Volver a variable</a>
+          This figure is now <b>fixed</b> (own server): it does not move when you change automation — the hourly cost adjusts by itself, which is what really happens won un servidor alquilado.
+          <a href="#" id="ct-fijo-soltar" style="color:var(--m-con); font-weight:700;">Back to variable</a>
         </p>
       </div>
       <details class="asistente">
         <summary>Not sure what to enter? Open the real-cost assistant</summary>
         <div class="asist-body">
-          <p class="hint" style="margin-bottom:10px;">The goal is not to nail the exact number: it is to <b>no olvidarte de ningún costo</b>. Several may legitimately be zero — if you already cover them — but look at each one before dismissing it.</p>
+          <p class="hint" style="margin-bottom:10px;">The goal is not to nail the exact number: it is <b>to forget no cost</b>. Several may legitimately be zero — if you already cover them — but look at each one before dismissing it.</p>
           <div style="display:flex; gap:8px; margin-bottom:12px;">
             <button type="button" class="ct-btn on" id="ct-modo-api">Pay per use (API)</button>
             <button type="button" class="ct-btn" id="ct-modo-local">Own server</button>
@@ -574,7 +586,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
           <div id="ct-panel-local" style="display:none;">
             <div class="campo">
-              <label>Servidor: alquiler o cuota mensual (USD) <span class="hint">si lo comprás, no va acá: va en "Inversión inicial"</span></label>
+              <label>Servidor: alquiler o cuota mensual (USD) <span class="hint">if you buy it, it does not go here: it goes under "Upfront investment"</span></label>
               <input type="number" id="ctl_srv" value="5170" min="0" step="100">
             </div>
             <div class="campo">
@@ -582,7 +594,7 @@ window.addEventListener('DOMContentLoaded',function(){
               <input type="number" id="ctl_luz" value="250" min="0" step="50">
             </div>
             <div class="campo">
-              <label>SysAdmin / soporte técnico (USD/mes) <span class="hint">hired, hourly, outsourced — or <b>0 if someone already absorbs it</b></span></label>
+              <label>SysAdmin / technical support (USD/month) <span class="hint">hired, hourly, outsourced — or <b>0 if someone already absorbs it</b></span></label>
               <input type="number" id="ctl_sys" value="3000" min="0" step="250">
             </div>
             <div class="campo">
@@ -639,7 +651,7 @@ window.addEventListener('DOMContentLoaded',function(){
             <p class="hint"><b>1 · The written manual procedure.</b> Step by step of how the work was done before the AI: which system to open, what to check, who to notify. If the only person who knows is "the one who has been here since the start", there is no plan.</p>
             <p class="hint"><b>2 · People genuinely trained, not just listed.</b> This is the key part: it is not enough to <i>tener</i> the people. If the AI has been doing everything for eight months and they only review output, <b>they have lost the practice</b>. The day the AI is gone they will not be able to start, and they will have to relearn under pressure, with the business at a standstill.</p>
             <p class="hint"><b>3 · Regular drills.</b> The way to solve the above: once a quarter, switch the AI off on purpose for a few hours and operate by hand. Same idea as a fire drill. It is the only way to know whether your continuity floor is real or just a number in a spreadsheet. It costs hours, and those hours are part of the insurance.</p>
-            <p class="hint"><b>4 · Un segundo camino técnico probado.</b> Another provider with credentials already loaded and tested, or a smaller model running locally that can carry the critical load. Tested: if you never switched it on, it does not count.</p>
+            <p class="hint"><b>4 · A second technical route, tested.</b> Another provider with credentials already loaded and tested, or a smaller model running locally that can carry the critical load. Tested: if you never switched it on, it does not count.</p>
             <p class="hint" style="background:var(--m-rie-claro); border-left:3px solid var(--m-rie); padding:9px 11px; border-radius:6px; margin-top:9px;">
             The most common mistake is having point 1 and believing that is enough. <b>A procedure nobody has executed in a year is not a plan: it is a piece of paper.</b> If that is your situation, leave the box ticked — your risk is real.</p>
           </div>
@@ -650,8 +662,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="acciones">
     <button type="button" class="btn-accion primario" id="btn-calcular"><svg class="ic"><use href="#i-calc"/></svg> Calculate</button>
     <button type="button" class="btn-accion" id="btn-reiniciar"><svg class="ic"><use href="#i-reset"/></svg> Reset values</button>
-    <button type="button" class="btn-accion" id="btn-informe"><svg class="ic"><use href="#i-doc"/></svg> Download report</button>
-    <button type="button" class="btn-accion" id="btn-csv"><svg class="ic"><use href="#i-doc"/></svg> Download CSV</button>
+    <!-- informe: solo en la edicion en castellano --><button type="button" class="btn-accion" id="btn-csv"><svg class="ic"><use href="#i-doc"/></svg> Download CSV</button>
   </div>
   <p class="nota" style="margin-top:10px; margin-bottom:0;">Results update as you move the values. The <b>Calculate</b> button jumps to the result — handy on a phone.</p>
 </section>
@@ -719,7 +730,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <div class="footer-links">
     <a class="cta" href="https://github.com/All-Aideas/Modelo-IDA"><svg class="ic"><use href="#i-arrow"/></svg> View on GitHub</a>
     <a class="cta" href="https://ssrn.com/abstract=7341479"><svg class="ic"><use href="#i-arrow"/></svg> Read the paper</a>
-    <a class="discreto" href="en"><svg class="ic"><use href="#i-arrow"/></svg> Read this in English</a>
+    <a class="discreto" href="../"><svg class="ic"><use href="#i-arrow"/></svg> Read this in Spanish</a>
     <!-- Link a Medium: el articulo se dio de baja para reescribirlo. Cuando se
          republique, Medium genera un slug nuevo: reponer el <a class="discreto">
          con el icono #i-medium, aca y en la cabecera del README. -->
@@ -874,7 +885,7 @@ const MODULOS={
     produce:'el <b class="v-rie">multiplicador de riesgo</b>: cuánto encarece tu gasto de IA la fragilidad de tu arquitectura',
     formula:'multiplicador de riesgo  =  1  +  suma de las primas de tu arquitectura',
     simbolo:'En las fórmulas aparece como <b class="v-rie">λ</b> (lambda), y cada prima como <b class="v-rie">ρ</b> (rho). Arranca en 1, que significa "sin riesgo".',
-    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: is what it el multiplicador te cobra por la exposición del día que el servicio se cae. Se aplica como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
+    detalle:'Cada decisión suma su prima: una sola nube agrega 30%, no tener plan de contingencia otro 20%, tener datos sensibles afuera un 15%. No es plata que pagás todos los meses: es lo que el multiplicador te cobra por la exposición del día que el servicio se cae. Se aplica como un recargo sobre la factura de IA, para que una arquitectura frágil se vea cara en el momento de decidir y no el día del problema.',
     usa:'Encarece el gasto de IA en el ahorro, y multiplica la exposición en el índice.'},
   con:{nom:'Continuity', ico:'i-mod-con', cls:'fm-con', color:'var(--m-con)',
     datos:['Hmin','hp'], datos_nodo:['Hmin','Ph'], res:['P'],
@@ -936,7 +947,7 @@ const RESULTADOS={
   IDA:{nom:"IDA", sub:"cuán expuesto quedás",
     formula:'índice de dependencia  =  automatización efectiva  ×  multiplicador de riesgo  ×  (1 − cobertura de respaldo × 0,7)  ×  100   (topeado en 100)',
     simbolo:'Va de 0 a 100. Bajo 30 es resiliente; entre 30 y 60, vigilancia; arriba de 60, crítico.',
-    detalle:'Mide cuánto delegaste multiplicado por cuán frágil is what it lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
+    detalle:'Mide cuánto delegaste multiplicado por cuán frágil es lo que lo sostiene, y descontado por la gente de fuera del área que podría cubrirte. Automatizar mucho sobre infraestructura sólida da un índice bajo; lo que dispara el número es automatizar mucho sobre algo frágil y sin nadie que sepa hacerlo a mano. El descuento por respaldo llega hasta el 70%, nunca al 100%: esa gente deja su propio puesto para venir y no hace esta tarea todos los días.',
     conecta:'Es el único que <b>no toca la plata</b>, y es a propósito: si el dinero entrara acá, un ahorro grande taparía el riesgo y el índice diría que estás bien justo cuando más frágil estás. Corre en paralelo a los otros dos, compartiendo módulos pero nunca dinero.'}
 };
 const POS={};
@@ -1166,14 +1177,14 @@ function calcAsistente(){
     else if(tokHora<2) ref='Está en el rango de una conversación de atención o un trámite estándar.';
     else if(tokHora<8) ref='Está en el rango de resumir o redactar documentos.';
     else ref='Es un consumo alto, propio de análisis largos sobre documentos extensos. Verificá que sea tu caso.';
-    $('ctp_diag').innerHTML=`Tu consumo equivale a <b>${tokHora.toFixed(2)} millones de tokens por hora</b> de trabajo automatizado. ${ref}<br><span style="color:var(--gris)">Referencias: clasificar mails ≈ 0,2 · chat de atención ≈ 1 · resumen de documentos ≈ 5 · análisis legal largo ≈ 20.</span>`;
-    $('ct-aviso').textContent='Con API pagás por uso: si el volumen baja, el costo baja. Es el modo natural para volúmenes chicos y medianos.';
+    $('ctp_diag').innerHTML=`Your usage works out to <b>${tokHora.toFixed(2)} million tokens per hour</b> of automated work. ${ref}<br><span style="color:var(--gris)">For reference: classifying email ≈ 0.2 · support chat ≈ 1 · document summaries ≈ 5 · long legal analysis ≈ 20.</span>`;
+    $('ct-aviso').textContent='With an API you pay per use: if volume falls, cost falls. It is the natural mode for small and medium volumes.';
   } else {
     const tot=num('ctl_srv',0)+num('ctl_luz',0)+num('ctl_sys',0)+num('ctl_otros',0);
     v=tot;
     $('ctl_total').textContent=nf(tot);
     $('ctl_horas').textContent=Math.round(horasIAactual).toLocaleString('es-AR');
-    $('ct-aviso').textContent=`Ojo: este costo es FIJO. Pagás ${nf(tot)}/mes uses 10 horas o 10.000. Si automatizás menos, el costo por hora sube.`;
+    $('ct-aviso').textContent=`Careful: this cost is FIXED. You pay ${nf(tot)}/month whether you use 10 hours or 10,000. If you automate less, the hourly cost goes up.`;
   }
   ctValor=v; // siempre un costo MENSUAL, igual que el campo de la calculadora
   const porHora = horasIAactual>0 ? v/horasIAactual : 0;
@@ -1199,8 +1210,8 @@ function calcHmin(){
   $('hm_personas').textContent=personas;
   $('hm_res').textContent=Math.round(total).toLocaleString('es-AR')+' h';
   $('hm_aviso').innerHTML = puestos>0
-    ? `Tu <b>factor de cobertura</b> es ${factor.toFixed(2)} (${Math.round(oper)} h de operación ÷ ${Math.round(hp)} h que trabaja una persona). Por eso ${puestos} puesto${puestos>1?'s':''} simultáneo${puestos>1?'s':''} necesita${puestos>1?'n':''} <b>${personas} persona${personas>1?'s':''}</b>, no ${puestos}. Esa diferencia es la que casi nadie presupuesta.`
-    : 'Sin puestos simultáneos que cubrir, cargá directamente en el campo de arriba las horas de trabajo que necesitás al mes.';
+    ? `Your <b>coverage factor</b> is ${factor.toFixed(2)} (${Math.round(oper)} h of operation ÷ ${Math.round(hp)} h one person works). That is why ${puestos} station${puestos>1?'s':''}  running at once need${puestos>1?'':'s'} <b>${personas} person${personas>1?'s':''}</b>, not ${puestos}. That gap is the one almost nobody budgets for.`
+    : 'With no simultaneous stations to cover, enter the work hours you need per month directly in the field above.';
 }
 
 // ---- Calculator ----
@@ -1219,6 +1230,10 @@ function calc(){
   const Tmax=num('Tmax',1);
   $('a_v').textContent=$('a').value+'%';
   $('r_v').textContent=$('r').value+'%';
+  // rn es SOLO reporte: parte r en norma/politica para el informe. No entra
+  // en aef ni en nada aguas abajo -- las dos mitades descuentan igual.
+  const rn=+$('rn').value/100;
+  $('rn_v').textContent=$('rn').value+'%';
   $('eta_v').textContent=$('eta').value+'%';
   let lambda=1;
   document.querySelectorAll('#arq input:checked').forEach(c=>lambda+=+c.dataset.rho);
@@ -1236,7 +1251,7 @@ function calc(){
   //    escala con las horas automatizadas. Es lo que preserva el hallazgo central
   //    del modelo (pasado el piso, automatizar de mas baja el ahorro).
   //  - FIJO (servidor propio, ctFijo=true): el monthly spend NO se mueve aunque
-  //    cambie la automatizacion -- is what it de verdad pasa con un servidor
+  //    cambie la automatizacion -- es lo que de verdad pasa con un servidor
   //    alquilado. Lo que sube o baja es el costo por hora, como consecuencia.
   // Antes esto no se distinguia: el modo "servidor propio" del asistente
   // calculaba bien el numero una vez, pero al mover el slider de automatizacion
@@ -1286,7 +1301,7 @@ function calc(){
   // ctFijo viaja en el estado porque el grafico del informe lo necesita: sin
   // esto svgAhorro dibujaba SIEMPRE costo variable y el PDF contradecia a la
   // pantalla cuando el usuario tenia servidor propio.
-  estado={P,N,hp,a,r,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax,ctFijo};
+  estado={P,N,hp,a,r,rn,eta,Ct,CtMesEf,horasIA,I,M,Hmin,H,aef,lambda,Pmin,Pecon,Pfinal,sueldo,liberadas,costoIA,S,pb,IDA,R,cobertura,IDAcrudo,Tmax,techoMax,ctFijo};
   $('out_techo').textContent = S>0 ? nf(techoMax) : '—';
   $('out_techo_lab').textContent = `How much you can invest (over ${Tmax} ${Tmax===1?'mes':'meses'})`;
   $('out_techo_sub').innerHTML = S<=0
@@ -1298,7 +1313,7 @@ function calc(){
   // Con las tres tildadas y el campo todavia en 0 la pantalla quedaba muda,
   // que es justo cuando el usuario no sabe que numero corresponde.
   $('aviso-R').style.display = (avalado && R===0) || R>0 ? 'block' : 'none';
-  if(avalado && R===0) $('aviso-R').innerHTML = `Ahora cargá el número: <b>cuántas personas de fuera del área</b> podrían cubrir la operación. No es un porcentaje ni un puntaje, es gente. Tu piso es de ${Pmin}, así que con ${Pmin} de respaldo cubrís el 100%.`;
+  if(avalado && R===0) $('aviso-R').innerHTML = `Now enter the number: <b>how many people from outside the area</b> could cover the operation. It is not a percentage or a score, it is people. Your floor is ${Pmin}, so with ${Pmin} in backup you cover 100%.`;
   else if(R>0) $('aviso-R').innerHTML = cobertura>=1
     ? `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = 100%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>, y no a cero porque esa gente deja su propio puesto para venir y no hace esta tarea todos los días.`
     : `<span class="cuenta">cobertura = ${R} ÷ ${Pmin} = ${(cobertura*100).toFixed(0)}%</span> · El IDA baja de ${IDAcrudo.toFixed(0)} a <b>${IDA.toFixed(0)}</b>.`;
@@ -1319,20 +1334,20 @@ function calc(){
   const frenoS=$('out_S_freno');
   if(Pecon<Pmin){
     frenoS.style.display='block';
-    frenoS.textContent=`El piso te obliga a retener ${Pmin-Pecon} persona${Pmin-Pecon>1?'s':''} que la cuenta económica ya no necesita: seguís pagando ${nf((Pmin-Pecon)*sueldo)}/mes de sueldos mientras la IA hace ese trabajo. Automatizar más desde acá te baja el ahorro, no te lo sube.`;
+    frenoS.textContent=`The floor forces you to retain ${Pmin-Pecon} person${Pmin-Pecon>1?'s':''} the economic calculation no longer needs: you keep paying ${nf((Pmin-Pecon)*sueldo)}/month in salaries while the AI does that work. Automating further from here lowers your saving, it does not raise it.`;
   } else { frenoS.style.display='none'; }
   $('out_IDA').textContent=IDA.toFixed(0);
   $('out_IDA_sub').style.display = cobertura>0 ? 'block' : 'none';
-  if(cobertura>0) $('out_IDA_sub').innerHTML=`Sin respaldo externo sería <b>${IDAcrudo.toFixed(0)}</b>: ${R===1?'la persona':'las '+R+' personas'} de afuera cubren el ${(cobertura*100).toFixed(0)}% de tu piso.`;
+  if(cobertura>0) $('out_IDA_sub').innerHTML=`With no external backup it would be <b>${IDAcrudo.toFixed(0)}</b>: the ${R===1?'person':R+' people'} from outside cover ${(cobertura*100).toFixed(0)}% of your floor.`;
   const badge=$('out_IDA_badge'), mini=$('out_IDA_mini');
   if(IDA<30){badge.className='ida-badge ida-verde'; badge.textContent='Resilient';
-    mini.textContent=`Un IDA de ${IDA.toFixed(0)} significa baja dependencia: automatizaste poco o con arquitectura robusta. Una caída de IA sería una molestia menor, no un paro operativo.`;}
+    mini.textContent=`An IDA of ${IDA.toFixed(0)} means low dependency: you automated little, or on a robust architecture. An AI outage would be a nuisance, not an operational stop.`;}
   else if(IDA<=60){badge.className='ida-badge ida-amarillo'; badge.textContent='Watch';
-    mini.textContent=`Un IDA de ${IDA.toFixed(0)} es dependencia significativa: necesitás piso de continuidad calculado y simulacros de operación manual. Antes de automatizar más, conviene bajar el riesgo de tu arquitectura: un segundo proveedor, o mover la IA adentro.`;}
+    mini.textContent=`An IDA of ${IDA.toFixed(0)} is significant dependency: you need a calculated continuity floor and manual-operation drills. Before automating further, it is worth lowering the riesgo de tu arquitectura: un segundo proveedor, o mover la IA adentro.`;}
   else{badge.className='ida-badge ida-rojo'; badge.textContent='Critical';
-    mini.textContent=`Un IDA de ${IDA.toFixed(0)} es crítico: tu operación es prácticamente rehén de tu proveedor de IA. Si sos banco, energía o salud, esto debería ser prioridad de directorio.`;}
+    mini.textContent=`An IDA of ${IDA.toFixed(0)} is critical: your operation is effectively hostage to your AI provider. In banking, energy or healthcare this belongs on the board agenda.`;}
   const al=$('out_alerta');
-  if(S<=0){$('out_pb').textContent='Nunca'; al.className='alerta warn'; al.textContent='Ahorro negativo o nulo: con este riesgo, automatizar cuesta más de lo que ahorra.';}
+  if(S<=0){$('out_pb').textContent='Nunca'; al.className='alerta warn'; al.textContent='Saving is zero or negative: at this risk level, automating costs more than it saves.';}
   else if(pb>Tmax){$('out_pb').textContent=pb.toFixed(0)+' months'; al.className='alerta warn'; al.textContent=`Over ${Tmax} months: beyond the horizon you decide with, so it does not pass the filter.`;}
   else{$('out_pb').textContent=pb.toFixed(0)+' months'; al.className='alerta ok'; al.textContent=`Within your ${Tmax}-month horizon: the project makes sense.`;}
 }
@@ -1360,7 +1375,7 @@ $('ct-fijo-soltar').onclick=(ev)=>{ ev.preventDefault(); ctFijo=false; ctEditado
 $('hm-usar').onclick=()=>{ $('Hmin').value=Math.round(hmValor); calc(); };
 
 // ---- Botones de accion ----
-const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,Tmax:18,
+const DEFAULTS={P:10,N:16000,hp:160,a:60,r:20,rn:50,eta:80,CtMes:1229,I:50000,M:500,Hmin:640,R:0,Tmax:18,
   ctp_precio:0.21,ctp_mes:614,ctl_srv:5170,ctl_luz:250,ctl_sys:3000,ctl_otros:0,
   hm_puestos:2,hm_oper:176};
 
@@ -1485,7 +1500,8 @@ function buildInforme(){
     <tr><td>Horas por persona al mes</td><td class="num">${e.hp} h</td></tr>
     <tr><td>Horas totales del área</td><td class="num">${Math.round(e.H).toLocaleString('es-AR')} h</td></tr>
     <tr><td>Costo de la hora humana</td><td class="num">${nf(e.N/e.H)}</td></tr>
-    <tr><td>% automatizable / con firma humana / eficiencia IA</td><td class="num">${pc(e.a)} · ${pc(e.r)} · ${pc(e.eta)}</td></tr>
+    <tr><td>% automatizable / retenido por una persona / eficiencia IA</td><td class="num">${pc(e.a)} · ${pc(e.r)} · ${pc(e.eta)}</td></tr>
+    <tr><td>De lo retenido: por norma / por política propia</td><td class="num">${pc(e.r*e.rn)} · ${pc(e.r*(1-e.rn))}</td></tr>
     <tr><td>Gasto de IA por mes</td><td class="num">${nf(e.CtMesEf)}</td></tr>
     <tr><td>Equivale por hora automatizada</td><td class="num">${nfd(e.Ct)}</td></tr>
     <tr><td>Inversión inicial · mantenimiento mensual</td><td class="num">${nf(e.I)} · ${nf(e.M)}</td></tr>
@@ -1553,7 +1569,7 @@ function buildInforme(){
 $('btn-informe').onclick=()=>{ calc(); buildInforme(); window.print(); };
 
 // ---- Export CSV: los supuestos y los resultados, para auditar en planilla ----
-// Se separa con punto y coma y se usa coma decimal: is what it Excel en espanol
+// Se separa con punto y coma y se usa coma decimal: es lo que Excel en espanol
 // abre sin pedir asistente de importacion. El BOM hace que respete los acentos.
 function buildCSV(){
   const e=estado;
@@ -1575,7 +1591,9 @@ function buildCSV(){
   fila('Horas totales del area (H)', n(e.H), 'h/mes');
   fila('Costo de la hora humana (C_h)', n(e.N/e.H), 'USD/h');
   fila('Automatizable (a)', n(e.a*100), '%');
-  fila('Con firma humana obligatoria (r)', n(e.r*100), '%');
+  fila('Horas retenidas por una persona (r)', n(e.r*100), '%');
+  fila('  de eso, por norma (r_norma)', n(e.r*e.rn*100), '%');
+  fila('  de eso, por politica propia (revocable)', n(e.r*(1-e.rn)*100), '%');
   fila('Real AI efficiency (eta)', n(e.eta*100), '%');
   fila('Gasto de IA por mes (C_mes)', n(e.CtMesEf), 'USD/mes');
   fila('Equivale por hora automatizada', n(e.Ct), 'USD/h');
@@ -1719,7 +1737,7 @@ function updateJugar(){
     explica=`El costo real de la IA es $${cr.toFixed(1)}/h (λ×Ct) contra $${Ch}/h del humano. La línea gris es la cuenta ingenua: supone que cada hora automatizada es un sueldo menos. La naranja es la real: solo ahorrás sueldos de gente que efectivamente podés liberar. `+
       (Pmin<P
         ? `A partir del ${aFreno.toFixed(0)}% de automatización chocás con el piso de ${Pmin} personas y ya no podés liberar a nadie más — pero la factura de IA sigue subiendo, así que el ahorro empieza a CAER. Tu punto óptimo está cerca del ${aOpt.toFixed(0)}%: automatizar más allá de ahí te deja más pobre y más dependiente.`
-        : `Con un piso de ${Pmin} sobre ${P} personas no podés liberar a nadie: automaticis what it automatices, solo sumás costo de IA. El ahorro es negativo desde el arranque.`);
+        : `Con un piso de ${Pmin} sobre ${P} personas no podés liberar a nadie: automatices lo que automatices, solo sumás costo de IA. El ahorro es negativo desde el arranque.`);
   } else {
     // Techo de inversion: cuanto podes poner y todavia recuperarlo en Tmax meses.
     // Usa el mismo ahorro real que la calculadora (solo sueldos efectivamente liberados).
@@ -1810,7 +1828,7 @@ const mcDefs=[
 // Lo que NO se sortea sale de la calculadora, no de constantes: antes estaba
 // hardcodeado y la pestaña simulaba siempre la empresa de ejemplo, aunque el
 // usuario hubiera cargado la suya. Los rangos de arriba son lo incierto; esto
-// is what it el usuario ya declaro como dato firme.
+// es lo que el usuario ya declaro como dato firme.
 function mcBase(){
   const e = estado && estado.P ? estado : {};
   return {
@@ -1833,7 +1851,7 @@ function textoBaseMC(){
 function renderMC(){
   const cont=$('controles-mc'); cont.innerHTML='<p class="nota" style="margin-bottom:12px;">Definí el rango (mínimo–máximo) de cada variable incierta. Lo demás se toma <b>de lo que cargaste en la calculadora</b>: <span id="mc-base-txt">'+
     textoBaseMC()+
-    '</span>.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es un dato duro de tu industria —lo que exige firma humana por normativa—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
+    '</span>.</p><p class="nota" style="margin-bottom:12px;"><b>Por qué r no tiene rango:</b> es una decisión tomada —lo que la normativa exige retener, más lo que la organización decidió no delegar—, no algo que varíe al azar mes a mes como el precio de un token o cuánto rinde la IA. Si tu regulación cambia, es un escenario nuevo para simular, no una probabilidad.</p>';
   mcDefs.forEach(d=>{
     const div=document.createElement('div'); div.className='campo';
     div.innerHTML=`<label>${d.label}: <span class="val" style="color:var(--naranja)"><span id="${d.id}_lo_v">${d.fmt(d.lo)}</span> – <span id="${d.id}_hi_v">${d.fmt(d.hi)}</span></span></label>
@@ -1849,7 +1867,7 @@ function renderMC(){
 // Generador con SEMILLA. Antes era Math.random(): la simulacion daba un numero
 // distinto en cada corrida y el resultado publicado no era reproducible. Con
 // semilla fija, cualquiera que abra el sitio con los mismos rangos obtiene
-// EXACTAMENTE el mismo porcentaje, que is what it exige citarlo en un paper.
+// EXACTAMENTE el mismo porcentaje, que es lo que exige citarlo en un paper.
 // mulberry32: 32 bits, periodo 2^32, suficiente para 10.000 sorteos de 4 variables.
 const MC_SEMILLA=7;
 let _mcEstado=MC_SEMILLA;

@@ -86,7 +86,7 @@ I, M             →     (entran directo en S y T)
 
 > **El caso que se sigue hasta el final: una cadena de farmacias.** Para que los números no queden en el aire, de acá en adelante todo se calcula sobre el mismo caso. Una cadena de farmacias tiene un **área de atención al cliente de 10 personas** que reciben consultas por **email, teléfono y WhatsApp**: si un remedio está en stock, si una obra social lo cubre, en qué sucursal retirarlo, por qué se rechazó una receta electrónica, seguimiento de un pedido a domicilio. Cada una trabaja 160 h al mes y entre todas cuestan **$16.000** de nómina.
 >
-> Quieren automatizar esa atención: **60%** del trabajo es automatizable, **20%** de eso necesita intervención humana obligatoria —lo que toca dosis, interacciones o una receta que hay que validar—, la IA rinde al **80%**, corren sobre **una sola nube sin plan de contingencia**, necesitan cubrir **640 h mensuales** pase lo que pase, y el proyecto cuesta **$50.000** de inversión más **$500** por mes de mantenimiento.
+> Quieren automatizar esa atención: **60%** del trabajo es automatizable, **20%** de eso se lo sigue quedando una persona —lo que toca dosis, interacciones o una receta que hay que validar—, la IA rinde al **80%**, corren sobre **una sola nube sin plan de contingencia**, necesitan cubrir **640 h mensuales** pase lo que pase, y el proyecto cuesta **$50.000** de inversión más **$500** por mes de mantenimiento.
 
 ### Módulo Humano
 ```
@@ -102,17 +102,28 @@ Automatización efectiva = a × (1 − r) × η
 **Los tres, con un solo ejemplo: una distribuidora de gas que automatiza los reclamos por email.**
 
 - **`a` — ¿qué puede hacer la IA?** Mirás qué llega y ves que la mayoría son consultas repetidas: cuándo pasa el técnico, cómo se lee la factura, cómo se pide un cambio de titularidad. Eso lo redacta sin problema. Coordinar una cuadrilla o interpretar la foto de un medidor roto, no. Si son **6 de cada 10 horas**, `a = 60%`. La pregunta es *¿puede?*, no *¿conviene?*.
-- **`r` — ¿qué no tiene permitido hacer?** De esos mismos emails, algunos no se contestan con un robot aunque técnicamente se pudiera: "siento olor a gas", un aviso de acción legal, un corte de servicio con deuda. Tiene que intervenir una persona habilitada y queda registro de quién respondió. **1 de cada 5** → `r = 20%`. En banca o salud esto no se estima: se lee de la normativa.
-- **`η` — ¿cuánto sale listo sin retocar?** No es qué tan inteligente es la IA, es cuánto **trabajo terminado** entrega. Le pasás 10 reclamos, vuelve con 10 respuestas, pero **2 hay que rehacerlas** (una cita mal el número de cuenta, otra promete una visita que no corresponde). Rindió como 8 de cada 10 → `η = 80%`. Nunca es 100% porque siempre queda alguien revisando; si nadie revisa, η no subió — subió el riesgo de mandarle algo mal a un cliente.
+- **`r` — ¿qué se sigue quedando una persona?** De esos mismos emails, algunos no se contestan con un robot aunque técnicamente se pudiera: "siento olor a gas", un aviso de acción legal, un corte de servicio con deuda. Tiene que intervenir una persona habilitada y queda registro de quién respondió. **1 de cada 5** → `r = 20%`. En banca o salud esto no se estima: se lee de la normativa — pero **una norma no es la única razón**: a veces lo decide la propia organización (la IA clasifica el reclamo, pero si el cliente amenaza con acciones legales contesta una persona) y descuenta igual.
+
+  > **Cómo se cuenta.** `r` son **horas que se queda la persona**, no tareas que la persona toca. Si la IA redacta la respuesta en 30 minutos y alguien la aprueba en 30 segundos, esa tarea aporta los 30 segundos, no los 30 minutos. Contar la tarea entera infla `r`, hunde la automatización efectiva y te hace conservar más gente de la que el modelo realmente pide.
+
+  > **De dónde viene ese r: dos orígenes que no duran lo mismo.** Las dos mitades descuentan igual en la fórmula, pero no se sostienen igual.
+  >
+  > - **`r_norma` es exógeno.** La empresa no lo eligió y no lo puede sacar. Un call center de salud o de una fuerza de seguridad tiene horas que una persona retiene porque la ley lo dice. Un call center de un retail, con los mismos emails, puede tener `r_norma = 0`: no hay nada que aprobar. **`r` no es una propiedad de la tarea, es del sector.**
+  > - **`r_política` lo puso la empresa.** Se decidió que si el mensaje trae insultos, o si habla de una falla en la promoción, lo atiende una persona. Ninguna ley lo obliga &mdash; y lo que la empresa decidió, la empresa lo puede deshacer, justo cuando aprietan los costos.
+  >
+  > Por eso dos organizaciones con el mismo IDA no están igual de firmes: la que tiene todo su `r` por política tiene horas humanas retenidas que pueden evaporarse en una reunión de directorio. La calculadora lo pregunta como dato **opcional de reporte**: no entra en ningún cálculo, porque `r = r_norma + r_política` suma igual.
+  >
+  > **Y no depende de qué tan bueno sea el modelo.** Aunque la IA rindiera al 100%, esas horas siguen siendo humanas: `r` y `η` son independientes, mejorar el modelo sube `η` y no mueve `r` ni un punto.
+- **`η` — ¿cuántas horas dejan de ser humanas?** No es la exactitud del modelo, es **qué fracción de las horas delegadas deja de ser trabajo humano**. Un sistema que acierta 8 de cada 10 puede rendir bastante menos de 80%, porque para encontrar las 2 malas hay que revisar las 10. Le pasás 10 reclamos, vuelve con 10 respuestas, pero **2 hay que rehacerlas** (una cita mal el número de cuenta, otra promete una visita que no corresponde). Rindió como 8 de cada 10 → `η = 80%`. Nunca es 100% porque siempre queda alguien revisando; si nadie revisa, η no subió — subió el riesgo de mandarle algo mal a un cliente.
 
 Los tres juntos: `0,60 × (1 − 0,20) × 0,80 = 38,4%`. La gasífera arrancó creyendo que automatizaba el 60% y el número real con el que hay que hacer las cuentas es **38,4%**.
-- **r** — lo regulado (firma de médico, escribano): queda afuera sí o sí
+- **r** — las horas que se queda una persona igual: `r_norma` (exógeno, del sector) + `r_política` (lo puso la empresa y lo puede sacar)
 - **a** — lo técnicamente automatizable del resto
-- **η** — eficiencia real de la IA (70%–90%, nunca 100%)
+- **η** — qué fracción de las horas delegadas deja de ser humana (70%–90%, nunca 100%)
 
 Ejemplo: 0,60 × (1 − 0,20) × 0,80 = **38,4%**, no 60%. Primer baño de realidad.
 
-**Un caso concreto: los emails de la farmacia.** Técnicamente se pueden contestar **el 100%** con IA: leer, entender, redactar, responder. Ese es tu `a` = 100%. Pero hay correos que **tienen que pasar por una persona sí o sí**: los que preguntan por dosis o interacciones entre medicamentos, los que llegan con una receta que hay que validar, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales o de una obra social. Si eso es 1 de cada 5, tu `r` = 20%. Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu `η` = 80%.
+**Un caso concreto: los emails de la farmacia.** Técnicamente se pueden contestar **el 100%** con IA: leer, entender, redactar, responder. Ese es tu `a` = 100%. Pero hay correos donde **una persona se queda igual con parte del trabajo**: los que preguntan por dosis o interacciones entre medicamentos, los que llegan con una receta que hay que validar, los reclamos que pueden derivar en defensa del consumidor, y los que piden datos personales o de una obra social. Si eso es 1 de cada 5 de las horas, tu `r` = 20%. Y de los que sí automatizás, la IA no acierta siempre: hay que revisar, corregir y reenviar. Si rinde como 8 de cada 10 personas, tu `η` = 80%.
 
 `1,00 × (1 − 0,20) × 0,80` = **64%**. Arrancaste creyendo que automatizabas todo y en la práctica sacás dos tercios de la carga. Ese 64% es el número con el que hay que hacer las cuentas.
 
@@ -161,7 +172,7 @@ Esas 4 personas son tu P_min: no importa que automatices el 100%, nunca vas a ba
 
 > **Ojo: esto NO es lo mismo que la firma del médico o del escribano.** Son dos preguntas distintas y es donde más se confunde la gente.
 >
-> `r`, en el módulo Automatización, pregunta: *del trabajo que la IA podría hacer, ¿cuánto no puede por norma?* Es la firma del médico, del escribano, del auditor. Eso pasa **aunque la IA funcione perfecto**: hay tareas que legalmente no se delegan.
+> `r`, en el módulo Automatización, pregunta: *del trabajo que la IA podría hacer, ¿cuánto se queda igual una persona?* Es la firma del médico, del escribano, del auditor — y también lo que la organización decide no delegar aunque nadie se lo exija. Eso pasa **aunque la IA funcione perfecto**.
 >
 > `P_min`, acá, pregunta otra cosa: *si mañana la IA no está, ¿con cuánta gente sostengo lo que no puede parar?* No importa la firma: importa la **capacidad operativa**.
 >
@@ -478,6 +489,8 @@ Por debajo de ese volumen, la API es más barata y sin dolores de cabeza de infr
 El mismo hardware que era un disparate para los emails es la **mejor decisión posible** a escala. No cambió la tecnología ni el precio: cambió el volumen (H) y la criticidad del dato.
 
 > **La regla que se lleva el lector:** la IA local no se justifica por moda ni por miedo. Se justifica cuando tu volumen supera el break-even **o** cuando la criticidad del dato hace que λ importe más que el costo. Nunca antes.
+>
+> **Ojo con el precio de la API, que es lo que mueve el umbral.** Este break-even está calculado contra DeepSeek, que es de los más baratos (~$0,21 por hora de trabajo). Contra una API de frontera a $2 la hora, el mismo servidor se justifica con **diez veces menos volumen**: unas 3.900 horas de IA al mes. La fórmula general es `H · a_ef = λ_propia · C_propia / (λ_api · c)`, y está en la Sección 6.1 del paper.
 
 > **Resumen:** el piso te frena por supervivencia, **λ** por riesgo, **I** por plata, y **H** es la palanca que puede dar vuelta cualquiera de las tres cuentas.
 
@@ -518,7 +531,7 @@ Hay una cantidad de gente que **no podés soltar**: el piso de continuidad. Una 
 | 80% | $8.460 | $5.260 | 10 meses | 100 |
 | 100% | $10.700 | $4.300 | 12 meses | 100 |
 
-Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua promete **$10.700/mes** y la realidad da **$4.300**. Los $6.400 que faltan son los cuatro sueldos del piso, que seguís pagando mientras la IA hace ese trabajo.
+Leé la última fila con calma: al automatizar el 100%, la cuenta ingenua promete **$10.700/mes** y la realidad da **$4.300**. Ojo con una cosa: esa tabla mueve la automatización **efectiva**, que no es la misma que el % automatizable. Con `r = 20%` y `η = 80%`, aunque automatices todo lo automatizable (`a = 100%`) la efectiva llega como máximo a `1 × 0,80 × 0,80` = **64%**. En este caso alcanza, porque el óptimo está en 60%. Pero si tu `r` o tu `η` fueran peores, el techo podría quedar **por debajo** del óptimo y el piso no se activaría nunca. Y ahí hay una trampa: como el ahorro sube por escalones, lo mejor que podés hacer **no es llegar al techo**, sino quedarte en el borde del último escalón que el techo te permite. Con `r = 30%` y `η = 80%` el techo es 56%, y el borde es 50%: operar en 50% libera cinco personas y deja **$5.100**; operar en 56% libera las mismas cinco y deja **$4.812**. Esos $288 son IA que pagás sin liberar a nadie. Los $6.400 que faltan son los cuatro sueldos del piso, que seguís pagando mientras la IA hace ese trabajo.
 
 > **Si tu IA es de costo fijo, cambia una cosa.** Todo lo de arriba supone que pagás la IA por hora, que es lo que hacés con una API. Si tenés servidor propio la factura es la misma automatices 60% o 100%, así que pasado el piso el ahorro no baja: se queda quieto. Se comprueba en la calculadora poniendo el asistente de costo en servidor propio y moviendo el deslizador — el gasto mensual no se mueve y el ahorro se aplana. Eso no te deja sin consecuencia, solo cambia cuál es: automatizar de más ya no te empobrece, sin embargo el IDA sigue subiendo igual, de 90 a 100 en la misma tabla. Es decir que comprás dependencia a cambio de nada. Con API perdés plata y resiliencia juntas; con costo fijo perdés solo resiliencia, que es más difícil de ver en un balance y más caro de arreglar después.
 
@@ -780,7 +793,7 @@ Qué trae:
 
 ## Verificación
 
-Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 24 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero, y las dos estructuras de costo de la IA.
+Una calculadora que no se puede comprobar no sirve para decidir. El repo trae una **batería de 25 casos de borde** que corre contra el sitio real y compara el motor contra las fórmulas publicadas: piso mayor que la plantilla, una persona, mil personas, división por cero en la cobertura, hora de IA más cara que la humana, los extremos de λ y del plazo de recupero, y las dos estructuras de costo de la IA.
 
 Se corre pegando [`pruebas/casos-borde.js`](pruebas/casos-borde.js) en la consola del navegador. Detalle completo en [**PRUEBAS.md**](PRUEBAS.md).
 
@@ -788,7 +801,7 @@ Lo que verifica es que **el código haga lo que dicen las fórmulas**. Lo que no
 
 ### Robustez de los coeficientes
 
-Los coeficientes ρ no están calibrados, y eso es la objeción principal al modelo. No se puede responder acá con datos, pero sí **acotar**: [`analisis/robustez_ordinal.py`](analisis/robustez_ordinal.py) perturba cada ρ un ±50% —en los 243 vértices extremos y sobre 20.000 sorteos— y mide qué conclusiones se caen y cuáles no.
+Los coeficientes ρ no están calibrados, y eso es la objeción principal al modelo. No se puede responder acá con datos, pero sí **acotar**: [`analisis/robustez_ordinal.py`](analisis/robustez_ordinal.py) perturba cada ρ un ±50% —en las 243 combinaciones de una grilla de tres niveles y sobre 20.000 sorteos— y mide qué conclusiones se caen y cuáles no.
 
 | Propiedad | Resultado |
 |---|---|
@@ -816,7 +829,7 @@ El modelo está descrito en un preprint abierto, con las fórmulas, el caso de r
 - el techo de inversión **como banda con su umbral** (`λ < 1,24`) en lugar de como veredicto
 - el análisis de robustez de arriba, con su resultado negativo incluido
 - el Montecarlo **especificado por completo y con semilla**
-- **siete límites** en lugar de cuatro — entre ellos que el episodio de junio fue **de un modelo y no de un proveedor**, algo que la Tabla 2 todavía no cobra
+- **nueve límites** en lugar de cuatro — entre ellos que el episodio de junio fue **de un modelo y no de un proveedor**, algo que la Tabla 2 todavía no cobra
 - la distinción entre **incertidumbre de parámetro e incertidumbre de forma funcional**: perturbar los ρ no demuestra que la composición multiplicativa sea la correcta
 - el **margen de continuidad** `CM = (P′ − P_min)/P′` como la dimensión que falta, propuesta pero **no implementada** — el índice publicado no cambia
 - de 8 a **15 referencias**, con la evidencia de concentración del Banco de Inglaterra
@@ -874,7 +887,7 @@ All AIdeas SAS. https://doi.org/10.5281/zenodo.22070415
 >
 > El archivo `CITATION.cff` de este repositorio tiene los mismos datos en formato legible por máquina: GitHub lo usa para mostrar el botón **Cite this repository**.
 
-**Qué se está citando.** El depósito incluye el modelo completo, las fórmulas publicadas, la batería de 24 casos de borde y el código que las corre. Todo se ejecuta en el navegador, en JavaScript, sin servidor: cualquiera puede reproducir los resultados abriendo el archivo, sin instalar nada ni pedir credenciales.
+**Qué se está citando.** El depósito incluye el modelo completo, las fórmulas publicadas, la batería de 25 casos de borde y el código que las corre. Todo se ejecuta en el navegador, en JavaScript, sin servidor: cualquiera puede reproducir los resultados abriendo el archivo, sin instalar nada ni pedir credenciales.
 
 ## Licencia
 MIT — usalo, adaptalo, citá la fuente. Si lo aplicás en un caso real, me encantaría saberlo.

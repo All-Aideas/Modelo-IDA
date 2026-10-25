@@ -34,7 +34,7 @@ DOI [10.2139/ssrn.7341479](https://doi.org/10.2139/ssrn.7341479) · licencia **C
 Son dos cosas distintas y no son intercambiables:
 
 - **El trabajo y su argumento** → DOI de SSRN, `10.2139/ssrn.7341479`
-- **El modelo, las fórmulas y la batería de 24 casos** → DOI de concepto de
+- **El modelo, las fórmulas y la batería de 25 casos** → DOI de concepto de
   Zenodo, `10.5281/zenodo.22070415`, que siempre resuelve a la última versión
 
 Si alguien reprodujo un resultado corriendo la calculadora, lo que corresponde

@@ -9,7 +9,7 @@ abstract: >-
   mensual ajustado por la fragilidad de la arquitectura, el techo de inversión
   justificable y el Índice de Dependencia de IA (IDA), una escala de 0 a 100
   que resume la exposición de la operación. Incluye simulación de Montecarlo y
-  una batería de 24 casos de borde que verifican el motor contra las fórmulas
+  una batería de 25 casos de borde que verifican el motor contra las fórmulas
   publicadas. Corre íntegramente en el navegador, sin servidor.
 type: software
 authors:
@@ -22,8 +22,8 @@ doi: "10.5281/zenodo.22070415"   # DOI de concepto: siempre apunta a la ultima v
 repository-code: "https://github.com/All-Aideas/Modelo-IDA"
 url: "https://modelo-ida.web.app"
 license: MIT
-version: "1.0.2"
-date-released: "2026-08-28"
+version: "2.0.0"
+date-released: "2026-10-25"
 keywords:
   - continuidad operativa
   - resiliencia operacional
